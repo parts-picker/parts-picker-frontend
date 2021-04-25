@@ -31,7 +31,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "format": "npx lint-staged"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
@@ -41,7 +42,7 @@
       "./node_modules/.bin/prettier --write"
     ],
     "*.{js,ts,tsx}": [
-      "eslint --fix"
+      "./node_modules/.bin/eslint --fix"
     ]
   },
   "browserslist": {
