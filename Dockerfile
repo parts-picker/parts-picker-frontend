@@ -1,4 +1,4 @@
-FROM node:14.16.1
+FROM node:16.13.1-alpine
 
 # workdir in virtualized docker env
 WORKDIR /usr/src/app
