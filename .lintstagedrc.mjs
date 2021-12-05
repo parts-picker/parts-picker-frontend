@@ -1,6 +1,5 @@
 // add lint-staged support to next.js
 // adds the --file flag
-
 import { normalize } from "path";
 
 export default {

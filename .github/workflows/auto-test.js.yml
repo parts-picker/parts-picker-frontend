@@ -1,17 +1,14 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Node.js CI
+name: Build, test & lint
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -26,5 +23,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
+    - run: npm run lint:output
+    - name: Upload eslint results
+      if: success() || failure()
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: output/eslint-result.sarif
     - run: npm run build --if-present
     - run: npm test
