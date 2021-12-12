@@ -8,7 +8,7 @@ TODO
 
 husky is used to manage git hooks inside of this repository.
 Hooks stored inside the .husky directory and will be run accordingly.  
-Husky hooks will be automatically added when running `npm install`
+Husky hooks will be automatically added when running `npm install`  
 More information about husky can be found in its [repository](https://github.com/typicode/husky).
 
 ## Code Quality
@@ -25,7 +25,7 @@ npm run lint
 
 husky will also run the linter before each commit, but only for staged files.
 
--------
+---
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
