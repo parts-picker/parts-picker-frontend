@@ -15,8 +15,8 @@ const ItemsIndex: FC<ItemsIndexProps> = () => {
   return (
     <div>
       <H1> Item Inventory </H1>
-      {data ? JSON.stringify(data._embedded.itemResourceList) : "Loading..."}
-      <ItemListView items={data ? data._embedded.itemResourceList : []} />
+      {data ? JSON.stringify(data._embedded.items) : "Loading..."}
+      <ItemListView items={data ? data._embedded.items : []} />
     </div>
   );
 };
