@@ -1,4 +1,4 @@
-import LinkModel from "../../common/models/LinkModel";
+import LinkModel from "../../links/models/LinkModel";
 
 export default class ItemModel {
   id: number;
