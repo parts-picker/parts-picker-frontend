@@ -1,5 +1,5 @@
 import React from "react";
-import EntryLinksModel from "./models/EntryLinksModel";
+import EntryLinksModel from "./types/EntryLinksModel";
 
 type EntryLinksProviderProps = {
   children: React.ReactNode;
