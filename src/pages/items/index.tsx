@@ -19,7 +19,9 @@ const ItemsIndex: FC<ItemsIndexProps> = () => {
     <div>
       <H1> Item Inventory </H1>
       {JSON.stringify(entryLinks)}
-      <ItemListView items={data ? data._embedded.items : []} />
+      <ItemListView
+        items={data && data._embedded ? data._embedded.items : []}
+      />
     </div>
   );
 };
