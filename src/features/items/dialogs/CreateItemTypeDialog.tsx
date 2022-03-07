@@ -1,8 +1,10 @@
 import { Button, Classes, Dialog } from "@blueprintjs/core";
+import { IconNames } from "@blueprintjs/icons";
 import { FunctionComponent } from "react";
 import { FieldValues } from "react-hook-form";
 import { useSWRConfig } from "swr";
 import ListResponse from "../../common/models/ListResponse";
+import { AppToaster } from "../../common/utils/Toaster";
 import { useEntryLinks } from "../../links/EntryLinksContext";
 import ItemTypeForm from "../forms/ItemTypeForm";
 import EmbeddedItemTypeModel from "../models/EmbeddedItemTypeModel";
@@ -48,9 +50,14 @@ const CreateItemTypeDialog: FunctionComponent<CreateItemTypeDialogProps> = ({
             },
             false
           );
+
+          AppToaster?.show?.({
+            message: "Item type " + newItemType.name + " was created",
+            intent: "success",
+            icon: IconNames.CONFIRM,
+          });
         });
     }
-
     handleClose();
   };
 
@@ -67,7 +74,7 @@ const CreateItemTypeDialog: FunctionComponent<CreateItemTypeDialogProps> = ({
       <div className={Classes.DIALOG_FOOTER}>
         <div className={Classes.DIALOG_FOOTER_ACTIONS}>
           <Button onClick={handleClose}>Close</Button>
-          <Button form={formId} type="submit">
+          <Button form={formId} type="submit" intent="primary">
             Submit
           </Button>
         </div>
