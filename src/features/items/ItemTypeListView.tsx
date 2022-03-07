@@ -6,6 +6,7 @@ import { Column, Row } from "react-table";
 import SortableTable from "../common/tables/SortableTable";
 import ItemTypeModel from "./models/ItemTypeModel";
 import { IconNames } from "@blueprintjs/icons";
+import DeleteButton from "./subcomponents/DeleteButton";
 
 interface ItemTypeViewProps {
   loading?: boolean;
@@ -21,6 +22,18 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ loading, itemTypes }) => {
     {
       Header: "Description",
       accessor: "description",
+    },
+    {
+      Header: "Actions",
+      accessor: "_links",
+      disableSortBy: true,
+      Cell: (cell) => {
+        return (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <DeleteButton name={cell.row.values["name"]} links={cell.value} />
+          </div>
+        );
+      },
     },
   ];
 
