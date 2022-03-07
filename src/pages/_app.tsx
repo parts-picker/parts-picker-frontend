@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
+import "@blueprintjs/popover2/lib/css/blueprint-popover2.css";
 import useSWR from "swr";
 import defaultFetcher from "../features/common/DefaultFetcher";
 import { EntryLinksProvider } from "../features/links/EntryLinksContext";
