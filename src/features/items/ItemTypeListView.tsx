@@ -1,12 +1,14 @@
 import { NonIdealState } from "@blueprintjs/core";
 import { NextRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { FC } from "react";
 import { Column, Row } from "react-table";
 import SortableTable from "../common/tables/SortableTable";
 import ItemTypeModel from "./models/ItemTypeModel";
 import { IconNames } from "@blueprintjs/icons";
 import DeleteButton from "./subcomponents/DeleteButton";
+import EditButton from "./subcomponents/EditButton";
+import EditItemTypeDialog from "./dialogs/EditItemTypeDialog";
 
 interface ItemTypeViewProps {
   loading?: boolean;
@@ -14,6 +16,14 @@ interface ItemTypeViewProps {
 }
 
 const ItemTypeListView: FC<ItemTypeViewProps> = ({ loading, itemTypes }) => {
+  const [editableData, setEditableData] = useState<ItemTypeModel | undefined>(
+    undefined
+  );
+
+  const handleClose = () => {
+    setEditableData(undefined);
+  };
+
   const columns: Column<ItemTypeModel>[] = [
     {
       Header: "Name",
@@ -30,7 +40,11 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ loading, itemTypes }) => {
       Cell: (cell) => {
         return (
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <DeleteButton name={cell.row.values["name"]} links={cell.value} />
+            <EditButton
+              currentItemType={cell.row.original}
+              setEditData={setEditableData}
+            />
+            <DeleteButton name={cell.row.original.name} links={cell.value} />
           </div>
         );
       },
@@ -51,15 +65,21 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ loading, itemTypes }) => {
   );
 
   return (
-    <SortableTable
-      columns={columns}
-      data={itemTypes}
-      loading={loading}
-      options={{
-        nonIdealState: nonIdealState,
-        onRowClickAction: rowClickAction,
-      }}
-    />
+    <>
+      <EditItemTypeDialog
+        handleClose={handleClose}
+        editableData={editableData}
+      />
+      <SortableTable
+        columns={columns}
+        data={itemTypes}
+        loading={loading}
+        options={{
+          nonIdealState: nonIdealState,
+          onRowClickAction: rowClickAction,
+        }}
+      />
+    </>
   );
 };
 

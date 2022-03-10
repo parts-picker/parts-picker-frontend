@@ -9,10 +9,12 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TextFieldWrapper from "../../common/forms/wrapper/TextFieldWrapper";
 import TextAreaWrapper from "../../common/forms/wrapper/TextAreaWrapper";
+import ItemTypeModel from "../models/ItemTypeModel";
 
 interface ItemTypeFormProps {
   formId: string;
   onSubmit: SubmitHandler<FieldValues>;
+  initialData?: ItemTypeModel;
 }
 
 const schema = z.object({
@@ -20,10 +22,15 @@ const schema = z.object({
   description: z.string().min(1),
 });
 
-const ItemTypeForm: FC<ItemTypeFormProps> = ({ formId, onSubmit }) => {
+const ItemTypeForm: FC<ItemTypeFormProps> = ({
+  formId,
+  onSubmit,
+  initialData,
+}) => {
   const methods = useForm({
     mode: "onTouched",
     resolver: zodResolver(schema),
+    defaultValues: initialData,
   });
 
   const onFormSubmit = methods.handleSubmit(onSubmit);

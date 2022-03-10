@@ -1,14 +1,14 @@
-import { Button, Classes, Dialog } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
-import { FunctionComponent } from "react";
+import { FC } from "react";
 import { FieldValues } from "react-hook-form";
 import { useSWRConfig } from "swr";
 import ListResponse from "../../common/models/ListResponse";
 import { AppToaster } from "../../common/utils/Toaster";
 import { useEntryLinks } from "../../links/EntryLinksContext";
-import ItemTypeForm from "../forms/ItemTypeForm";
+import HttpMethods from "../../links/types/HttpMethods";
 import EmbeddedItemTypeModel from "../models/EmbeddedItemTypeModel";
 import ItemTypeModel from "../models/ItemTypeModel";
+import ItemTypeDialog from "./ItemTypeDialog";
 
 const formId = "createItemTypeForm";
 
@@ -17,7 +17,7 @@ interface CreateItemTypeDialogProps {
   handleClose: () => void;
 }
 
-const CreateItemTypeDialog: FunctionComponent<CreateItemTypeDialogProps> = ({
+const CreateItemTypeDialog: FC<CreateItemTypeDialogProps> = ({
   isOpen,
   handleClose,
 }) => {
@@ -27,7 +27,10 @@ const CreateItemTypeDialog: FunctionComponent<CreateItemTypeDialogProps> = ({
   const onSubmit = (data: FieldValues) => {
     const itemTypeLink = entryLinks?.itemTypes?.href;
 
-    if (itemTypeLink) {
+    if (
+      itemTypeLink &&
+      entryLinks?.itemTypes?.methods.includes(HttpMethods.POST)
+    ) {
       fetch(itemTypeLink, {
         method: "POST",
         headers: { "Content-type": "application/json" },
@@ -62,24 +65,13 @@ const CreateItemTypeDialog: FunctionComponent<CreateItemTypeDialogProps> = ({
   };
 
   return (
-    <Dialog
+    <ItemTypeDialog
+      title="Create item type"
       isOpen={isOpen}
-      onClose={handleClose}
-      title="New item type"
-      canOutsideClickClose={false}
-    >
-      <div className={Classes.DIALOG_BODY}>
-        <ItemTypeForm formId={formId} onSubmit={onSubmit} />
-      </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <Button onClick={handleClose}>Close</Button>
-          <Button form={formId} type="submit" intent="primary">
-            Submit
-          </Button>
-        </div>
-      </div>
-    </Dialog>
+      handleClose={handleClose}
+      onSubmit={onSubmit}
+      formId={formId}
+    />
   );
 };
 

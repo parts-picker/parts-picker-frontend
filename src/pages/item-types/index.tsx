@@ -10,6 +10,7 @@ import { IconNames } from "@blueprintjs/icons";
 import CreateItemTypeDialog from "../../features/items/dialogs/CreateItemTypeDialog";
 import ListResponse from "../../features/common/models/ListResponse";
 import EmbeddedItemTypeModel from "../../features/items/models/EmbeddedItemTypeModel";
+import HttpMethods from "../../features/links/types/HttpMethods";
 
 const ItemTypesIndex: FC = () => {
   const entryLinks = useEntryLinks();
@@ -38,7 +39,10 @@ const ItemTypesIndex: FC = () => {
   return (
     <div>
       <H1> Item Inventory </H1>
-      <Button icon={IconNames.ADD} onClick={handleOpenCreateDialog} />
+      {entryLinks?.itemTypes &&
+      entryLinks?.itemTypes.methods.includes(HttpMethods.POST) ? (
+        <Button icon={IconNames.ADD} onClick={handleOpenCreateDialog} />
+      ) : null}
       <CreateItemTypeDialog
         isOpen={createDialogOpen}
         handleClose={handleCloseCreateDialog}
