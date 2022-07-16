@@ -9,6 +9,8 @@ import ItemTypeModel from "../../features/items/models/ItemTypeModel";
 import { IconNames } from "@blueprintjs/icons";
 import DefaultLoadingSpinner from "../../features/common/loading/DefaultLoadingSpinner";
 import React from "react";
+import LinkUtil from "../../features/links/LinkUtil";
+import { LinkNames } from "../../features/links/types/LinkModel";
 
 const ItemTypeDetails: FC = () => {
   const router = useRouter();
@@ -18,8 +20,9 @@ const ItemTypeDetails: FC = () => {
   const decodedLink = itemTypeLink ? window.atob(itemTypeLink) : undefined;
   const { data: itemType } = useSWR<ItemTypeModel>(decodedLink, defaultFetcher);
 
+  const itemLink = LinkUtil.findLink(itemType, "describes", LinkNames.READ);
   const { data: itemsResponse } = useSWR<ItemsModel>(
-    itemType?._links.describes.href,
+    itemLink?.href,
     defaultFetcher
   );
   const items = itemsResponse?._embedded?.items;

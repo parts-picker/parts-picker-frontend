@@ -3,19 +3,22 @@ import React from "react";
 import { PropsWithChildren, ReactElement } from "react";
 import { Column, useSortBy, useTable } from "react-table";
 import { ResponseModel } from "../../links/types/ResponseModel";
-import { TableContext } from "./context/GenericTableContext";
-import GenericTableBody from "./GenericTableBody";
-import GenericTableHeader from "./GenericTableHeader";
+import { TableContext } from "./context/TableContext";
+import TableBody from "./subcomponents/TableBody";
+import TableHeader from "./subcomponents/TableHeader";
+import PaginationTableFooter from "./subcomponents/PaginationTableFooter";
+import PaginationControlOptions from "./types/PaginationControlOptions";
 import { RowClickAction } from "./types/RowClickAction";
 
 interface SortableTableProps<Content extends ResponseModel> {
   columns: Column<Content>[];
-  data: Readonly<Array<Content> | undefined>;
+  data: Content[] | undefined;
   loading?: boolean;
   options?: {
     onRowClickAction?: RowClickAction<Content>;
     nonIdealState?: ReactElement;
   };
+  pageControlOptions?: PaginationControlOptions;
 }
 
 const SortableTable = <Content extends ResponseModel>({
@@ -26,6 +29,7 @@ const SortableTable = <Content extends ResponseModel>({
     onRowClickAction: undefined,
     nonIdealState: undefined,
   },
+  pageControlOptions: pageOptions,
 }: PropsWithChildren<SortableTableProps<Content>>): ReactElement => {
   const table = useTable(
     {
@@ -44,6 +48,7 @@ const SortableTable = <Content extends ResponseModel>({
           onRowClickAction: options.onRowClickAction,
           nonIdealState: options.nonIdealState,
         },
+        pageOptions: pageOptions,
       }}
     >
       <HTMLTable
@@ -51,8 +56,9 @@ const SortableTable = <Content extends ResponseModel>({
         interactive={options?.onRowClickAction && !loading}
         {...table.getTableProps()}
       >
-        <GenericTableHeader />
-        <GenericTableBody />
+        <TableHeader />
+        <TableBody />
+        <PaginationTableFooter />
       </HTMLTable>
     </TableContext.Provider>
   );

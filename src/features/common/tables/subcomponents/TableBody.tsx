@@ -1,15 +1,10 @@
 import { useRouter } from "next/router";
-import { ReactElement, useContext } from "react";
-import { ResponseModel } from "../../links/types/ResponseModel";
-import DefaultLoadingSpinner from "../loading/DefaultLoadingSpinner";
-import {
-  GenericTableContextModel,
-  TableContext,
-} from "./context/GenericTableContext";
+import { ReactElement } from "react";
+import DefaultLoadingSpinner from "../../loading/DefaultLoadingSpinner";
+import { useTableContext } from "../context/TableContext";
 
-const GenericTableBody = <Content extends ResponseModel>(): ReactElement => {
-  const { loading, table, tableOptions } =
-    useContext<GenericTableContextModel<Content>>(TableContext);
+const TableBody = (): ReactElement => {
+  const { loading, table, tableOptions } = useTableContext();
 
   const router = useRouter();
 
@@ -59,4 +54,4 @@ const GenericTableBody = <Content extends ResponseModel>(): ReactElement => {
   return <tbody {...table.getTableBodyProps()}>{getTableBody()}</tbody>;
 };
 
-export default GenericTableBody;
+export default TableBody;

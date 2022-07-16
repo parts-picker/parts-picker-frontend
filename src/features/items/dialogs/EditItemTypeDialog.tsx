@@ -2,13 +2,12 @@ import { FC } from "react";
 import { IconNames } from "@blueprintjs/icons";
 import { FieldValues } from "react-hook-form";
 import { AppToaster } from "../../common/utils/Toaster";
-import HttpMethods from "../../links/types/HttpMethods";
 import ItemTypeModel from "../models/ItemTypeModel";
 import ItemTypeDialog from "./ItemTypeDialog";
-import { useSWRConfig } from "swr";
-import ListResponse from "../../common/models/ListResponse";
-import EmbeddedItemTypeModel from "../models/EmbeddedItemTypeModel";
 import { useEntryLinks } from "../../links/EntryLinksContext";
+import { LinkNames } from "../../links/types/LinkModel";
+import LinkUtil from "../../links/LinkUtil";
+import { useMatchMutate } from "../../common/utils/swr/useMutateMatch";
 
 const formId = "editItemTypeForm";
 
@@ -22,41 +21,29 @@ const EditItemTypeDialog: FC<EditItemTypeDialogProps> = ({
   editableData,
 }) => {
   const entryLinks = useEntryLinks();
-  const { mutate } = useSWRConfig();
+  const mutateMatch = useMatchMutate();
 
   const onSubmit = (data: FieldValues) => {
-    const selfLink = editableData?._links?.self?.href;
+    const selfUpdateLink = LinkUtil.findLink(
+      editableData,
+      "self",
+      LinkNames.UPDATE
+    );
 
-    if (
-      selfLink &&
-      editableData?._links?.self.methods.includes(HttpMethods.PUT)
-    ) {
-      fetch(selfLink, {
+    if (selfUpdateLink) {
+      fetch(selfUpdateLink.href, {
         method: "PUT",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(data),
       })
         .then((response) => response.json() as Promise<ItemTypeModel>)
         .then((updatedItemType) => {
-          mutate<ListResponse<EmbeddedItemTypeModel>>(
-            entryLinks?.itemTypes?.href,
-            async (embeddedData) => {
-              const itemTypes = [...(embeddedData?._embedded.itemTypes || [])];
-
-              const indexOfItemTypeToUpdate = itemTypes.findIndex(
-                (type) => type._links.self.href === selfLink
-              );
-              itemTypes[indexOfItemTypeToUpdate] = updatedItemType;
-
-              return {
-                _embedded: {
-                  itemTypes: itemTypes,
-                },
-                _links: embeddedData?._links || {},
-              };
-            },
-            false
+          const itemTypesREADLink = LinkUtil.findLink(
+            entryLinks,
+            "itemTypes",
+            LinkNames.READ
           );
+          mutateMatch(itemTypesREADLink);
 
           AppToaster?.show?.({
             message: "Item type " + updatedItemType.name + " was updated",

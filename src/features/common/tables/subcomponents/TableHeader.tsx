@@ -1,13 +1,9 @@
-import { ReactElement, useContext } from "react";
-import { ResponseModel } from "../../links/types/ResponseModel";
-import {
-  GenericTableContextModel,
-  TableContext,
-} from "./context/GenericTableContext";
-import SortIndicator from "./util/SortIndicator";
+import { ReactElement } from "react";
+import { useTableContext } from "../context/TableContext";
+import SortIndicator from "../util/SortIndicator";
 
-const GenericTableHeader = <Content extends ResponseModel>(): ReactElement => {
-  const { table } = useContext<GenericTableContextModel<Content>>(TableContext);
+const TableHeader = (): ReactElement => {
+  const { table } = useTableContext();
 
   return (
     <thead>
@@ -32,4 +28,4 @@ const GenericTableHeader = <Content extends ResponseModel>(): ReactElement => {
   );
 };
 
-export default GenericTableHeader;
+export default TableHeader;
