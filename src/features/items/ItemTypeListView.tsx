@@ -6,16 +6,37 @@ import { Column, Row } from "react-table";
 import SortableTable from "../common/tables/SortableTable";
 import ItemTypeModel from "./models/ItemTypeModel";
 import { IconNames } from "@blueprintjs/icons";
-import DeleteButton from "./subcomponents/DeleteButton";
-import EditButton from "./subcomponents/EditButton";
+import DeleteButton from "../common/tables/subcomponents/DeleteButton";
+import EditItemTypeButton from "./subcomponents/EditItemTypeButton";
 import EditItemTypeDialog from "./dialogs/EditItemTypeDialog";
+import LinkUtil from "../links/LinkUtil";
+import { LinkNames } from "../links/types/LinkModel";
+import { AppToaster } from "../common/utils/Toaster";
+import PaginationQueryOptions from "../common/tables/types/PaginationQueryOptions";
+import { useEntryLinkFor } from "../links/EntryLinksContext";
+import { useSWRWithURILike } from "../common/utils/swr/useSWRWithURILike";
+import EmbeddedItemTypeModel from "./models/EmbeddedItemTypeModel";
+import ListResponse from "../common/models/ListResponse";
+import URITemplate from "urijs/src/URITemplate";
 
 interface ItemTypeViewProps {
-  loading?: boolean;
-  itemTypes: ItemTypeModel[];
+  pageQueryOptions: PaginationQueryOptions;
 }
 
-const ItemTypeListView: FC<ItemTypeViewProps> = ({ loading, itemTypes }) => {
+const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
+  const itemTypesReadLink = useEntryLinkFor(LinkNames.READ, "itemTypes");
+  const itemTypesReadLinkTemplate = itemTypesReadLink
+    ? new URITemplate(itemTypesReadLink.href)
+    : undefined;
+
+  const { data, loading, mutate } = useSWRWithURILike<
+    ListResponse<EmbeddedItemTypeModel>
+  >(itemTypesReadLinkTemplate, {
+    size: pageQueryOptions.requestedPageSize.toString(),
+    page: pageQueryOptions.requestedPageNumber.toString(),
+  });
+  const itemTypes = data?._embedded?.itemTypes || new Array<ItemTypeModel>();
+
   const [editableData, setEditableData] = useState<ItemTypeModel | undefined>(
     undefined
   );
@@ -38,13 +59,68 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ loading, itemTypes }) => {
       accessor: "_links",
       disableSortBy: true,
       Cell: (cell) => {
+        const selfLink = LinkUtil.findLink(
+          cell.row.original,
+          "self",
+          LinkNames.DELETE
+        );
+        const name = cell.row.original.name;
+
+        const deleteRow = () => {
+          if (!selfLink) {
+            return;
+          }
+
+          mutate(
+            async () => {
+              await fetch(selfLink.href, {
+                method: "DELETE",
+              });
+
+              return undefined;
+            },
+            {
+              populateCache: false,
+              revalidate: true,
+              optimisticData: (currentData) => {
+                const updatedList = itemTypes.filter(
+                  (itemType) =>
+                    LinkUtil.findLink(itemType, "self", LinkNames.READ)?.href !=
+                    selfLink.href
+                );
+
+                if (!currentData) {
+                  return new ListResponse();
+                }
+
+                const updatedData = { ...currentData };
+                updatedData._embedded.itemTypes = updatedList;
+                return updatedData;
+              },
+            }
+          );
+
+          AppToaster?.show?.({
+            message: "Item type " + name + " was deleted",
+            intent: "success",
+            icon: IconNames.CONFIRM,
+          });
+        };
+
         return (
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <EditButton
+            <EditItemTypeButton
               currentItemType={cell.row.original}
               setEditData={setEditableData}
             />
-            <DeleteButton name={cell.row.original.name} links={cell.value} />
+            <DeleteButton
+              deleteAction={deleteRow}
+              confirmDescription={
+                <>
+                  Delete item type <b>{cell.row.original.name}</b> ?
+                </>
+              }
+            />
           </div>
         );
       },
@@ -52,11 +128,16 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ loading, itemTypes }) => {
   ];
 
   const rowClickAction = (row: Row<ItemTypeModel>, router: NextRouter) => {
-    const link = window.btoa(row.original._links.self.href);
+    const link = LinkUtil.findLink(row.original, "self", LinkNames.READ);
+    if (!link) {
+      return;
+    }
+
+    const encodedLink = window.btoa(link.href);
 
     router.push({
       pathname: "item-types/[link]",
-      query: { link: link },
+      query: { link: encodedLink },
     });
   };
 
@@ -78,6 +159,16 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ loading, itemTypes }) => {
           nonIdealState: nonIdealState,
           onRowClickAction: rowClickAction,
         }}
+        pageControlOptions={
+          !loading && data && data.page
+            ? {
+                ...data.page,
+                setRequestedPageSize: pageQueryOptions.setRequestedPageSize,
+                setRequestedPageNumber: pageQueryOptions.setRequestedPageNumber,
+                allowedPageSizes: pageQueryOptions.allowedPageSizes,
+              }
+            : undefined
+        }
       />
     </>
   );

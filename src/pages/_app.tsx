@@ -9,9 +9,10 @@ import defaultFetcher from "../features/common/DefaultFetcher";
 import { EntryLinksProvider } from "../features/links/EntryLinksContext";
 import ResponseError from "../features/common/models/ResponseError";
 import DefaultLoadingSpinner from "../features/common/loading/DefaultLoadingSpinner";
+import { EntryLinksResponse } from "../features/links/types/EntryLinksResponse";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { data, error } = useSWR(
+  const { data, error } = useSWR<EntryLinksResponse>(
     "http://localhost:8080/api/v1/entry",
     defaultFetcher
   );
@@ -29,7 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <EntryLinksProvider value={data ? data._links : undefined}>
+    <EntryLinksProvider value={data}>
       <Component {...pageProps} />
     </EntryLinksProvider>
   );

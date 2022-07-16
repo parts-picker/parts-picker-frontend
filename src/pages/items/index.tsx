@@ -4,21 +4,21 @@ import useSWR from "swr";
 import defaultFetcher from "../../features/common/DefaultFetcher";
 import ItemListView from "../../features/items/ItemListView";
 import ItemsModel from "../../features/items/models/ItemsModel";
-import { useEntryLinks } from "../../features/links/EntryLinksContext";
+import { useEntryLinkFor } from "../../features/links/EntryLinksContext";
+import { LinkNames } from "../../features/links/types/LinkModel";
 
 interface ItemsIndexProps {
   items: ItemsModel;
 }
 
 const ItemsIndex: FC<ItemsIndexProps> = () => {
-  const entryLinks = useEntryLinks();
+  const itemsReadLink = useEntryLinkFor(LinkNames.READ, "items");
 
-  const { data } = useSWR(entryLinks?.items.href, defaultFetcher);
+  const { data } = useSWR(itemsReadLink?.href, defaultFetcher);
 
   return (
     <div>
       <H1> Item Inventory </H1>
-      {JSON.stringify(entryLinks)}
       <ItemListView
         items={data && data._embedded ? data._embedded.items : []}
       />

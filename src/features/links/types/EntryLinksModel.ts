@@ -1,6 +1,7 @@
-import LinkModel from "./LinkModel";
+import { LinkMap } from "./LinkMap";
+import { Links } from "./LinkModel";
 
-export default class EntryLinksModel {
-  items: LinkModel;
-  itemTypes: LinkModel;
+export default class EntryLinksModel extends LinkMap {
+  items: Links;
+  itemTypes: Links;
 }

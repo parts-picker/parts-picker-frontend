@@ -1,4 +1,4 @@
-import { Links } from "../../links/types/Links";
+import { LinkMap } from "../../links/types/LinkMap";
 import { ResponseModel } from "../../links/types/ResponseModel";
 
 export default class ItemModel implements ResponseModel {
@@ -6,5 +6,5 @@ export default class ItemModel implements ResponseModel {
   condition: string;
   status: string;
   note: string;
-  _links: Links;
+  _links: LinkMap;
 }

@@ -1,6 +1,14 @@
-import HttpMethods from "./HttpMethods";
-
-export default class LinkModel {
+export class LinkModel {
   href: string;
-  methods: HttpMethods[];
+  name: LinkNames;
+  templated = false;
+}
+
+export type Links = LinkModel | LinkModel[];
+
+export enum LinkNames {
+  CREATE = "CREATE",
+  READ = "READ",
+  UPDATE = "UPDATE",
+  DELETE = "DELETE",
 }

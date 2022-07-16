@@ -1,5 +1,5 @@
-import { Links } from "./Links";
+import { LinkMap } from "./LinkMap";
 
 export interface ResponseModel {
-  _links: Links;
+  _links: LinkMap;
 }
