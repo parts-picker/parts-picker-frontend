@@ -13,8 +13,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "@blueprintjs/core": "3.53.0",
-    "@blueprintjs/popover2": "0.13.0",
+    "@blueprintjs/core": "4.6.0",
+    "@blueprintjs/popover2": "1.4.2",
     "@hookform/resolvers": "2.8.8",
     "next": "12.1.0",
     "react": "17.0.2",
