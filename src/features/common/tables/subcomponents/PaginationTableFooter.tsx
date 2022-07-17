@@ -37,6 +37,10 @@ const PaginationTableFooter: FC = () => {
             />
             {pageNumbers.map((targetNumber) => {
               if (Array.isArray(targetNumber)) {
+                if (targetNumber.length === 0) {
+                  return undefined;
+                }
+
                 return (
                   <PageButtonOverflow
                     key={`overflow-for-${targetNumber}`}
@@ -78,7 +82,7 @@ const generatePageNumbersToShow = (
   totalPages?: number,
   siblings = 2
 ): (number | number[])[] => {
-  if (!currentPageNumber || !totalPages) {
+  if ((!currentPageNumber && currentPageNumber !== 0) || !totalPages) {
     return [];
   }
 
