@@ -7,9 +7,13 @@ import ItemModel from "./models/ItemModel";
 import { IconNames } from "@blueprintjs/icons";
 import PaginationQueryOptions from "../common/tables/types/PaginationQueryOptions";
 import URITemplate from "urijs/src/URITemplate";
-import { LinkModel } from "../links/types/LinkModel";
+import { LinkModel, LinkNames } from "../links/types/LinkModel";
 import { useSWRWithURILike } from "../common/utils/swr/useSWRWithURILike";
 import { EmbeddedItems } from "./models/EmbeddedTypes";
+import LinkUtil from "../links/LinkUtil";
+import ListResponse from "../common/models/ListResponse";
+import DeleteButton from "../common/tables/subcomponents/DeleteButton";
+import { AppToaster } from "../common/utils/Toaster";
 
 interface ItemListViewProps {
   itemsReadLink?: LinkModel;
@@ -24,7 +28,7 @@ const ItemListView: FC<ItemListViewProps> = ({
     ? new URITemplate(itemsReadLink.href)
     : undefined;
 
-  const { data, loading } = useSWRWithURILike<EmbeddedItems>(
+  const { data, loading, mutate } = useSWRWithURILike<EmbeddedItems>(
     itemsReadLinkTemplate,
     {
       size: pageQueryOptions.requestedPageSize.toString(),
@@ -37,6 +41,68 @@ const ItemListView: FC<ItemListViewProps> = ({
     { Header: "Condition", accessor: "condition" },
     { Header: "Status", accessor: "status" },
     { Header: "Note", accessor: "note" },
+    {
+      Header: "Actions",
+      accessor: "_links",
+      disableSortBy: true,
+      Cell: (cell) => {
+        const selfLink = LinkUtil.findLink(
+          cell.row.original,
+          "self",
+          LinkNames.DELETE
+        );
+
+        const deleteRow = () => {
+          if (!selfLink) {
+            return;
+          }
+
+          mutate(
+            async () => {
+              await fetch(selfLink.href, {
+                method: "DELETE",
+              });
+
+              return undefined;
+            },
+            {
+              populateCache: false,
+              revalidate: true,
+              optimisticData: (currentData) => {
+                if (!currentData) {
+                  return new ListResponse();
+                }
+
+                const updatedList = currentData._embedded.items.filter(
+                  (item) =>
+                    LinkUtil.findLink(item, "self", LinkNames.READ)?.href !=
+                    selfLink.href
+                );
+
+                const updatedData = { ...currentData };
+                updatedData._embedded.items = updatedList;
+                return updatedData;
+              },
+            }
+          );
+
+          AppToaster?.show?.({
+            message: "Item was deleted",
+            intent: "success",
+            icon: IconNames.CONFIRM,
+          });
+        };
+
+        return (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <DeleteButton
+              deleteAction={deleteRow}
+              confirmDescription={<>Delete item?</>}
+            />
+          </div>
+        );
+      },
+    },
   ];
 
   const nonIdealState = (
