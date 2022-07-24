@@ -26,9 +26,7 @@ const PageButton: FC<PageButtonProps> = ({
   }
 
   if (targetPageNumber >= pageOptions.totalPages) {
-    throw Error(
-      `targetPageNumber must be smaller than total amount of pages ${pageOptions.totalPages}`
-    );
+    return null;
   }
 
   const isPrimary = targetPageNumber === pageOptions?.number;

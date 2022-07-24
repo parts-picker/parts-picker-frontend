@@ -15,9 +15,9 @@ import { AppToaster } from "../common/utils/Toaster";
 import PaginationQueryOptions from "../common/tables/types/PaginationQueryOptions";
 import { useEntryLinkFor } from "../links/EntryLinksContext";
 import { useSWRWithURILike } from "../common/utils/swr/useSWRWithURILike";
-import EmbeddedItemTypeModel from "./models/EmbeddedItemTypeModel";
 import ListResponse from "../common/models/ListResponse";
 import URITemplate from "urijs/src/URITemplate";
+import { EmbeddedItemTypes } from "./models/EmbeddedTypes";
 
 interface ItemTypeViewProps {
   pageQueryOptions: PaginationQueryOptions;
@@ -29,12 +29,13 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
     ? new URITemplate(itemTypesReadLink.href)
     : undefined;
 
-  const { data, loading, mutate } = useSWRWithURILike<
-    ListResponse<EmbeddedItemTypeModel>
-  >(itemTypesReadLinkTemplate, {
-    size: pageQueryOptions.requestedPageSize.toString(),
-    page: pageQueryOptions.requestedPageNumber.toString(),
-  });
+  const { data, loading, mutate } = useSWRWithURILike<EmbeddedItemTypes>(
+    itemTypesReadLinkTemplate,
+    {
+      size: pageQueryOptions.requestedPageSize.toString(),
+      page: pageQueryOptions.requestedPageNumber.toString(),
+    }
+  );
   const itemTypes = data?._embedded?.itemTypes || new Array<ItemTypeModel>();
 
   const [editableData, setEditableData] = useState<ItemTypeModel | undefined>(
