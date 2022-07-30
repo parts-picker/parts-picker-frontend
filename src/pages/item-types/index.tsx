@@ -2,7 +2,6 @@ import { Button, H1 } from "@blueprintjs/core";
 import React, { useState } from "react";
 import { FC } from "react";
 import ItemTypeListView from "../../features/items/ItemTypeListView";
-import { useEntryLinkFor } from "../../features/links/EntryLinksContext";
 import { IconNames } from "@blueprintjs/icons";
 import CreateItemTypeDialog from "../../features/items/dialogs/CreateItemTypeDialog";
 import { LinkNames } from "../../features/links/types/LinkModel";
@@ -10,6 +9,7 @@ import { GetServerSideProps } from "next";
 import { ALLOWED_PAGE_SIZES } from "../../features/common/utils/ConfigReaderUtils";
 import { parsePageQueryParams } from "../../features/common/utils/pageQueries/ParsePageQueryParams";
 import { usePageQueryParams } from "../../features/common/utils/pageQueries/usePageQueryParams";
+import { useEntryLinkFor } from "../../features/links/hooks/useEntryLinkFor";
 
 const ItemTypesIndex: FC = () => {
   const itemTypeCreateLink = useEntryLinkFor(LinkNames.CREATE, "itemTypes");
