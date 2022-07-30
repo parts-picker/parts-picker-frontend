@@ -3,11 +3,11 @@ import { IconNames } from "@blueprintjs/icons";
 import { FieldValues } from "react-hook-form";
 import { AppToaster } from "../../common/utils/Toaster";
 import ItemTypeModel from "../models/ItemTypeModel";
-import ItemTypeDialog from "./ItemTypeDialog";
 import { useEntryLinks } from "../../links/EntryLinksContext";
 import { LinkNames } from "../../links/types/LinkModel";
 import LinkUtil from "../../links/LinkUtil";
 import { useMatchMutate } from "../../common/utils/swr/useMutateMatch";
+import ItemTypeDialog from "./ItemTypeDialog";
 
 const formId = "editItemTypeForm";
 

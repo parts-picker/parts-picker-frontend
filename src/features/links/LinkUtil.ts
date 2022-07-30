@@ -12,6 +12,9 @@ export default class LinkUtil {
     }
 
     const linksForRef = responseModel._links[ref];
+    if (!linksForRef) {
+      return undefined;
+    }
 
     if (Array.isArray(linksForRef)) {
       return linksForRef.find((link) => link.name === name);

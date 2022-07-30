@@ -1,0 +1,17 @@
+export enum ItemStatus {
+  NEEDED = "NEEDED",
+  ORDERED = "ORDERED",
+  UNSORTED = "UNSORTED",
+  IN_TRANSIT = "IN_TRANSIT",
+  IN_STOCK = "IN_STOCK",
+  RESERVED = "RESERVED",
+  USED = "USED",
+  DISPOSED = "DISPOSED",
+  UNKNOWN = "UNKNOWN",
+}
+
+export enum ItemStatusForCreate {
+  ORDERED = "ORDERED",
+  UNSORTED = "UNSORTED",
+  IN_STOCK = "IN_STOCK",
+}

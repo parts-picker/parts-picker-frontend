@@ -1,53 +1,54 @@
-import { IconNames } from "@blueprintjs/icons";
 import { FC } from "react";
 import { FieldValues } from "react-hook-form";
 import { useMatchMutate } from "../../common/utils/swr/useMutateMatch";
 import { AppToaster } from "../../common/utils/Toaster";
-import { useEntryLinks } from "../../links/EntryLinksContext";
 import LinkUtil from "../../links/LinkUtil";
 import { LinkNames } from "../../links/types/LinkModel";
+import { IconNames } from "@blueprintjs/icons";
+import ItemModel from "../models/ItemModel";
 import ItemTypeModel from "../models/ItemTypeModel";
-import ItemTypeDialog from "./ItemTypeDialog";
+import ItemDialog from "./ItemDialog";
 
-const formId = "createItemTypeForm";
+const formId = "createItemForm";
 
-interface CreateItemTypeDialogProps {
+interface CreateItemDialogProps {
   isOpen: boolean;
   handleClose: () => void;
+  targetItemType?: ItemTypeModel;
 }
 
-const CreateItemTypeDialog: FC<CreateItemTypeDialogProps> = ({
+const CreateItemDialog: FC<CreateItemDialogProps> = ({
   isOpen,
   handleClose,
+  targetItemType,
 }) => {
-  const entryLinks = useEntryLinks();
   const mutateMatch = useMatchMutate();
 
   const onSubmit = (data: FieldValues) => {
-    const itemTypeCreateLink = LinkUtil.findLink(
-      entryLinks,
-      "itemTypes",
+    const itemCreateLink = LinkUtil.findLink(
+      targetItemType,
+      "describes",
       LinkNames.CREATE
     );
 
-    if (itemTypeCreateLink) {
-      fetch(itemTypeCreateLink.href, {
+    if (itemCreateLink) {
+      fetch(itemCreateLink.href, {
         method: "POST",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(data),
       })
-        .then((response) => response.json() as Promise<ItemTypeModel>)
-        .then((newItemType) => {
+        .then((response) => response.json() as Promise<ItemModel>)
+        .then(() => {
           // invalidate all pages
-          const itemTypesREADLink = LinkUtil.findLink(
-            entryLinks,
-            "itemTypes",
+          const itemReadLink = LinkUtil.findLink(
+            targetItemType,
+            "describes",
             LinkNames.READ
           );
-          mutateMatch(itemTypesREADLink);
+          mutateMatch(itemReadLink);
 
           AppToaster?.show?.({
-            message: "Item type " + newItemType.name + " was created",
+            message: "Item for type " + targetItemType?.name + " was created",
             intent: "success",
             icon: IconNames.CONFIRM,
           });
@@ -57,14 +58,14 @@ const CreateItemTypeDialog: FC<CreateItemTypeDialogProps> = ({
   };
 
   return (
-    <ItemTypeDialog
-      title="Create item type"
+    <ItemDialog
       isOpen={isOpen}
       handleClose={handleClose}
       formId={formId}
       onSubmit={onSubmit}
+      targetItemType={targetItemType}
     />
   );
 };
 
-export default CreateItemTypeDialog;
+export default CreateItemDialog;

@@ -1,6 +1,8 @@
-import { Button, Classes, Dialog } from "@blueprintjs/core";
-import { FC } from "react";
-import { FieldValues } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FC, useEffect } from "react";
+import { FieldValues, useForm } from "react-hook-form";
+import { z } from "zod";
+import SubmitDialog from "../../common/components/SubmitDialog";
 import ItemTypeForm from "../forms/ItemTypeForm";
 import ItemTypeModel from "../models/ItemTypeModel";
 
@@ -8,42 +10,45 @@ interface ItemTypeDialogProps {
   title: string;
   isOpen: boolean;
   handleClose: () => void;
-  onSubmit: (data: FieldValues) => void;
   formId: string;
+  onSubmit: (data: FieldValues) => void;
   initialData?: ItemTypeModel;
 }
+
+const schema = z.object({
+  name: z.string().min(1),
+  description: z.string().min(1),
+});
 
 const ItemTypeDialog: FC<ItemTypeDialogProps> = ({
   title,
   isOpen,
   handleClose,
-  onSubmit,
   formId,
+  onSubmit,
   initialData,
 }) => {
+  const methods = useForm<ItemTypeModel>({
+    mode: "onChange",
+    resolver: zodResolver(schema),
+    defaultValues: initialData,
+  });
+
+  useEffect(() => {
+    methods.reset(initialData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialData, isOpen]);
+
   return (
-    <Dialog
-      isOpen={isOpen}
-      onClose={handleClose}
+    <SubmitDialog
       title={title}
-      canOutsideClickClose={false}
+      isOpen={isOpen}
+      handleClose={handleClose}
+      formId={formId}
+      isValid={methods.formState.isValid}
     >
-      <div className={Classes.DIALOG_BODY}>
-        <ItemTypeForm
-          formId={formId}
-          initialData={initialData}
-          onSubmit={onSubmit}
-        />
-      </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <Button onClick={handleClose}>Close</Button>
-          <Button form={formId} type="submit" intent="primary">
-            Submit
-          </Button>
-        </div>
-      </div>
-    </Dialog>
+      <ItemTypeForm formId={formId} onSubmit={onSubmit} methods={methods} />
+    </SubmitDialog>
   );
 };
 
