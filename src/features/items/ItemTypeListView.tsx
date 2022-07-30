@@ -13,11 +13,11 @@ import LinkUtil from "../links/LinkUtil";
 import { LinkNames } from "../links/types/LinkModel";
 import { AppToaster } from "../common/utils/Toaster";
 import PaginationQueryOptions from "../common/tables/types/PaginationQueryOptions";
-import { useEntryLinkFor } from "../links/EntryLinksContext";
 import { useSWRWithURILike } from "../common/utils/swr/useSWRWithURILike";
 import ListResponse from "../common/models/ListResponse";
 import URITemplate from "urijs/src/URITemplate";
 import { EmbeddedItemTypes } from "./models/EmbeddedTypes";
+import { useEntryLinkFor } from "../links/hooks/useEntryLinkFor";
 
 interface ItemTypeViewProps {
   pageQueryOptions: PaginationQueryOptions;

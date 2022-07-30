@@ -3,7 +3,7 @@ import { IconNames } from "@blueprintjs/icons";
 import { FieldValues } from "react-hook-form";
 import { useMatchMutate } from "../../common/utils/swr/useMutateMatch";
 import { AppToaster } from "../../common/utils/Toaster";
-import { useEntryLinks } from "../../links/EntryLinksContext";
+import { useEntryLinks } from "../../links/hooks/useEntryLinks";
 import LinkUtil from "../../links/LinkUtil";
 import { LinkNames } from "../../links/types/LinkModel";
 import ItemModel from "../models/ItemModel";

@@ -10,10 +10,11 @@ import { EntryLinksProvider } from "../features/links/EntryLinksContext";
 import ResponseError from "../features/common/models/ResponseError";
 import DefaultLoadingSpinner from "../features/common/loading/DefaultLoadingSpinner";
 import { EntryLinksResponse } from "../features/links/types/EntryLinksResponse";
+import { ENTRY_LINK } from "../features/common/utils/ConfigReaderUtils";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { data, error } = useSWR<EntryLinksResponse>(
-    "http://localhost:8080/api/v1/entry",
+    ENTRY_LINK,
     defaultFetcher
   );
 
