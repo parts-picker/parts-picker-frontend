@@ -24,7 +24,6 @@ const ItemTypeDetails: FC = () => {
   const decodedLink = itemTypeLink ? window.atob(itemTypeLink) : undefined;
   const { data: itemType } = useSWR<ItemTypeModel>(decodedLink, defaultFetcher);
 
-  const itemLink = LinkUtil.findLink(itemType, "describes", LinkNames.READ);
   const itemCreateLink = LinkUtil.findLink(
     itemType,
     "describes",
@@ -60,7 +59,7 @@ const ItemTypeDetails: FC = () => {
       </div>
       <Divider />
       <ItemListView
-        itemsReadLink={itemLink}
+        itemType={itemType}
         pageQueryOptions={{
           ...pageQueryOptions,
           allowedPageSizes: ALLOWED_PAGE_SIZES,

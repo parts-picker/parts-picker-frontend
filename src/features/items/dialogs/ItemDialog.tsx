@@ -8,30 +8,39 @@ import { ItemCondition } from "../models/ItemConditionEnum";
 import ItemModel from "../models/ItemModel";
 import { ItemStatusForCreate } from "../models/ItemStatusEnum";
 import ItemTypeModel from "../models/ItemTypeModel";
+import { ItemFormMode } from "../forms/ItemFormMode";
 
 interface ItemDialogProps {
+  title: string;
   isOpen: boolean;
   handleClose: () => void;
   formId: string;
+  formMode: ItemFormMode;
   onSubmit: SubmitHandler<FieldValues>;
   targetItemType?: ItemTypeModel;
   initialData?: ItemModel;
 }
 
-const schema = z.object({
+const fullSchema = z.object({
   status: z.nativeEnum(ItemStatusForCreate),
   condition: z.nativeEnum(ItemCondition),
   note: z.string().nullable(),
 });
 
+const updateSchema = fullSchema.omit({ status: true });
+
 const ItemDialog: FC<ItemDialogProps> = ({
+  title,
   isOpen,
   handleClose,
   formId,
+  formMode,
   onSubmit,
   targetItemType,
   initialData,
 }) => {
+  const schema = formMode == ItemFormMode.CREATE ? fullSchema : updateSchema;
+
   const methods = useForm({
     mode: "onChange",
     resolver: zodResolver(schema),
@@ -49,16 +58,18 @@ const ItemDialog: FC<ItemDialogProps> = ({
 
   return (
     <SubmitDialog
-      title={
-        "Create item" +
-        (targetItemType?.name ? " for type " + targetItemType?.name : "")
-      }
+      title={title}
       isOpen={isOpen}
       handleClose={handleClose}
       formId={formId}
       isValid={methods.formState.isValid}
     >
-      <ItemForm formId={formId} onSubmit={onSubmit} methods={methods} />
+      <ItemForm
+        formId={formId}
+        formMode={formMode}
+        onSubmit={onSubmit}
+        methods={methods}
+      />
     </SubmitDialog>
   );
 };

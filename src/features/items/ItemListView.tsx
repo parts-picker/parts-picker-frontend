@@ -1,5 +1,5 @@
 import { NonIdealState } from "@blueprintjs/core";
-import React from "react";
+import React, { useState } from "react";
 import { FC } from "react";
 import { Column } from "react-table";
 import SortableTable from "../common/tables/SortableTable";
@@ -7,23 +7,31 @@ import ItemModel from "./models/ItemModel";
 import { IconNames } from "@blueprintjs/icons";
 import PaginationQueryOptions from "../common/tables/types/PaginationQueryOptions";
 import URITemplate from "urijs/src/URITemplate";
-import { LinkModel, LinkNames } from "../links/types/LinkModel";
+import { LinkNames } from "../links/types/LinkModel";
 import { useSWRWithURILike } from "../common/utils/swr/useSWRWithURILike";
 import { EmbeddedItems } from "./models/EmbeddedTypes";
 import LinkUtil from "../links/LinkUtil";
 import ListResponse from "../common/models/ListResponse";
 import DeleteButton from "../common/tables/subcomponents/DeleteButton";
 import { AppToaster } from "../common/utils/Toaster";
+import EditButton from "../common/tables/subcomponents/EditButton";
+import EditItemDialog from "./dialogs/EditItemDialog";
+import ItemTypeModel from "./models/ItemTypeModel";
 
 interface ItemListViewProps {
-  itemsReadLink?: LinkModel;
+  itemType: ItemTypeModel;
   pageQueryOptions: PaginationQueryOptions;
 }
 
 const ItemListView: FC<ItemListViewProps> = ({
-  itemsReadLink,
+  itemType,
   pageQueryOptions,
 }) => {
+  const itemsReadLink = LinkUtil.findLink(
+    itemType,
+    "describes",
+    LinkNames.READ
+  );
   const itemsReadLinkTemplate = itemsReadLink
     ? new URITemplate(itemsReadLink.href)
     : undefined;
@@ -36,6 +44,14 @@ const ItemListView: FC<ItemListViewProps> = ({
     }
   );
   const items = data?._embedded?.items || new Array<ItemModel>();
+
+  const [editableData, setEditableData] = useState<ItemModel | undefined>(
+    undefined
+  );
+
+  const handleClose = () => {
+    setEditableData(undefined);
+  };
 
   const columns: Column<ItemModel>[] = [
     { Header: "Condition", accessor: "condition" },
@@ -95,6 +111,10 @@ const ItemListView: FC<ItemListViewProps> = ({
 
         return (
           <div style={{ display: "flex", justifyContent: "center" }}>
+            <EditButton
+              current={cell.row.original}
+              setEditData={setEditableData}
+            />
             <DeleteButton
               deleteAction={deleteRow}
               confirmDescription={<>Delete item?</>}
@@ -110,22 +130,29 @@ const ItemListView: FC<ItemListViewProps> = ({
   );
 
   return (
-    <SortableTable
-      columns={columns}
-      data={items}
-      loading={loading}
-      options={{ nonIdealState: nonIdealState }}
-      pageControlOptions={
-        !loading && data && data.page
-          ? {
-              ...data.page,
-              setRequestedPageSize: pageQueryOptions.setRequestedPageSize,
-              setRequestedPageNumber: pageQueryOptions.setRequestedPageNumber,
-              allowedPageSizes: pageQueryOptions.allowedPageSizes,
-            }
-          : undefined
-      }
-    />
+    <>
+      <EditItemDialog
+        editableData={editableData}
+        handleClose={handleClose}
+        targetItemType={itemType}
+      />
+      <SortableTable
+        columns={columns}
+        data={items}
+        loading={loading}
+        options={{ nonIdealState: nonIdealState }}
+        pageControlOptions={
+          !loading && data && data.page
+            ? {
+                ...data.page,
+                setRequestedPageSize: pageQueryOptions.setRequestedPageSize,
+                setRequestedPageNumber: pageQueryOptions.setRequestedPageNumber,
+                allowedPageSizes: pageQueryOptions.allowedPageSizes,
+              }
+            : undefined
+        }
+      />
+    </>
   );
 };
 

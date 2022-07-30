@@ -7,17 +7,24 @@ import {
 } from "react-hook-form";
 import { ItemCondition } from "../models/ItemConditionEnum";
 import ItemModel from "../models/ItemModel";
-import { ItemStatusForCreate } from "../models/ItemStatusEnum";
+import { ItemStatus, ItemStatusForCreate } from "../models/ItemStatusEnum";
 import EnumHtmlSelectWrapper from "../../common/forms/wrapper/EnumHtmlSelectWrapper";
 import TextAreaWrapper from "../../common/forms/wrapper/TextAreaWrapper";
+import { ItemFormMode } from "./ItemFormMode";
 
 interface ItemFormProps {
+  formMode: ItemFormMode;
   formId: string;
   onSubmit: SubmitHandler<FieldValues>;
   methods: UseFormReturn<ItemModel>;
 }
 
-const ItemForm: FC<ItemFormProps> = ({ formId, onSubmit, methods }) => {
+const ItemForm: FC<ItemFormProps> = ({
+  formMode,
+  formId,
+  onSubmit,
+  methods,
+}) => {
   const onFormSubmit = methods.handleSubmit(onSubmit);
 
   return (
@@ -26,7 +33,10 @@ const ItemForm: FC<ItemFormProps> = ({ formId, onSubmit, methods }) => {
         <EnumHtmlSelectWrapper
           name="status"
           label="Status"
-          valueEnum={ItemStatusForCreate}
+          valueEnum={
+            formMode == ItemFormMode.CREATE ? ItemStatusForCreate : ItemStatus
+          }
+          disabled={formMode != ItemFormMode.CREATE}
           defaultValue={ItemStatusForCreate.IN_STOCK}
         />
         <EnumHtmlSelectWrapper
