@@ -1,24 +1,28 @@
 import { FC } from "react";
 import { IconNames } from "@blueprintjs/icons";
 import { FieldValues } from "react-hook-form";
-import { AppToaster } from "../../common/utils/Toaster";
-import ItemTypeModel from "../models/ItemTypeModel";
-import { useEntryLinks } from "../../links/EntryLinksContext";
-import { LinkNames } from "../../links/types/LinkModel";
-import LinkUtil from "../../links/LinkUtil";
 import { useMatchMutate } from "../../common/utils/swr/useMutateMatch";
-import ItemTypeDialog from "./ItemTypeDialog";
+import { AppToaster } from "../../common/utils/Toaster";
+import { useEntryLinks } from "../../links/EntryLinksContext";
+import LinkUtil from "../../links/LinkUtil";
+import { LinkNames } from "../../links/types/LinkModel";
+import ItemModel from "../models/ItemModel";
+import ItemDialog from "./ItemDialog";
+import ItemTypeModel from "../models/ItemTypeModel";
+import { ItemFormMode } from "../forms/ItemFormMode";
 
-const formId = "editItemTypeForm";
+const formId = "editItemForm";
 
-interface EditItemTypeDialogProps {
-  editableData?: ItemTypeModel;
+interface EditItemDialogProps {
+  editableData?: ItemModel;
   handleClose: () => void;
+  targetItemType?: ItemTypeModel;
 }
 
-const EditItemTypeDialog: FC<EditItemTypeDialogProps> = ({
-  handleClose,
+const EditItemDialog: FC<EditItemDialogProps> = ({
   editableData,
+  handleClose,
+  targetItemType,
 }) => {
   const entryLinks = useEntryLinks();
   const mutateMatch = useMatchMutate();
@@ -36,17 +40,17 @@ const EditItemTypeDialog: FC<EditItemTypeDialogProps> = ({
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(data),
       })
-        .then((response) => response.json() as Promise<ItemTypeModel>)
-        .then((updatedItemType) => {
-          const itemTypesReadLink = LinkUtil.findLink(
+        .then((response) => response.json() as Promise<ItemModel>)
+        .then(() => {
+          const itemReadLink = LinkUtil.findLink(
             entryLinks,
             "itemTypes",
             LinkNames.READ
           );
-          mutateMatch(itemTypesReadLink);
+          mutateMatch(itemReadLink);
 
           AppToaster?.show?.({
-            message: "Item type " + updatedItemType.name + " was updated",
+            message: "Item of type " + targetItemType?.name + " was updated",
             intent: "success",
             icon: IconNames.CONFIRM,
           });
@@ -55,16 +59,20 @@ const EditItemTypeDialog: FC<EditItemTypeDialogProps> = ({
     handleClose();
   };
 
+  const title = "Edit item of type " + targetItemType?.name;
+
   return (
-    <ItemTypeDialog
-      title="Edit item type"
+    <ItemDialog
+      title={title}
       isOpen={Boolean(editableData)}
       handleClose={handleClose}
       onSubmit={onSubmit}
       formId={formId}
+      formMode={ItemFormMode.UPDATE}
+      targetItemType={targetItemType}
       initialData={editableData}
     />
   );
 };
 
-export default EditItemTypeDialog;
+export default EditItemDialog;

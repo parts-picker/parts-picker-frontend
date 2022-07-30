@@ -8,6 +8,7 @@ import { IconNames } from "@blueprintjs/icons";
 import ItemModel from "../models/ItemModel";
 import ItemTypeModel from "../models/ItemTypeModel";
 import ItemDialog from "./ItemDialog";
+import { ItemFormMode } from "../forms/ItemFormMode";
 
 const formId = "createItemForm";
 
@@ -57,11 +58,15 @@ const CreateItemDialog: FC<CreateItemDialogProps> = ({
     handleClose();
   };
 
+  const title = "Create item of type " + targetItemType?.name;
+
   return (
     <ItemDialog
+      title={title}
       isOpen={isOpen}
       handleClose={handleClose}
       formId={formId}
+      formMode={ItemFormMode.CREATE}
       onSubmit={onSubmit}
       targetItemType={targetItemType}
     />

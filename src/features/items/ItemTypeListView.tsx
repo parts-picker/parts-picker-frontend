@@ -7,7 +7,7 @@ import SortableTable from "../common/tables/SortableTable";
 import ItemTypeModel from "./models/ItemTypeModel";
 import { IconNames } from "@blueprintjs/icons";
 import DeleteButton from "../common/tables/subcomponents/DeleteButton";
-import EditItemTypeButton from "./subcomponents/EditItemTypeButton";
+import EditButton from "../common/tables/subcomponents/EditButton";
 import EditItemTypeDialog from "./dialogs/EditItemTypeDialog";
 import LinkUtil from "../links/LinkUtil";
 import { LinkNames } from "../links/types/LinkModel";
@@ -110,8 +110,8 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
 
         return (
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <EditItemTypeButton
-              currentItemType={cell.row.original}
+            <EditButton
+              current={cell.row.original}
               setEditData={setEditableData}
             />
             <DeleteButton
