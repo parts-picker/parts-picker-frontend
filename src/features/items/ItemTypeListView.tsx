@@ -137,8 +137,8 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
     const encodedLink = window.btoa(link.href);
 
     router.push({
-      pathname: "item-types/[link]",
-      query: { link: encodedLink },
+      pathname: "/item-types/[itemTypeLink]",
+      query: { itemTypeLink: encodedLink, page: 0, size: 10 },
     });
   };
 

@@ -1,16 +1,21 @@
 import "../../styles/globals.scss";
 import type { AppProps } from "next/app";
 
+import "../../styles/layout.scss";
+import "../../styles/navigation.scss";
+
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/popover2/lib/css/blueprint-popover2.css";
+
 import useSWR from "swr";
-import defaultFetcher from "../features/common/DefaultFetcher";
+import defaultFetcher from "../features/common/utils/swr/DefaultFetcher";
 import { EntryLinksProvider } from "../features/links/EntryLinksContext";
 import ResponseError from "../features/common/models/ResponseError";
 import DefaultLoadingSpinner from "../features/common/loading/DefaultLoadingSpinner";
 import { EntryLinksResponse } from "../features/links/types/EntryLinksResponse";
 import { ENTRY_LINK } from "../features/common/utils/ConfigReaderUtils";
+import Layout from "../features/common/layout/Layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { data, error } = useSWR<EntryLinksResponse>(
@@ -32,7 +37,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <EntryLinksProvider value={data}>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </EntryLinksProvider>
   );
 }

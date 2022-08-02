@@ -1,0 +1,59 @@
+@import "../node_modules/@blueprintjs/core/lib/scss/variables";
+@import "./variables.scss";
+
+.layout {
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "sidebar content";
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: 5rem 1fr;
+    background-color: $pt-app-background-color;
+    width: 100vw;
+    height: 100vh;
+    
+    .#{$ns}-dark & {
+        background-color: $pt-dark-app-background-color;
+    }
+}
+
+.sidebar {
+    grid-area: sidebar;
+    background-color: $pt-app-background-color;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0.5em;
+    width: $sidebar-width;
+    overflow: hidden;
+    border-right: 0.1rem solid $light-gray1;
+
+    transition: width 0.5s;
+    
+    .#{$ns}-dark & {
+        background-color: $pt-dark-app-background-color;
+        border-right: 0.1rem solid $dark-gray5;
+    }
+
+    &--reduced {
+        @extend .sidebar;
+        width: $sidebar-reduced-width;
+        align-content: center;
+
+        .invisible-if-reduced {
+            display: none;
+        }
+    }
+}
+
+.header {
+    grid-area: header;
+    font-size: 2em;
+    background-color: rgb(100, 240, 240);
+}
+
+.content {
+    grid-area: content;
+    padding: 0.75em;
+    overflow: auto;
+}
