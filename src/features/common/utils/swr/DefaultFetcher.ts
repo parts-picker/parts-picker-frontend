@@ -1,4 +1,4 @@
-import ResponseError from "./models/ResponseError";
+import ResponseError from "../../models/ResponseError";
 
 const defaultFetcher = async (url: string) => {
   const res = await fetch(url);

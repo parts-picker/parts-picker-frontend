@@ -1,0 +1,39 @@
+@import "../node_modules/@blueprintjs/core/lib/scss/variables";
+
+.nav-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-container__href {
+    font-size: 1.3rem;
+    color: $pt-heading-color;
+    padding: 0.75em;
+    display: flex;
+    align-items: center;
+    height: 3rem;
+
+    .#{$ns}-dark & {
+        color: $pt-dark-heading-color;
+    }
+
+    &--selected {
+        @extend .nav-container__href;
+        background-color: $light-gray1;
+
+        .#{$ns}-dark & {
+                background-color: $dark-gray5;
+            }
+    }
+
+    &:hover {
+        outline: none;
+        text-decoration: none;
+    }
+
+    .href-text{
+        margin-left: 1.5rem;
+        white-space: nowrap;
+    }
+
+}

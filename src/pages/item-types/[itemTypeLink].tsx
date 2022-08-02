@@ -2,7 +2,7 @@ import { Button, Divider, H1 } from "@blueprintjs/core";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
 import useSWR from "swr";
-import defaultFetcher from "../../features/common/DefaultFetcher";
+import defaultFetcher from "../../features/common/utils/swr/DefaultFetcher";
 import ItemListView from "../../features/items/ItemListView";
 import ItemTypeModel from "../../features/items/models/ItemTypeModel";
 import { IconNames } from "@blueprintjs/icons";
