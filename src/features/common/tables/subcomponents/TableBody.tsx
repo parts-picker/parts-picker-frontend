@@ -1,3 +1,4 @@
+import { flexRender } from "@tanstack/react-table";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import DefaultLoadingSpinner from "../../loading/DefaultLoadingSpinner";
@@ -12,46 +13,44 @@ const TableBody = (): ReactElement => {
     if (loading) {
       return (
         <tr>
-          <td colSpan={table.visibleColumns.length}>
+          <td colSpan={table.getAllColumns().length}>
             <DefaultLoadingSpinner />
           </td>
         </tr>
       );
     }
 
-    if (table.rows.length > 0) {
-      return table.rows.map((row) => {
-        table.prepareRow(row);
-
-        return (
-          // eslint-disable-next-line react/jsx-key
-          <tr
-            {...row.getRowProps()}
-            onClick={() => {
-              tableOptions?.onRowClickAction?.(row, router);
-            }}
-          >
-            {row.cells.map((cell) => (
-              // eslint-disable-next-line react/jsx-key
-              <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-            ))}
-          </tr>
-        );
-      });
+    if (table.getRowModel().rows.length > 0) {
+      return table.getRowModel().rows.map((row) => (
+        <tr
+          key={row.id}
+          onClick={() => {
+            tableOptions?.onRowClickAction?.(row, router);
+          }}
+        >
+          {row.getVisibleCells().map((cell) => (
+            <td key={cell.id}>
+              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            </td>
+          ))}
+        </tr>
+      ));
     }
 
     if (tableOptions?.nonIdealState) {
       return (
         <tr>
-          <td colSpan={table.visibleColumns.length}>
+          <td colSpan={table.getAllColumns().length}>
             {tableOptions?.nonIdealState}
           </td>
         </tr>
       );
     }
+
+    return null;
   };
 
-  return <tbody {...table.getTableBodyProps()}>{getTableBody()}</tbody>;
+  return <tbody>{getTableBody()}</tbody>;
 };
 
 export default TableBody;

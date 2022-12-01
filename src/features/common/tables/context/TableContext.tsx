@@ -1,5 +1,5 @@
+import { Table } from "@tanstack/react-table";
 import React, { ReactElement, useContext } from "react";
-import { TableInstance } from "react-table";
 import { ResponseModel } from "../../../links/types/ResponseModel";
 import PaginationControlOptions from "../types/PaginationControlOptions";
 import { RowClickAction } from "../types/RowClickAction";
@@ -10,7 +10,7 @@ export const TableContext = React.createContext<TableContextModel<any>>( //eslin
 
 export interface TableContextModel<Content extends ResponseModel> {
   loading: boolean;
-  table: TableInstance<Content>;
+  table: Table<Content>;
   tableOptions?: TableOptions<Content>;
   pageOptions?: PaginationControlOptions;
 }

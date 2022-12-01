@@ -1,7 +1,6 @@
 import { NonIdealState } from "@blueprintjs/core";
 import React, { useState } from "react";
 import { FC } from "react";
-import { Column } from "react-table";
 import SortableTable from "../common/tables/SortableTable";
 import ItemModel from "./models/ItemModel";
 import { IconNames } from "@blueprintjs/icons";
@@ -11,12 +10,12 @@ import { LinkNames } from "../links/types/LinkModel";
 import { useSWRWithURILike } from "../common/utils/swr/useSWRWithURILike";
 import { EmbeddedItems } from "./models/EmbeddedTypes";
 import LinkUtil from "../links/LinkUtil";
-import ListResponse from "../common/models/ListResponse";
-import DeleteButton from "../common/tables/subcomponents/DeleteButton";
-import { AppToaster } from "../common/utils/Toaster";
-import EditButton from "../common/tables/subcomponents/EditButton";
 import EditItemDialog from "./dialogs/EditItemDialog";
 import ItemTypeModel from "./models/ItemTypeModel";
+import { requestedSortRulesToQueryParam } from "../common/utils/pageQueries/usePageQueryParams";
+import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
+import { useDeleteRowFunction } from "../common/tables/hooks/useDeleteRowFunction";
+import ActionButtons from "../common/tables/subcomponents/ActionButtons";
 
 interface ItemListViewProps {
   itemType: ItemTypeModel;
@@ -41,88 +40,48 @@ const ItemListView: FC<ItemListViewProps> = ({
     {
       size: pageQueryOptions.requestedPageSize.toString(),
       page: pageQueryOptions.requestedPageNumber.toString(),
+      sort: requestedSortRulesToQueryParam(pageQueryOptions.requestedSortRules),
     }
   );
   const items = data?._embedded?.items || new Array<ItemModel>();
 
-  const [editableData, setEditableData] = useState<ItemModel | undefined>(
+  const [editableData, setEditData] = useState<ItemModel | undefined>(
     undefined
   );
 
   const handleClose = () => {
-    setEditableData(undefined);
+    setEditData(undefined);
   };
 
-  const columns: Column<ItemModel>[] = [
-    { Header: "Condition", accessor: "condition" },
-    { Header: "Status", accessor: "status" },
-    { Header: "Note", accessor: "note" },
-    {
-      Header: "Actions",
-      accessor: "_links",
-      disableSortBy: true,
-      Cell: (cell) => {
-        const selfLink = LinkUtil.findLink(
-          cell.row.original,
-          "self",
-          LinkNames.DELETE
-        );
+  const deleteRow = useDeleteRowFunction({ mutate });
 
-        const deleteRow = () => {
-          if (!selfLink) {
-            return;
+  const itemColumnHelper = createColumnHelper<ItemModel>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const columns: ColumnDef<ItemModel, any>[] = [
+    itemColumnHelper.accessor("condition", { header: () => "Condition" }),
+    itemColumnHelper.accessor("status", { header: () => "Status" }),
+    itemColumnHelper.accessor("note", { header: () => "Note" }),
+    itemColumnHelper.display({
+      id: "actions",
+      header: "Actions",
+      cell: (props) => (
+        <ActionButtons
+          backingRow={props.row.original}
+          setEditData={setEditData}
+          deleteRow={deleteRow}
+          deleteNotification={
+            <span>
+              Item of item type <b>{itemType.name}</b> was deleted
+            </span>
           }
-
-          mutate(
-            async () => {
-              await fetch(selfLink.href, {
-                method: "DELETE",
-              });
-
-              return undefined;
-            },
-            {
-              populateCache: false,
-              revalidate: true,
-              optimisticData: (currentData) => {
-                if (!currentData) {
-                  return new ListResponse();
-                }
-
-                const updatedList = currentData._embedded.items.filter(
-                  (item) =>
-                    LinkUtil.findLink(item, "self", LinkNames.READ)?.href !=
-                    selfLink.href
-                );
-
-                const updatedData = { ...currentData };
-                updatedData._embedded.items = updatedList;
-                return updatedData;
-              },
-            }
-          );
-
-          AppToaster?.show?.({
-            message: "Item was deleted",
-            intent: "success",
-            icon: IconNames.CONFIRM,
-          });
-        };
-
-        return (
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <EditButton
-              current={cell.row.original}
-              setEditData={setEditableData}
-            />
-            <DeleteButton
-              deleteAction={deleteRow}
-              confirmDescription={<>Delete item?</>}
-            />
-          </div>
-        );
-      },
-    },
+          deleteConfirmDescription={
+            <span>
+              Delete item of item type <b>{itemType.name}</b>?
+            </span>
+          }
+        />
+      ),
+    }),
   ];
 
   const nonIdealState = (
@@ -147,6 +106,8 @@ const ItemListView: FC<ItemListViewProps> = ({
                 ...data.page,
                 setRequestedPageSize: pageQueryOptions.setRequestedPageSize,
                 setRequestedPageNumber: pageQueryOptions.setRequestedPageNumber,
+                setRequestedSortRules: pageQueryOptions.setRequestedSortRules,
+                requestedSortRules: pageQueryOptions.requestedSortRules,
                 allowedPageSizes: pageQueryOptions.allowedPageSizes,
               }
             : undefined

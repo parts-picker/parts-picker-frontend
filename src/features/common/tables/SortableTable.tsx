@@ -1,7 +1,6 @@
 import { HTMLTable } from "@blueprintjs/core";
-import React from "react";
+import React, { useMemo } from "react";
 import { PropsWithChildren, ReactElement } from "react";
-import { Column, useSortBy, useTable } from "react-table";
 import { ResponseModel } from "../../links/types/ResponseModel";
 import { TableContext } from "./context/TableContext";
 import TableBody from "./subcomponents/TableBody";
@@ -9,9 +8,16 @@ import TableHeader from "./subcomponents/TableHeader";
 import PaginationTableFooter from "./subcomponents/PaginationTableFooter";
 import PaginationControlOptions from "./types/PaginationControlOptions";
 import { RowClickAction } from "./types/RowClickAction";
+import {
+  ColumnDef,
+  useReactTable,
+  getCoreRowModel,
+  Updater,
+  SortingState,
+} from "@tanstack/react-table";
 
 interface SortableTableProps<Content extends ResponseModel> {
-  columns: Column<Content>[];
+  columns: ColumnDef<Content>[];
   data: Content[] | undefined;
   loading?: boolean;
   options?: {
@@ -29,15 +35,32 @@ const SortableTable = <Content extends ResponseModel>({
     onRowClickAction: undefined,
     nonIdealState: undefined,
   },
-  pageControlOptions: pageOptions,
+  pageControlOptions,
 }: PropsWithChildren<SortableTableProps<Content>>): ReactElement => {
-  const table = useTable(
-    {
-      columns: React.useMemo(() => columns, [columns]),
-      data: React.useMemo(() => data || [], [data]),
+  const handleOnSortingChange = (updaterOrValue: Updater<SortingState>) => {
+    let newSortingState;
+
+    if (typeof updaterOrValue === "function") {
+      newSortingState = updaterOrValue(
+        pageControlOptions?.requestedSortRules ?? []
+      );
+    } else {
+      newSortingState = updaterOrValue;
+    }
+
+    pageControlOptions?.setRequestedSortRules(newSortingState);
+  };
+
+  const table = useReactTable({
+    columns: useMemo(() => columns, [columns]),
+    data: useMemo(() => data || [], [data]),
+    getCoreRowModel: getCoreRowModel(),
+    manualSorting: true,
+    state: {
+      sorting: pageControlOptions?.requestedSortRules,
     },
-    useSortBy
-  );
+    onSortingChange: handleOnSortingChange,
+  });
 
   return (
     <TableContext.Provider
@@ -48,13 +71,12 @@ const SortableTable = <Content extends ResponseModel>({
           onRowClickAction: options.onRowClickAction,
           nonIdealState: options.nonIdealState,
         },
-        pageOptions: pageOptions,
+        pageOptions: pageControlOptions,
       }}
     >
       <HTMLTable
         striped={!loading}
         interactive={options?.onRowClickAction && !loading}
-        {...table.getTableProps()}
       >
         <TableHeader />
         <TableBody />

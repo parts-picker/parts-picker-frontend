@@ -28,7 +28,7 @@ const PaginationTableFooter: FC = () => {
   return (
     <tfoot>
       <tr>
-        <td colSpan={table.visibleColumns.length}>
+        <td colSpan={table.getAllColumns().length}>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <PageButton
               targetPageNumber={pageOptions.number - 1}
