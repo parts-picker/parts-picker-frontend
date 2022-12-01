@@ -1,25 +1,29 @@
 import { ReactElement } from "react";
 import { useTableContext } from "../context/TableContext";
 import SortIndicator from "../util/SortIndicator";
+import { flexRender } from "@tanstack/react-table";
 
 const TableHeader = (): ReactElement => {
   const { table } = useTableContext();
 
   return (
     <thead>
-      {table.headerGroups.map((headerGroup) => (
-        // eslint-disable-next-line react/jsx-key
-        <tr {...headerGroup.getHeaderGroupProps()}>
-          {headerGroup.headers.map((cell) => (
-            // eslint-disable-next-line react/jsx-key
-            <th {...cell.getHeaderProps(cell.getSortByToggleProps())}>
-              {cell.render("Header")}
-              {cell.canSort ? (
-                <SortIndicator
-                  sorted={cell.isSorted}
-                  sortDesc={cell.isSortedDesc}
-                />
-              ) : null}
+      {table.getHeaderGroups().map((headerGroup) => (
+        <tr key={headerGroup.id}>
+          {headerGroup.headers.map((header) => (
+            <th key={header.id}>
+              {header.isPlaceholder ? null : (
+                <div
+                  onClick={header.column.getToggleSortingHandler()}
+                  style={{ userSelect: "none" }}
+                >
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
+                  )}
+                  <SortIndicator sorted={header.column.getIsSorted()} />
+                </div>
+              )}
             </th>
           ))}
         </tr>

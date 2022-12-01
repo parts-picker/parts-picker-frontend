@@ -7,15 +7,15 @@ import { LinkNames } from "../../../links/types/LinkModel";
 import { ResponseModel } from "../../../links/types/ResponseModel";
 
 interface EditButtonProps<Content extends ResponseModel> {
-  current: Content;
+  currentData: Content;
   setEditData: (editData: Content | undefined) => void;
 }
 
 const EditButton = <Content extends ResponseModel>({
-  current,
+  currentData,
   setEditData,
 }: PropsWithChildren<EditButtonProps<Content>>): ReactElement | null => {
-  const selfLink = LinkUtil.findLink(current, "self", LinkNames.UPDATE);
+  const selfLink = LinkUtil.findLink(currentData, "self", LinkNames.UPDATE);
 
   if (!selfLink) {
     return null;
@@ -24,7 +24,7 @@ const EditButton = <Content extends ResponseModel>({
   const onClick = (event: ClickMouseEvent) => {
     event.stopPropagation();
 
-    setEditData(current);
+    setEditData(currentData);
   };
   return <Button minimal icon={IconNames.EDIT} onClick={onClick} />;
 };

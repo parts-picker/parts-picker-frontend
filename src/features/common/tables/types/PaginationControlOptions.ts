@@ -1,6 +1,8 @@
+import { ColumnSort } from "@tanstack/react-table";
 import {
   SetRequestedPageNumber,
   SetRequestedPageSize,
+  SetRequestedSortRules,
 } from "./PaginationQueryOptions";
 
 export default interface PaginationControlOptions {
@@ -11,4 +13,6 @@ export default interface PaginationControlOptions {
   number: number;
   setRequestedPageNumber: SetRequestedPageNumber;
   totalPages: number;
+  requestedSortRules: ColumnSort[];
+  setRequestedSortRules: SetRequestedSortRules;
 }
