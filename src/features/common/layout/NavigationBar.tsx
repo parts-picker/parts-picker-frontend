@@ -7,7 +7,8 @@ import { useRouter } from "next/router";
 
 const navLinks: NavLink[] = [
   { href: "/", text: "Dashboard", icon: IconNames.TIMELINE_AREA_CHART },
-  { href: "/item-types", text: "Item inventory", icon: IconNames.BOX },
+  { href: "/projects", text: "Project Overview", icon: IconNames.CLIPBOARD },
+  { href: "/item-types", text: "Item Inventory", icon: IconNames.BOX },
 ];
 
 const NavigationBar: FC = () => {
