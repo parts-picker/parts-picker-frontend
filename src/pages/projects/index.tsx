@@ -4,7 +4,7 @@ import { FC } from "react";
 import { ALLOWED_PAGE_SIZES } from "../../features/common/utils/ConfigReaderUtils";
 import { parsePageQueryParams } from "../../features/common/utils/pageQueries/ParsePageQueryParams";
 import { usePageQueryParams } from "../../features/common/utils/pageQueries/usePageQueryParams";
-import ProjectView from "../../features/projects/ProjectListView";
+import ProjectListView from "../../features/projects/ProjectListView";
 
 const ProjectsIndex: FC = () => {
   const pageQueryOptions = usePageQueryParams();
@@ -12,7 +12,7 @@ const ProjectsIndex: FC = () => {
   return (
     <div>
       <H1> Project Overview </H1>
-      <ProjectView
+      <ProjectListView
         pageQueryOptions={{
           ...pageQueryOptions,
           allowedPageSizes: ALLOWED_PAGE_SIZES,
