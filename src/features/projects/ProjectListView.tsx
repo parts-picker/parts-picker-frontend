@@ -1,5 +1,5 @@
 import { NonIdealState } from "@blueprintjs/core";
-import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
+import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
 import { FC } from "react";
 import URITemplate from "urijs/src/URITemplate";
 import PaginationQueryOptions from "../common/tables/types/PaginationQueryOptions";
@@ -11,12 +11,14 @@ import ProjectModel from "./models/ProjectModel";
 import { ReadProjectsResponse } from "./models/ReadProjectsResponse";
 import { IconNames } from "@blueprintjs/icons";
 import SortableTable from "../common/tables/SortableTable";
+import { NextRouter } from "next/router";
+import LinkUtil from "../links/LinkUtil";
 
 interface ProjectViewProps {
   pageQueryOptions: PaginationQueryOptions;
 }
 
-const ProjectView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
+const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
   const projectReadLink = useEntryLinkFor(LinkNames.READ, "projects");
   const projectReadLinkTemplate = projectReadLink
     ? new URITemplate(projectReadLink.href)
@@ -41,6 +43,20 @@ const ProjectView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
     }),
   ];
 
+  const rowClickAction = (row: Row<ProjectModel>, router: NextRouter) => {
+    const link = LinkUtil.findLink(row.original, "self", LinkNames.READ);
+    if (!link) {
+      return;
+    }
+
+    const encodedLink = window.btoa(link.href);
+
+    router.push({
+      pathname: "/projects/[projectLink]",
+      query: { projectLink: encodedLink, page: 0, size: 10 },
+    });
+  };
+
   const nonIdealState = (
     <NonIdealState icon={IconNames.CROSS} title={"No projects were found"} />
   );
@@ -53,6 +69,7 @@ const ProjectView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
         loading={loading}
         options={{
           nonIdealState: nonIdealState,
+          onRowClickAction: rowClickAction,
         }}
         pageControlOptions={
           !loading && data && data.page
@@ -71,4 +88,4 @@ const ProjectView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
   );
 };
 
-export default ProjectView;
+export default ProjectListView;
