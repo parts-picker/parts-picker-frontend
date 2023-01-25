@@ -6,7 +6,8 @@ import useSWR, { KeyedMutator, SWRResponse } from "swr";
 
 export const useSWRWithURILike = <ReturnType = unknown, ErrorType = unknown>(
   uriLike: URILike,
-  uriParams?: URITemplateInput
+  uriParams?: URITemplateInput,
+  swrOptions?: SwrOptions
 ): ExtendedSWRResponse<ReturnType, ErrorType> => {
   let key: string | undefined;
 
@@ -17,7 +18,11 @@ export const useSWRWithURILike = <ReturnType = unknown, ErrorType = unknown>(
   } else if (typeof uriLike === "string") {
     key = uriLike;
   }
-  const swrResponse = useSWR<ReturnType, ErrorType>(key, defaultFetcher);
+  const swrResponse = useSWR<ReturnType, ErrorType>(
+    key,
+    defaultFetcher,
+    swrOptions
+  );
 
   return { ...swrResponse, loading: !swrResponse.error && !swrResponse.data };
 };
@@ -30,4 +35,8 @@ export class ExtendedSWRResponse<ReturnType, ErrorType>
   mutate: KeyedMutator<ReturnType>;
   isValidating: boolean;
   loading: boolean;
+}
+
+class SwrOptions {
+  refreshInterval: number;
 }
