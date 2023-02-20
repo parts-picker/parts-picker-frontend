@@ -4,16 +4,16 @@ import { ResponseModel } from "../../../links/types/ResponseModel";
 import { AppToaster } from "../../utils/Toaster";
 import { IconNames } from "@blueprintjs/icons";
 import { KeyedMutator } from "swr";
-import { ListEmbeddedModels } from "../../../items/models/EmbeddedTypes";
+import { EmbeddedModels } from "../../models/EmbeddedModels";
 import { ReactNode } from "react";
 
-interface UseDeleteRowFunctionProps<Data extends ListEmbeddedModels> {
-  mutate: KeyedMutator<Data>;
+interface UseDeleteRowFunctionProps<DataList extends EmbeddedModels> {
+  mutate: KeyedMutator<DataList>;
 }
 
-export const useDeleteRowFunction = <Data extends ListEmbeddedModels>({
+export const useDeleteRowFunction = <DataList extends EmbeddedModels>({
   mutate,
-}: UseDeleteRowFunctionProps<Data>) => {
+}: UseDeleteRowFunctionProps<DataList>) => {
   const deleteRow: DeleteRowFunction = (
     rowToDelete: ResponseModel,
     deleteNotification: ReactNode
@@ -24,24 +24,13 @@ export const useDeleteRowFunction = <Data extends ListEmbeddedModels>({
       LinkNames.DELETE
     );
 
-    const readSelfLink = LinkUtil.findLink(rowToDelete, "self", LinkNames.READ);
-
     if (!deleteSelfLink) {
       return;
     }
 
-    mutate(
-      async () => {
-        await fetch(deleteSelfLink.href, {
-          method: "DELETE",
-        });
-
-        return undefined;
-      },
-      {
-        populateCache: false,
-        revalidate: true,
-        optimisticData: (currentData) => {
+    const readSelfLink = LinkUtil.findLink(rowToDelete, "self", LinkNames.READ);
+    const createOptimisticData = readSelfLink
+      ? (currentData: DataList | undefined) => {
           if (!currentData) {
             throw Error("currentData cannot be undefined");
           }
@@ -61,10 +50,24 @@ export const useDeleteRowFunction = <Data extends ListEmbeddedModels>({
           const updatedData = {
             ...currentData,
             _embedded: { [embeddedPropertyName]: updatedList },
-          } as Data;
+          } as DataList;
 
           return updatedData;
-        },
+        }
+      : undefined;
+
+    mutate(
+      async () => {
+        await fetch(deleteSelfLink.href, {
+          method: "DELETE",
+        });
+
+        return undefined;
+      },
+      {
+        populateCache: false,
+        revalidate: true,
+        optimisticData: createOptimisticData,
       }
     );
 

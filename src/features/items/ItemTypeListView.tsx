@@ -11,7 +11,7 @@ import { LinkNames } from "../links/types/LinkModel";
 import PaginationQueryOptions from "../common/tables/types/PaginationQueryOptions";
 import { useSWRWithURILike } from "../common/utils/swr/useSWRWithURILike";
 import URITemplate from "urijs/src/URITemplate";
-import { EmbeddedItemTypes } from "./models/EmbeddedTypes";
+import { EmbeddedItemTypes } from "./models/ItemEmbeddedTypes";
 import { useEntryLinkFor } from "../links/hooks/useEntryLinkFor";
 import { requestedSortRulesToQueryParam } from "../common/utils/pageQueries/usePageQueryParams";
 import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";

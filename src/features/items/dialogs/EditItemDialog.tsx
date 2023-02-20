@@ -47,6 +47,7 @@ const EditItemDialog: FC<EditItemDialogProps> = ({
             "itemTypes",
             LinkNames.READ
           );
+
           mutateMatch(itemReadLink);
 
           AppToaster?.show?.({

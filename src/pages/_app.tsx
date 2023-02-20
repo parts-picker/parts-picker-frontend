@@ -7,6 +7,7 @@ import "../../styles/navigation.scss";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/popover2/lib/css/blueprint-popover2.css";
+import "@blueprintjs/select/lib/css/blueprint-select.css";
 
 import useSWR from "swr";
 import defaultFetcher from "../features/common/utils/swr/DefaultFetcher";

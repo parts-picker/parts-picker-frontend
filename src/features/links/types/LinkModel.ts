@@ -11,4 +11,5 @@ export enum LinkNames {
   READ = "READ",
   UPDATE = "UPDATE",
   DELETE = "DELETE",
+  SEARCH = "SEARCH",
 }

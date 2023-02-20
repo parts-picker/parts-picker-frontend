@@ -53,7 +53,7 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
 
     router.push({
       pathname: "/projects/[projectLink]",
-      query: { projectLink: encodedLink, page: 0, size: 10 },
+      query: { projectLink: encodedLink },
     });
   };
 

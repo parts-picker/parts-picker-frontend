@@ -8,7 +8,7 @@ import PaginationQueryOptions from "../common/tables/types/PaginationQueryOption
 import URITemplate from "urijs/src/URITemplate";
 import { LinkNames } from "../links/types/LinkModel";
 import { useSWRWithURILike } from "../common/utils/swr/useSWRWithURILike";
-import { EmbeddedItems } from "./models/EmbeddedTypes";
+import { EmbeddedItems } from "./models/ItemEmbeddedTypes";
 import LinkUtil from "../links/LinkUtil";
 import EditItemDialog from "./dialogs/EditItemDialog";
 import ItemTypeModel from "./models/ItemTypeModel";

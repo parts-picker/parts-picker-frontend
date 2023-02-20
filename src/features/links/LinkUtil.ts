@@ -1,3 +1,4 @@
+import URITemplate from "urijs/src/URITemplate";
 import { LinkModel, LinkNames } from "./types/LinkModel";
 import { ResponseModel } from "./types/ResponseModel";
 
@@ -23,6 +24,24 @@ export default class LinkUtil {
     }
 
     return undefined;
+  }
+
+  static findTemplatedLink(
+    responseModel: ResponseModel | undefined,
+    ref: string,
+    name: LinkNames
+  ): URITemplate.URITemplate | null {
+    const link = this.findLink(responseModel, ref, name);
+
+    if (!link) {
+      return null;
+    }
+
+    if (!link.templated) {
+      throw Error("Link must be templated");
+    }
+
+    return new URITemplate(link.href);
   }
 
   static isLinkAvailable(

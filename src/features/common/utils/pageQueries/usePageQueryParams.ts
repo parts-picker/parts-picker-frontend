@@ -13,8 +13,12 @@ import {
  */
 export const usePageQueryParams = (): PageQueryOptions => {
   const router = useRouter();
-  const requestedPageNumber = Number(router.query.page);
-  const requestedPageSize = Number(router.query.size);
+  const requestedPageNumber = isNaN(Number(router.query.page))
+    ? Number(process.env.NEXT_PUBLIC_DEFAULT_PAGE_NUMBER)
+    : Number(router.query.page);
+  const requestedPageSize = isNaN(Number(router.query.size))
+    ? Number(process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE)
+    : Number(router.query.size);
   const requestedSortRules = queryParamToSortRules(router.query.sort);
 
   const setRequestedPageNumber = (page: number) =>
