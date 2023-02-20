@@ -7,9 +7,10 @@ import ProjectModel from "../../features/projects/models/ProjectModel";
 import { IconNames } from "@blueprintjs/icons";
 import DefaultLoadingSpinner from "../../features/common/loading/DefaultLoadingSpinner";
 import InstanceStatusBar from "../../features/workflow/InstanceStatusBar";
-import { InstanceInfoModel } from "../../features/workflow/models/InstanceInfoModel";
 import LinkUtil from "../../features/links/LinkUtil";
 import { LinkNames } from "../../features/links/types/LinkModel";
+import ProjectInstanceViews from "../../features/projects/instanceViews/ProjectInstanceViews";
+import { InstanceInfo } from "../../features/workflow/models/InstanceInfoModel";
 
 const ProjectDetails: FC = () => {
   const router = useRouter();
@@ -23,7 +24,7 @@ const ProjectDetails: FC = () => {
     "status",
     LinkNames.READ
   )?.href;
-  const { data: instanceInfo, mutate } = useSWR<InstanceInfoModel>(
+  const { data: instanceInfo, mutate } = useSWR<InstanceInfo>(
     instanceInfoLink,
     defaultFetcher,
     { refreshInterval: 5000 }
@@ -50,6 +51,7 @@ const ProjectDetails: FC = () => {
       </Text>
       <Divider />
       <InstanceStatusBar instanceInfo={instanceInfo} mutate={mutate} />
+      <ProjectInstanceViews project={project} instanceInfo={instanceInfo} />
     </div>
   );
 };

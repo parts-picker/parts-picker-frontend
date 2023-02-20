@@ -5,5 +5,3 @@ import { EmbeddedItemTypeModel } from "./EmbeddedItemTypeModel";
 export type EmbeddedItemTypes = ListResponse<EmbeddedItemTypeModel>;
 
 export type EmbeddedItems = ListResponse<EmbeddedItemModel>;
-
-export type ListEmbeddedModels = EmbeddedItemTypes | EmbeddedItems;

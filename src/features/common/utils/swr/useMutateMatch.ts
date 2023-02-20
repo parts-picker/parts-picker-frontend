@@ -38,3 +38,8 @@ export const useMatchMutate = () => {
     return Promise.all(mutations);
   };
 };
+
+export type MutateMatch = (
+  linkToMutate: LinkModel | undefined,
+  ...args: unknown[]
+) => Promise<unknown[]> | undefined;

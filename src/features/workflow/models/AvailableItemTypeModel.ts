@@ -1,10 +1,9 @@
 import { LinkMap } from "../../links/types/LinkMap";
 import { ResponseModel } from "../../links/types/ResponseModel";
 
-export default class ProjectModel implements ResponseModel {
+export class AvailableItemType implements ResponseModel {
   name: string;
-  description?: string;
   _links: LinkMap;
 }
 
-export type NullableProjectModel = ProjectModel | undefined | null;
+export type NullableAvailableItemType = AvailableItemType | null;
