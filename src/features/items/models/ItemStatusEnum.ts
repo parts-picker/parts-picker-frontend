@@ -1,7 +1,6 @@
 export enum ItemStatus {
   NEEDED = "NEEDED",
   ORDERED = "ORDERED",
-  UNSORTED = "UNSORTED",
   IN_TRANSIT = "IN_TRANSIT",
   IN_STOCK = "IN_STOCK",
   RESERVED = "RESERVED",
@@ -12,6 +11,5 @@ export enum ItemStatus {
 
 export enum ItemStatusForCreate {
   ORDERED = "ORDERED",
-  UNSORTED = "UNSORTED",
   IN_STOCK = "IN_STOCK",
 }
