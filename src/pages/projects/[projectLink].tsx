@@ -8,7 +8,7 @@ import { IconNames } from "@blueprintjs/icons";
 import DefaultLoadingSpinner from "../../features/common/loading/DefaultLoadingSpinner";
 import InstanceStatusBar from "../../features/workflow/InstanceStatusBar";
 import LinkUtil from "../../features/links/LinkUtil";
-import { LinkNames } from "../../features/links/types/LinkModel";
+import { LinkName } from "../../features/links/types/LinkModel";
 import ProjectInstanceViews from "../../features/projects/instanceViews/ProjectInstanceViews";
 import { InstanceInfo } from "../../features/workflow/models/InstanceInfoModel";
 
@@ -22,7 +22,7 @@ const ProjectDetails: FC = () => {
   const instanceInfoLink = LinkUtil.findLink(
     project,
     "status",
-    LinkNames.READ
+    LinkName.READ
   )?.href;
   const { data: instanceInfo, mutate } = useSWR<InstanceInfo>(
     instanceInfoLink,

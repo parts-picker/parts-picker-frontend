@@ -1,6 +1,6 @@
 import React from "react";
 import LinkUtil from "../LinkUtil";
-import { LinkNames } from "../types/LinkModel";
+import { LinkName } from "../types/LinkModel";
 import { EntryLinksContext } from "../EntryLinksContext";
 
 /**
@@ -9,7 +9,7 @@ import { EntryLinksContext } from "../EntryLinksContext";
  * @param ref the ref the link must have
  * @returns the entry link matching the given parameters or undefined
  */
-export const useEntryLinkFor = (name: LinkNames, ref: string) => {
+export const useEntryLinkFor = (name: LinkName, ref: string) => {
   const entryLinks = React.useContext(EntryLinksContext);
 
   return LinkUtil.findLink(entryLinks, ref, name);

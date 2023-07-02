@@ -6,7 +6,7 @@ import ItemModel from "./models/ItemModel";
 import { IconNames } from "@blueprintjs/icons";
 import PaginationQueryOptions from "../common/tables/types/PaginationQueryOptions";
 import URITemplate from "urijs/src/URITemplate";
-import { LinkNames } from "../links/types/LinkModel";
+import { LinkName } from "../links/types/LinkModel";
 import { useSWRWithURILike } from "../common/utils/swr/useSWRWithURILike";
 import { EmbeddedItems } from "./models/ItemEmbeddedTypes";
 import LinkUtil from "../links/LinkUtil";
@@ -26,11 +26,7 @@ const ItemListView: FC<ItemListViewProps> = ({
   itemType,
   pageQueryOptions,
 }) => {
-  const itemsReadLink = LinkUtil.findLink(
-    itemType,
-    "describes",
-    LinkNames.READ
-  );
+  const itemsReadLink = LinkUtil.findLink(itemType, "describes", LinkName.READ);
   const itemsReadLinkTemplate = itemsReadLink
     ? new URITemplate(itemsReadLink.href)
     : undefined;
@@ -43,7 +39,7 @@ const ItemListView: FC<ItemListViewProps> = ({
       sort: requestedSortRulesToQueryParam(pageQueryOptions.requestedSortRules),
     }
   );
-  const items = data?._embedded?.items || new Array<ItemModel>();
+  const items = data?._embedded?.items ?? new Array<ItemModel>();
 
   const [editableData, setEditData] = useState<ItemModel | undefined>(
     undefined

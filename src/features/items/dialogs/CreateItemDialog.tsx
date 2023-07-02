@@ -3,7 +3,7 @@ import { FieldValues } from "react-hook-form";
 import { useMatchMutate } from "../../common/utils/swr/useMutateMatch";
 import { AppToaster } from "../../common/utils/Toaster";
 import LinkUtil from "../../links/LinkUtil";
-import { LinkNames } from "../../links/types/LinkModel";
+import { LinkName } from "../../links/types/LinkModel";
 import { IconNames } from "@blueprintjs/icons";
 import ItemModel from "../models/ItemModel";
 import ItemTypeModel from "../models/ItemTypeModel";
@@ -29,7 +29,7 @@ const CreateItemDialog: FC<CreateItemDialogProps> = ({
     const itemCreateLink = LinkUtil.findLink(
       targetItemType,
       "describes",
-      LinkNames.CREATE
+      LinkName.CREATE
     );
 
     if (itemCreateLink) {
@@ -44,7 +44,7 @@ const CreateItemDialog: FC<CreateItemDialogProps> = ({
           const itemReadLink = LinkUtil.findLink(
             targetItemType,
             "describes",
-            LinkNames.READ
+            LinkName.READ
           );
           mutateMatch(itemReadLink);
 

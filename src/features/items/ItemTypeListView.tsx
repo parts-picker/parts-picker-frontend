@@ -7,7 +7,7 @@ import ItemTypeModel from "./models/ItemTypeModel";
 import { IconNames } from "@blueprintjs/icons";
 import EditItemTypeDialog from "./dialogs/EditItemTypeDialog";
 import LinkUtil from "../links/LinkUtil";
-import { LinkNames } from "../links/types/LinkModel";
+import { LinkName } from "../links/types/LinkModel";
 import PaginationQueryOptions from "../common/tables/types/PaginationQueryOptions";
 import { useSWRWithURILike } from "../common/utils/swr/useSWRWithURILike";
 import URITemplate from "urijs/src/URITemplate";
@@ -23,7 +23,7 @@ interface ItemTypeViewProps {
 }
 
 const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
-  const itemTypesReadLink = useEntryLinkFor(LinkNames.READ, "itemTypes");
+  const itemTypesReadLink = useEntryLinkFor(LinkName.READ, "itemTypes");
   const itemTypesReadLinkTemplate = itemTypesReadLink
     ? new URITemplate(itemTypesReadLink.href)
     : undefined;
@@ -36,7 +36,7 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
       sort: requestedSortRulesToQueryParam(pageQueryOptions.requestedSortRules),
     }
   );
-  const itemTypes = data?._embedded?.itemTypes || new Array<ItemTypeModel>();
+  const itemTypes = data?._embedded?.itemTypes ?? new Array<ItemTypeModel>();
 
   const [editData, setEditData] = useState<ItemTypeModel | undefined>(
     undefined
@@ -79,7 +79,7 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
   ];
 
   const rowClickAction = (row: Row<ItemTypeModel>, router: NextRouter) => {
-    const link = LinkUtil.findLink(row.original, "self", LinkNames.READ);
+    const link = LinkUtil.findLink(row.original, "self", LinkName.READ);
     if (!link) {
       return;
     }

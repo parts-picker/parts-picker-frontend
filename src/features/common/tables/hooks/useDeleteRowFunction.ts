@@ -1,5 +1,5 @@
 import LinkUtil from "../../../links/LinkUtil";
-import { LinkNames } from "../../../links/types/LinkModel";
+import { LinkName } from "../../../links/types/LinkModel";
 import { ResponseModel } from "../../../links/types/ResponseModel";
 import { AppToaster } from "../../utils/Toaster";
 import { IconNames } from "@blueprintjs/icons";
@@ -21,14 +21,14 @@ export const useDeleteRowFunction = <DataList extends EmbeddedModels>({
     const deleteSelfLink = LinkUtil.findLink(
       rowToDelete,
       "self",
-      LinkNames.DELETE
+      LinkName.DELETE
     );
 
     if (!deleteSelfLink) {
       return;
     }
 
-    const readSelfLink = LinkUtil.findLink(rowToDelete, "self", LinkNames.READ);
+    const readSelfLink = LinkUtil.findLink(rowToDelete, "self", LinkName.READ);
     const createOptimisticData = readSelfLink
       ? (currentData: DataList | undefined) => {
           if (!currentData) {
@@ -41,7 +41,7 @@ export const useDeleteRowFunction = <DataList extends EmbeddedModels>({
 
           const updatedList = rows?.filter(
             (row: ResponseModel) =>
-              LinkUtil.findLink(row, "self", LinkNames.READ)?.href !=
+              LinkUtil.findLink(row, "self", LinkName.READ)?.href !=
               readSelfLink?.href
           );
 

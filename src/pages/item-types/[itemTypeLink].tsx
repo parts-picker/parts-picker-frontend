@@ -9,7 +9,7 @@ import { IconNames } from "@blueprintjs/icons";
 import DefaultLoadingSpinner from "../../features/common/loading/DefaultLoadingSpinner";
 import React from "react";
 import LinkUtil from "../../features/links/LinkUtil";
-import { LinkNames } from "../../features/links/types/LinkModel";
+import { LinkName } from "../../features/links/types/LinkModel";
 import { GetServerSideProps } from "next";
 import { parsePageQueryParams } from "../../features/common/utils/pageQueries/ParsePageQueryParams";
 import { usePageQueryParams } from "../../features/common/utils/pageQueries/usePageQueryParams";
@@ -27,7 +27,7 @@ const ItemTypeDetails: FC = () => {
   const itemCreateLink = LinkUtil.findLink(
     itemType,
     "describes",
-    LinkNames.CREATE
+    LinkName.CREATE
   );
 
   const backButtonOnClick = () => {

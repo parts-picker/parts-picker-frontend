@@ -4,7 +4,7 @@ import { FC, useState } from "react";
 import { IconNames } from "@blueprintjs/icons";
 import ProjectModel from "../models/ProjectModel";
 import LinkUtil from "../../links/LinkUtil";
-import { LinkNames } from "../../links/types/LinkModel";
+import { LinkName } from "../../links/types/LinkModel";
 import { SearchAvailableItemTypesResponse } from "../../workflow/models/SearchAvailableItemTypesResponse";
 import DefaultLoadingSpinner from "../../common/loading/DefaultLoadingSpinner";
 import {
@@ -42,14 +42,14 @@ const RequiredItemDialog: FC<RequiredItemDialogProps> = ({
   const itemTypeSearchLinkTemplate = LinkUtil.findTemplatedLink(
     project,
     "available",
-    LinkNames.SEARCH
+    LinkName.SEARCH
   );
 
   const { data, mutate } = useSWRWithURILike<SearchAvailableItemTypesResponse>(
     itemTypeSearchLinkTemplate,
     { name: searchQueryName }
   );
-  const availableItemTypes = data?._embedded?.availableItemTypes || [];
+  const availableItemTypes = data?._embedded?.availableItemTypes ?? [];
 
   // util
   if (!project) {
@@ -79,13 +79,16 @@ const RequiredItemDialog: FC<RequiredItemDialogProps> = ({
           query={searchQueryName}
           onQueryChange={setSearchQueryName}
           itemsEqual={(first, second) =>
-            ResponseUtil.equal(first, second, LinkNames.READ, "subsetOf")
+            ResponseUtil.equal(first, second, LinkName.READ, "subsetOf")
           }
           itemRenderer={(itemType, props) => {
             return (
               <AvailableItemTypeItem
                 availableItemType={itemType}
                 itemRendererProps={props}
+                key={
+                  LinkUtil.findLink(itemType, "subsetOf", LinkName.READ)?.href
+                }
               />
             );
           }}
@@ -136,7 +139,7 @@ const createRequiredItemType = (
   const editRequiredItemTypeLink = LinkUtil.findLink(
     availableItemType,
     "assigned",
-    LinkNames.CREATE
+    LinkName.CREATE
   );
 
   if (editRequiredItemTypeLink) {

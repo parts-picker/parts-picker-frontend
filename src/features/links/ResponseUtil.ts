@@ -1,12 +1,12 @@
 import LinkUtil from "./LinkUtil";
-import { LinkNames } from "./types/LinkModel";
+import { LinkName } from "./types/LinkModel";
 import { ResponseModel } from "./types/ResponseModel";
 
 export default class ResponseUtil {
   static equal(
     first: ResponseModel,
     second: ResponseModel,
-    name: LinkNames,
+    name: LinkName,
     ref: string
   ): boolean {
     return (

@@ -2,7 +2,7 @@ import { Button, ButtonGroup, Callout } from "@blueprintjs/core";
 import { FC } from "react";
 import { IconNames } from "@blueprintjs/icons";
 import { InstanceInfo } from "./models/InstanceInfoModel";
-import { LinkModel, LinkNames } from "../links/types/LinkModel";
+import { LinkModel, LinkName } from "../links/types/LinkModel";
 import LinkUtil from "../links/LinkUtil";
 import { KeyedMutator } from "swr";
 
@@ -44,7 +44,7 @@ const WorkflowStatusBar: FC<WorkflowStatusBarProps> = ({
               onClick={() =>
                 chooseOption(
                   mutate,
-                  LinkUtil.findLink(option, "advance", LinkNames.UPDATE)
+                  LinkUtil.findLink(option, "advance", LinkName.UPDATE)
                 )
               }
             >

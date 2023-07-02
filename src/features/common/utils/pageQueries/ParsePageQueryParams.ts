@@ -1,5 +1,9 @@
 import { z, ZodTypeAny } from "zod";
-import { ALLOWED_PAGE_SIZES } from "../ConfigReaderUtils";
+import {
+  ALLOWED_PAGE_SIZES,
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+} from "../ConfigReaderUtils";
 
 const pagePreprocessingSchema = z.preprocess(
   (val: unknown) => Number(val),
@@ -25,7 +29,7 @@ export const parsePageQueryParams = (
   try {
     parsedSize = sizePreprocessingSchema.parse(size);
   } catch (e: unknown) {
-    parsedSize = Number(process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE) || 10;
+    parsedSize = DEFAULT_PAGE_SIZE;
     valid = false;
   }
 
@@ -33,7 +37,7 @@ export const parsePageQueryParams = (
   try {
     parsedPage = pagePreprocessingSchema.parse(page);
   } catch (e: unknown) {
-    parsedPage = Number(process.env.NEXT_PUBLIC_DEFAULT_PAGE_NUMBER) || 0;
+    parsedPage = DEFAULT_PAGE_NUMBER;
     valid = false;
   }
 
