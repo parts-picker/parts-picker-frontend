@@ -3,7 +3,7 @@ import { IconNames } from "@blueprintjs/icons";
 import { PropsWithChildren, ReactElement } from "react";
 import { ClickMouseEvent } from "../../types/ClickMouseEvent";
 import LinkUtil from "../../../links/LinkUtil";
-import { LinkNames } from "../../../links/types/LinkModel";
+import { LinkName } from "../../../links/types/LinkModel";
 import { ResponseModel } from "../../../links/types/ResponseModel";
 
 interface EditButtonProps<Content extends ResponseModel> {
@@ -15,7 +15,7 @@ const EditButton = <Content extends ResponseModel>({
   currentData,
   setEditData,
 }: PropsWithChildren<EditButtonProps<Content>>): ReactElement | null => {
-  const selfLink = LinkUtil.findLink(currentData, "self", LinkNames.UPDATE);
+  const selfLink = LinkUtil.findLink(currentData, "self", LinkName.UPDATE);
 
   if (!selfLink) {
     return null;

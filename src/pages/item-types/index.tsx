@@ -4,7 +4,7 @@ import { FC } from "react";
 import ItemTypeListView from "../../features/items/ItemTypeListView";
 import { IconNames } from "@blueprintjs/icons";
 import CreateItemTypeDialog from "../../features/items/dialogs/CreateItemTypeDialog";
-import { LinkNames } from "../../features/links/types/LinkModel";
+import { LinkName } from "../../features/links/types/LinkModel";
 import { GetServerSideProps } from "next";
 import { ALLOWED_PAGE_SIZES } from "../../features/common/utils/ConfigReaderUtils";
 import { parsePageQueryParams } from "../../features/common/utils/pageQueries/ParsePageQueryParams";
@@ -12,7 +12,7 @@ import { usePageQueryParams } from "../../features/common/utils/pageQueries/useP
 import { useEntryLinkFor } from "../../features/links/hooks/useEntryLinkFor";
 
 const ItemTypesIndex: FC = () => {
-  const itemTypeCreateLink = useEntryLinkFor(LinkNames.CREATE, "itemTypes");
+  const itemTypeCreateLink = useEntryLinkFor(LinkName.CREATE, "itemTypes");
   const pageQueryOptions = usePageQueryParams();
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false);

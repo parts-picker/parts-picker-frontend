@@ -1,12 +1,12 @@
 import URITemplate from "urijs/src/URITemplate";
-import { LinkModel, LinkNames } from "./types/LinkModel";
+import { LinkModel, LinkName } from "./types/LinkModel";
 import { ResponseModel } from "./types/ResponseModel";
 
 export default class LinkUtil {
   static findLink(
     responseModel: ResponseModel | undefined,
     ref: string,
-    name: LinkNames
+    name: LinkName
   ): LinkModel | undefined {
     if (!responseModel) {
       return undefined;
@@ -29,7 +29,7 @@ export default class LinkUtil {
   static findTemplatedLink(
     responseModel: ResponseModel | undefined,
     ref: string,
-    name: LinkNames
+    name: LinkName
   ): URITemplate.URITemplate | null {
     const link = this.findLink(responseModel, ref, name);
 
@@ -47,7 +47,7 @@ export default class LinkUtil {
   static isLinkAvailable(
     responseModel: ResponseModel | undefined,
     ref: string,
-    name: LinkNames
+    name: LinkName
   ): boolean {
     return this.findLink(responseModel, ref, name) !== undefined;
   }

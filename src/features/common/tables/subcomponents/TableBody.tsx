@@ -29,7 +29,7 @@ const TableBody = (): ReactElement => {
           }}
         >
           {row.getVisibleCells().map((cell) => (
-            <td key={cell.id}>
+            <td key={cell.id} style={{ verticalAlign: "middle" }}>
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </td>
           ))}

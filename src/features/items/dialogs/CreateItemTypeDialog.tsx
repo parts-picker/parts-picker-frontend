@@ -5,7 +5,7 @@ import { useMatchMutate } from "../../common/utils/swr/useMutateMatch";
 import { AppToaster } from "../../common/utils/Toaster";
 import { useEntryLinks } from "../../links/hooks/useEntryLinks";
 import LinkUtil from "../../links/LinkUtil";
-import { LinkNames } from "../../links/types/LinkModel";
+import { LinkName } from "../../links/types/LinkModel";
 import ItemTypeModel from "../models/ItemTypeModel";
 import ItemTypeDialog from "./ItemTypeDialog";
 
@@ -27,7 +27,7 @@ const CreateItemTypeDialog: FC<CreateItemTypeDialogProps> = ({
     const itemTypeCreateLink = LinkUtil.findLink(
       entryLinks,
       "itemTypes",
-      LinkNames.CREATE
+      LinkName.CREATE
     );
 
     if (itemTypeCreateLink) {
@@ -42,7 +42,7 @@ const CreateItemTypeDialog: FC<CreateItemTypeDialogProps> = ({
           const itemTypesREADLink = LinkUtil.findLink(
             entryLinks,
             "itemTypes",
-            LinkNames.READ
+            LinkName.READ
           );
           mutateMatch(itemTypesREADLink);
 

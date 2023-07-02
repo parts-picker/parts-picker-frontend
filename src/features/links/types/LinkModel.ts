@@ -1,12 +1,12 @@
 export class LinkModel {
   href: string;
-  name: LinkNames;
+  name: LinkName;
   templated = false;
 }
 
 export type Links = LinkModel | LinkModel[];
 
-export enum LinkNames {
+export enum LinkName {
   CREATE = "CREATE",
   READ = "READ",
   UPDATE = "UPDATE",

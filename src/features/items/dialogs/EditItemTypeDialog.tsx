@@ -4,7 +4,7 @@ import { FieldValues } from "react-hook-form";
 import { AppToaster } from "../../common/utils/Toaster";
 import ItemTypeModel from "../models/ItemTypeModel";
 import { useEntryLinks } from "../../links/hooks/useEntryLinks";
-import { LinkNames } from "../../links/types/LinkModel";
+import { LinkName } from "../../links/types/LinkModel";
 import LinkUtil from "../../links/LinkUtil";
 import { useMatchMutate } from "../../common/utils/swr/useMutateMatch";
 import ItemTypeDialog from "./ItemTypeDialog";
@@ -27,7 +27,7 @@ const EditItemTypeDialog: FC<EditItemTypeDialogProps> = ({
     const selfUpdateLink = LinkUtil.findLink(
       editableData,
       "self",
-      LinkNames.UPDATE
+      LinkName.UPDATE
     );
 
     if (selfUpdateLink) {
@@ -41,7 +41,7 @@ const EditItemTypeDialog: FC<EditItemTypeDialogProps> = ({
           const itemTypesReadLink = LinkUtil.findLink(
             entryLinks,
             "itemTypes",
-            LinkNames.READ
+            LinkName.READ
           );
           mutateMatch(itemTypesReadLink);
 

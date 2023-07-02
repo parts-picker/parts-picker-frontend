@@ -63,26 +63,28 @@ const SortableTable = <Content extends ResponseModel>({
   });
 
   return (
-    <TableContext.Provider
-      value={{
-        loading,
-        table: table,
-        tableOptions: {
-          onRowClickAction: options.onRowClickAction,
-          nonIdealState: options.nonIdealState,
-        },
-        pageOptions: pageControlOptions,
-      }}
-    >
-      <HTMLTable
-        striped={!loading}
-        interactive={options?.onRowClickAction && !loading}
+    <div>
+      <TableContext.Provider
+        value={{
+          loading,
+          table: table,
+          tableOptions: {
+            onRowClickAction: options.onRowClickAction,
+            nonIdealState: options.nonIdealState,
+          },
+          pageOptions: pageControlOptions,
+        }}
       >
-        <TableHeader />
-        <TableBody />
-        <PaginationTableFooter />
-      </HTMLTable>
-    </TableContext.Provider>
+        <HTMLTable
+          striped={!loading}
+          interactive={options?.onRowClickAction && !loading}
+        >
+          <TableHeader />
+          <TableBody />
+          <PaginationTableFooter />
+        </HTMLTable>
+      </TableContext.Provider>
+    </div>
   );
 };
 

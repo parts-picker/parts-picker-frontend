@@ -1,32 +1,25 @@
 import { useEffect, useState } from "react";
 
 interface UseDebounceReturn<Type> {
-  value: Type | undefined;
+  debouncedValue: Type;
+  value: Type;
   setValue: (value: Type) => void;
 }
 
-export const useDebounce = <Type, ActionAttributes>(
-  action: (value: Type, attributes: ActionAttributes) => void,
-  actionAttributes: ActionAttributes,
+export const useDebounce = <Type>(
   initialValue: Type,
   debounceTime = 700
 ): UseDebounceReturn<Type> => {
   const [value, setValue] = useState<Type>(initialValue);
-  const [debouncedValue, setDebouncedValue] = useState<Type>(value);
+  const [debouncedValue, setDebouncedValue] = useState<Type>(initialValue);
 
   useEffect(() => {
-    if (value != initialValue) {
+    if (value != debouncedValue) {
       const timer = setTimeout(() => setDebouncedValue(value), debounceTime);
 
       return () => clearTimeout(timer);
     }
-  }, [value, debounceTime, initialValue]);
+  }, [value, debounceTime, debouncedValue]);
 
-  useEffect(() => {
-    if (debouncedValue && debouncedValue != initialValue) {
-      action(value, actionAttributes);
-    }
-  }, [debouncedValue, initialValue, value, action, actionAttributes]);
-
-  return { value, setValue };
+  return { debouncedValue, value, setValue };
 };

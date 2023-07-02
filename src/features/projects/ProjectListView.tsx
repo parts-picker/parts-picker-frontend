@@ -6,7 +6,7 @@ import PaginationQueryOptions from "../common/tables/types/PaginationQueryOption
 import { requestedSortRulesToQueryParam } from "../common/utils/pageQueries/usePageQueryParams";
 import { useSWRWithURILike } from "../common/utils/swr/useSWRWithURILike";
 import { useEntryLinkFor } from "../links/hooks/useEntryLinkFor";
-import { LinkNames } from "../links/types/LinkModel";
+import { LinkName } from "../links/types/LinkModel";
 import ProjectModel from "./models/ProjectModel";
 import { ReadProjectsResponse } from "./models/ReadProjectsResponse";
 import { IconNames } from "@blueprintjs/icons";
@@ -19,7 +19,7 @@ interface ProjectViewProps {
 }
 
 const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
-  const projectReadLink = useEntryLinkFor(LinkNames.READ, "projects");
+  const projectReadLink = useEntryLinkFor(LinkName.READ, "projects");
   const projectReadLinkTemplate = projectReadLink
     ? new URITemplate(projectReadLink.href)
     : undefined;
@@ -32,7 +32,7 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
       sort: requestedSortRulesToQueryParam(pageQueryOptions.requestedSortRules),
     }
   );
-  const projects = data?._embedded?.projects || new Array<ProjectModel>();
+  const projects = data?._embedded?.projects ?? new Array<ProjectModel>();
 
   const projectsColumnHelper = createColumnHelper<ProjectModel>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,7 +44,7 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
   ];
 
   const rowClickAction = (row: Row<ProjectModel>, router: NextRouter) => {
-    const link = LinkUtil.findLink(row.original, "self", LinkNames.READ);
+    const link = LinkUtil.findLink(row.original, "self", LinkName.READ);
     if (!link) {
       return;
     }

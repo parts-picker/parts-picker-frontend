@@ -5,7 +5,7 @@ import { useMatchMutate } from "../../common/utils/swr/useMutateMatch";
 import { AppToaster } from "../../common/utils/Toaster";
 import { useEntryLinks } from "../../links/hooks/useEntryLinks";
 import LinkUtil from "../../links/LinkUtil";
-import { LinkNames } from "../../links/types/LinkModel";
+import { LinkName } from "../../links/types/LinkModel";
 import ItemModel from "../models/ItemModel";
 import ItemDialog from "./ItemDialog";
 import ItemTypeModel from "../models/ItemTypeModel";
@@ -31,7 +31,7 @@ const EditItemDialog: FC<EditItemDialogProps> = ({
     const selfUpdateLink = LinkUtil.findLink(
       editableData,
       "self",
-      LinkNames.UPDATE
+      LinkName.UPDATE
     );
 
     if (selfUpdateLink) {
@@ -45,7 +45,7 @@ const EditItemDialog: FC<EditItemDialogProps> = ({
           const itemReadLink = LinkUtil.findLink(
             entryLinks,
             "itemTypes",
-            LinkNames.READ
+            LinkName.READ
           );
 
           mutateMatch(itemReadLink);
