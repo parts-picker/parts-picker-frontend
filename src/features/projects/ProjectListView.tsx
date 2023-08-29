@@ -38,8 +38,8 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const columns: ColumnDef<ProjectModel, any>[] = [
     projectsColumnHelper.accessor("name", { header: () => "Name" }),
-    projectsColumnHelper.accessor("description", {
-      header: () => "Description",
+    projectsColumnHelper.accessor("shortDescription", {
+      header: () => "Short description",
     }),
   ];
 
