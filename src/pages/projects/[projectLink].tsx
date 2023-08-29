@@ -47,7 +47,7 @@ const ProjectDetails: FC = () => {
       <Divider />
       <span>Description</span>
       <Text title="Description">
-        {project.description || "No description yet"}
+        {project.shortDescription || "No description yet"}
       </Text>
       <Divider />
       <InstanceStatusBar instanceInfo={instanceInfo} mutate={mutate} />
