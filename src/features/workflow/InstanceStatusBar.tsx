@@ -9,23 +9,33 @@ import { DisplayType } from "./models/DisplayTypeModel";
 
 interface WorkflowStatusBarProps {
   instanceInfo?: InstanceInfo;
-  mutate: KeyedMutator<InstanceInfo>;
+  instanceMutate: KeyedMutator<InstanceInfo>;
+  optionalMutates?: Array<KeyedMutator<unknown>>;
 }
 
-const chooseOption = (mutate: KeyedMutator<InstanceInfo>, link?: LinkModel) => {
+const chooseOption = (
+  instanceMutate: KeyedMutator<InstanceInfo>,
+  optionalMutates?: Array<KeyedMutator<unknown>>,
+  link?: LinkModel
+) => {
   if (link) {
-    mutate(
+    instanceMutate(
       fetch(link.href, {
         method: "POST",
       }).then((response) => response.json() as Promise<InstanceInfo>),
       { revalidate: false }
-    );
+    ).then(() => {
+      optionalMutates?.forEach((mutate) => {
+        mutate();
+      });
+    });
   }
 };
 
 const WorkflowStatusBar: FC<WorkflowStatusBarProps> = ({
   instanceInfo,
-  mutate,
+  instanceMutate,
+  optionalMutates,
 }) => {
   if (!instanceInfo) {
     return null;
@@ -59,7 +69,8 @@ const WorkflowStatusBar: FC<WorkflowStatusBarProps> = ({
               key={option.name}
               onClick={() =>
                 chooseOption(
-                  mutate,
+                  instanceMutate,
+                  optionalMutates,
                   LinkUtil.findLink(option, "advance", LinkName.UPDATE)
                 )
               }

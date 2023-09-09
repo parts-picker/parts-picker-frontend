@@ -1,25 +1,32 @@
 import { FC, useState } from "react";
 import ProjectModel from "../models/ProjectModel";
-import ProjectPlanningMainView from "./ProjectPlanningMainView";
+import PartsListMainView from "./PartsListMainView";
 import { NullableRequiredItemType } from "../../workflow/models/RequiredItemTypeModel";
-import ProjectPlanningItemTypeView from "./ProjectPlanningItemTypeView";
+import PartsListItemTypeView from "./PartsListItemTypeView";
+import { useDidUpdate } from "../../common/hooks/useDidUpdate";
 
-interface ProjectPlanningViewProps {
+interface PartsListViewProps {
   project: ProjectModel;
 }
 
-const ProjectPlanningView: FC<ProjectPlanningViewProps> = ({ project }) => {
+const PartsListView: FC<PartsListViewProps> = ({ project }) => {
   const [detailedRequiredItemType, setDetailedRequiredItemType] =
     useState<NullableRequiredItemType>(null);
+
+  // reset detailed item type if project changed
+  useDidUpdate(() => {
+    setDetailedRequiredItemType(null);
+  }, [project]);
+
   return (
     <>
       {detailedRequiredItemType ? (
-        <ProjectPlanningItemTypeView
+        <PartsListItemTypeView
           requiredItemType={detailedRequiredItemType}
           setDetailedRequiredItemType={setDetailedRequiredItemType}
         />
       ) : (
-        <ProjectPlanningMainView
+        <PartsListMainView
           project={project}
           setDetailedRequiredItemType={setDetailedRequiredItemType}
         />
@@ -28,4 +35,4 @@ const ProjectPlanningView: FC<ProjectPlanningViewProps> = ({ project }) => {
   );
 };
 
-export default ProjectPlanningView;
+export default PartsListView;
