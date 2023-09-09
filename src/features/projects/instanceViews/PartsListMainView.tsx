@@ -1,4 +1,4 @@
-import { H2, NonIdealState } from "@blueprintjs/core";
+import { NonIdealState } from "@blueprintjs/core";
 import { ColumnDef, Row, createColumnHelper } from "@tanstack/react-table";
 import { FC } from "react";
 import SortableTable from "../../common/tables/SortableTable";
@@ -22,13 +22,16 @@ import { ALLOWED_PAGE_SIZES } from "../../common/utils/ConfigReaderUtils";
 import { usePageQueryValidator } from "../../common/utils/pageQueries/usePageQueryValidator";
 import RequiredItemTypeCell from "./components/RequiredItemTypeCell";
 import RequiredItemTypeDeleteCell from "./components/RequiredItemTypeDeleteCell";
+import { useDidUpdate } from "../../common/hooks/useDidUpdate";
 
-interface ProjectPlanningMainViewProps {
+interface PartsListMainViewProps {
   project: ProjectModel;
-  setDetailedRequiredItemType: (link: NullableRequiredItemType) => void;
+  setDetailedRequiredItemType: (
+    requiredItemType: NullableRequiredItemType
+  ) => void;
 }
 
-const ProjectPlanningMainView: FC<ProjectPlanningMainViewProps> = ({
+const PartsListMainView: FC<PartsListMainViewProps> = ({
   project,
   setDetailedRequiredItemType,
 }) => {
@@ -58,6 +61,11 @@ const ProjectPlanningMainView: FC<ProjectPlanningMainViewProps> = ({
     );
   const requiredItemTypes = data?._embedded?.requiredItemTypes ?? [];
 
+  // reload data if project changed
+  useDidUpdate(() => {
+    mutate();
+  }, [project]);
+
   const deleteRowAction = useDeleteRowFunction({ mutate });
 
   const columnHelper = createColumnHelper<RequiredItemType>();
@@ -83,7 +91,6 @@ const ProjectPlanningMainView: FC<ProjectPlanningMainViewProps> = ({
 
   return (
     <div>
-      <H2>Parts List</H2>
       <RequiredItemDialog project={project} requiredItemTypesMutate={mutate} />
       <SortableTable
         columns={columns}
@@ -107,7 +114,7 @@ const ProjectPlanningMainView: FC<ProjectPlanningMainViewProps> = ({
   );
 };
 
-export default ProjectPlanningMainView;
+export default PartsListMainView;
 
 const nonIdealState = (
   <NonIdealState icon={IconNames.CROSS} title={"No required item types yet"} />

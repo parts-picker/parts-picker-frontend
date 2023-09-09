@@ -1,7 +1,7 @@
-import { Button, Divider, H1, Text } from "@blueprintjs/core";
+import { Button, Divider, H1, Tab, Tabs, Text } from "@blueprintjs/core";
 import { useRouter } from "next/router";
 import { FC, useCallback } from "react";
-import useSWR from "swr";
+import useSWR, { KeyedMutator } from "swr";
 import defaultFetcher from "../../features/common/utils/swr/DefaultFetcher";
 import ProjectModel from "../../features/projects/models/ProjectModel";
 import { IconNames } from "@blueprintjs/icons";
@@ -9,25 +9,33 @@ import DefaultLoadingSpinner from "../../features/common/loading/DefaultLoadingS
 import InstanceStatusBar from "../../features/workflow/InstanceStatusBar";
 import LinkUtil from "../../features/links/LinkUtil";
 import { LinkName } from "../../features/links/types/LinkModel";
-import ProjectInstanceViews from "../../features/projects/instanceViews/ProjectInstanceViews";
 import { InstanceInfo } from "../../features/workflow/models/InstanceInfoModel";
+import PartsListView from "../../features/projects/instanceViews/PartsListView";
+import ProjectDescriptionComponent from "../../features/projects/description/ProjectDescriptionComponent";
 
 const ProjectDetails: FC = () => {
   const router = useRouter();
 
   const { projectLink } = router.query as { projectLink: string };
   const decodedLink = projectLink ? window.atob(projectLink) : undefined;
-  const { data: project } = useSWR<ProjectModel>(decodedLink, defaultFetcher);
-
+  const { data: project, mutate: projectMutate } = useSWR<ProjectModel>(
+    decodedLink,
+    defaultFetcher
+  );
   const instanceInfoLink = LinkUtil.findLink(
     project,
     "status",
     LinkName.READ
   )?.href;
-  const { data: instanceInfo, mutate } = useSWR<InstanceInfo>(
+  const { data: instanceInfo, mutate: instanceMutate } = useSWR<InstanceInfo>(
     instanceInfoLink,
     defaultFetcher,
-    { refreshInterval: 5000 }
+    {
+      refreshInterval: 5000,
+      onSuccess: () => {
+        projectMutate();
+      },
+    }
   );
 
   const backButtonOnClick = useCallback(() => {
@@ -40,18 +48,45 @@ const ProjectDetails: FC = () => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      <H1>Project - {project.name} </H1>
-      <div>
-        <Button icon={IconNames.CHEVRON_LEFT} onClick={backButtonOnClick} />
+      <div style={{ display: "flex" }}>
+        <div style={{ marginRight: "1em" }}>
+          <Button
+            icon={IconNames.CHEVRON_LEFT}
+            onClick={backButtonOnClick}
+            large
+          />
+        </div>
+        <H1>Project - {project.name} </H1>
       </div>
       <Divider />
-      <span>Description</span>
-      <Text title="Description">
-        {project.shortDescription || "No description yet"}
+
+      <Text style={{ marginBottom: "1.5em" }}>
+        {project.shortDescription || "No short description yet"}
       </Text>
-      <Divider />
-      <InstanceStatusBar instanceInfo={instanceInfo} mutate={mutate} />
-      <ProjectInstanceViews project={project} instanceInfo={instanceInfo} />
+      <div style={{ marginBottom: "1.5em" }}>
+        <InstanceStatusBar
+          instanceInfo={instanceInfo}
+          instanceMutate={instanceMutate}
+          optionalMutates={[projectMutate as KeyedMutator<unknown>]}
+        />
+      </div>
+      <Tabs id="project_tabs" large>
+        <Tab
+          id={"parts_list"}
+          title={"Parts List"}
+          panel={<PartsListView project={project} />}
+        />
+        <Tab
+          id={"description"}
+          title={"Description"}
+          panel={
+            <ProjectDescriptionComponent
+              project={project}
+              projectMutate={projectMutate}
+            />
+          }
+        />
+      </Tabs>
     </div>
   );
 };

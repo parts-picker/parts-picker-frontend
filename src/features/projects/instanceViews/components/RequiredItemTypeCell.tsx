@@ -12,20 +12,31 @@ import { ReadRequiredItemTypesResponse } from "../../../workflow/models/ReadRequ
 const RequiredItemTypeCell: FC<CellContext<RequiredItemType, unknown>> = (
   props
 ) => {
+  const selfPatchLink = LinkUtil.findLink(
+    props.row.original,
+    "self",
+    LinkName.UPDATE
+  );
+
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
       <div style={{ marginRight: "0.75ch" }} className="bp4-text-large">
-        {props.row.original.assignedAmount + " /"}
+        {props.row.original.assignedAmount +
+          " / " +
+          (selfPatchLink ? "" : props.row.original.requiredAmount)}
       </div>
-      <DebouncedNumberInput
-        action={updateRequiredAmount}
-        actionAttributes={{
-          requiredItemTypeToUpdate: props.row.original,
-          mutate: mutate,
-        }}
-        initialValue={props.row.original.requiredAmount}
-        min={Math.max(1, props.row.original.assignedAmount)}
-      />
+
+      {selfPatchLink ? (
+        <DebouncedNumberInput
+          action={updateRequiredAmount}
+          actionAttributes={{
+            requiredItemTypeToUpdate: props.row.original,
+            mutate: mutate,
+          }}
+          initialValue={props.row.original.requiredAmount}
+          min={Math.max(1, props.row.original.assignedAmount)}
+        />
+      ) : null}
     </div>
   );
 };

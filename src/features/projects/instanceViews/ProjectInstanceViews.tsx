@@ -2,7 +2,7 @@ import { FC } from "react";
 import DefaultLoadingSpinner from "../../common/loading/DefaultLoadingSpinner";
 import { NullableInstanceInfo } from "../../workflow/models/InstanceInfoModel";
 import ProjectModel, { NullableProjectModel } from "../models/ProjectModel";
-import ProjectPlanningView from "./ProjectPlanningView";
+import PartsListView from "./PartsListView";
 
 interface ProjectInstanceStateProps {
   project: NullableProjectModel;
@@ -15,7 +15,7 @@ const getComponentForNode = (
 ) => {
   switch (instanceInfo?.name) {
     case "planning":
-      return <ProjectPlanningView project={project} />;
+      return <PartsListView project={project} />;
     default:
       return null;
   }

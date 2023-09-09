@@ -3,7 +3,10 @@ import { ResponseModel } from "../../links/types/ResponseModel";
 
 export default class ProjectModel implements ResponseModel {
   name: string;
+  status: string;
   shortDescription?: string;
+  description: string | null;
+
   _links: LinkMap;
 }
 

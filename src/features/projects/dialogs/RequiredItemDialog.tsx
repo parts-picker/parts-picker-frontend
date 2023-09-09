@@ -56,6 +56,10 @@ const RequiredItemDialog: FC<RequiredItemDialogProps> = ({
     return <DefaultLoadingSpinner />;
   }
 
+  if (!itemTypeSearchLinkTemplate) {
+    return null;
+  }
+
   const resetQuery = () => {
     setSearchQueryName(DEFAULT_SEARCH_QUERY);
   };

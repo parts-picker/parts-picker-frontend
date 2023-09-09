@@ -7,27 +7,31 @@ import { Button, H2 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import ProjectItemAssigner from "./components/ProjectItemAssigner";
 
-interface ProjectPlanningItemTypeViewProps {
+interface PartsListItemTypeViewProps {
   requiredItemType: RequiredItemType;
-  setDetailedRequiredItemType: (link: NullableRequiredItemType) => void;
+  setDetailedRequiredItemType: (
+    requiredItemType: NullableRequiredItemType
+  ) => void;
 }
 
-const ProjectPlanningItemTypeView: FC<ProjectPlanningItemTypeViewProps> = ({
+const PartsListItemTypeView: FC<PartsListItemTypeViewProps> = ({
   requiredItemType,
   setDetailedRequiredItemType,
 }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      <H2>Assign parts for type {requiredItemType.itemTypeName}</H2>
-      <div>
-        <Button
-          icon={IconNames.CHEVRON_LEFT}
-          onClick={() => setDetailedRequiredItemType(null)}
-        />
+      <div style={{ display: "flex" }}>
+        <div style={{ marginRight: "1em" }}>
+          <Button
+            icon={IconNames.CHEVRON_LEFT}
+            onClick={() => setDetailedRequiredItemType(null)}
+          />
+        </div>
+        <H2>Assign parts for type {requiredItemType.itemTypeName}</H2>
       </div>
       <ProjectItemAssigner requiredItemType={requiredItemType} />
     </div>
   );
 };
 
-export default ProjectPlanningItemTypeView;
+export default PartsListItemTypeView;

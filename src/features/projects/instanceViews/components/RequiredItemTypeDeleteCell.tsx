@@ -3,11 +3,23 @@ import { FC } from "react";
 import { RequiredItemType } from "../../../workflow/models/RequiredItemTypeModel";
 import DeleteButton from "../../../common/tables/subcomponents/DeleteButton";
 import { DeleteRowFunction } from "../../../common/tables/hooks/useDeleteRowFunction";
+import LinkUtil from "../../../links/LinkUtil";
+import { LinkName } from "../../../links/types/LinkModel";
 
 const RequiredItemTypeDeleteCell: FC<CellContext<RequiredItemType, unknown>> = (
   props
 ) => {
   const deleteRowAction = props.column.columnDef.meta as DeleteRowFunction;
+  const deleteSelfLink = LinkUtil.findLink(
+    props.row.original,
+    "self",
+    LinkName.DELETE
+  );
+
+  if (!deleteSelfLink) {
+    return null;
+  }
+
   return (
     <DeleteButton
       deleteAction={() =>
