@@ -3,9 +3,9 @@ import {
   NullableRequiredItemType,
   RequiredItemType,
 } from "../../workflow/models/RequiredItemTypeModel";
-import { Button, H2 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import ProjectItemAssigner from "./components/ProjectItemAssigner";
+import { Button, H2 } from "@blueprintjs/core";
 
 interface PartsListItemTypeViewProps {
   requiredItemType: RequiredItemType;
