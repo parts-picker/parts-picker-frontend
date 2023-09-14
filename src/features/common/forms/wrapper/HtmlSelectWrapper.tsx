@@ -48,7 +48,7 @@ const HtmlSelectWrapper: FC<HtmlSelectWrapperProps> = ({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        elementRef={ref}
+        ref={ref}
         disabled={disabled}
       />
     </FormGroup>

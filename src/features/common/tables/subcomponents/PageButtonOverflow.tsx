@@ -1,6 +1,5 @@
-import { Button } from "@blueprintjs/core";
+import { Button, Classes, Popover } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
-import { Classes, Popover2 } from "@blueprintjs/popover2";
 import { FC, useState } from "react";
 import PageButton from "./PageButton";
 
@@ -26,13 +25,13 @@ const PageButtonOverflow: FC<PageButtonOverflowProps> = ({
   };
 
   return (
-    <Popover2
+    <Popover
       isOpen={isOpen}
       onClose={handleClose}
       placement={"bottom"}
       content={
         <div
-          className={Classes.POPOVER2_CONTENT}
+          className={Classes.POPOVER_CONTENT}
           style={{ marginLeft: "0.25em", marginRight: "0.25em" }}
         >
           {targetPageNumbers.map((targetNumber) => (
@@ -45,7 +44,7 @@ const PageButtonOverflow: FC<PageButtonOverflowProps> = ({
       }
     >
       <Button minimal icon={IconNames.MORE} onClick={handleOpen} />
-    </Popover2>
+    </Popover>
   );
 };
 
