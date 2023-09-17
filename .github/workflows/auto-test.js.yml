@@ -2,9 +2,9 @@ name: Build, test & lint
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -17,17 +17,17 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run lint:output
-    - name: Upload eslint results
-      if: success() || failure()
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: output/eslint-result.sarif
-    - run: npm run build --if-present
-    - run: npm test
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run lint:output
+      - name: Upload eslint results
+        if: success() || failure()
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: output/eslint-result.sarif
+      - run: npm run build --if-present
+      - run: npm test
