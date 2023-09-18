@@ -14,7 +14,6 @@ import EditItemDialog from "./dialogs/EditItemDialog";
 import ItemTypeModel from "./models/ItemTypeModel";
 import { requestedSortRulesToQueryParam } from "../common/utils/pageQueries/usePageQueryParams";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { useDeleteRowFunction } from "../common/tables/hooks/useDeleteRowFunction";
 import ActionButtons from "../common/tables/subcomponents/ActionButtons";
 
 interface ItemListViewProps {
@@ -49,8 +48,6 @@ const ItemListView: FC<ItemListViewProps> = ({
     setEditData(undefined);
   };
 
-  const deleteRow = useDeleteRowFunction({ mutate });
-
   const itemColumnHelper = createColumnHelper<ItemModel>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const columns: ColumnDef<ItemModel, any>[] = [
@@ -62,9 +59,9 @@ const ItemListView: FC<ItemListViewProps> = ({
       header: "Actions",
       cell: (props) => (
         <ActionButtons
-          backingRow={props.row.original}
+          object={props.row.original}
           setEditData={setEditData}
-          deleteRow={deleteRow}
+          objectListMutate={mutate}
           deleteNotification={
             <span>
               Item of item type <b>{itemType.name}</b> was deleted

@@ -13,6 +13,7 @@ import { IconNames } from "@blueprintjs/icons";
 import SortableTable from "../common/tables/SortableTable";
 import { NextRouter } from "next/router";
 import LinkUtil from "../links/LinkUtil";
+import DeleteButton from "../common/tables/subcomponents/DeleteButton";
 
 interface ProjectViewProps {
   pageQueryOptions: PaginationQueryOptions;
@@ -24,7 +25,7 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
     ? new URITemplate(projectReadLink.href)
     : undefined;
 
-  const { data, loading } = useSWRWithURILike<ReadProjectsResponse>(
+  const { data, loading, mutate } = useSWRWithURILike<ReadProjectsResponse>(
     projectReadLinkTemplate,
     {
       size: pageQueryOptions.requestedPageSize.toString(),
@@ -40,6 +41,21 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
     projectsColumnHelper.accessor("name", { header: () => "Name" }),
     projectsColumnHelper.accessor("shortDescription", {
       header: () => "Short description",
+    }),
+    projectsColumnHelper.display({
+      id: "actions",
+      header: "Actions",
+      cell: (props) => (
+        <DeleteButton
+          objectToDelete={props.row.original}
+          objectListMutate={mutate}
+          confirmDescription={
+            <span>
+              Delete project <b>{props.row.original.name}</b>?
+            </span>
+          }
+        />
+      ),
     }),
   ];
 

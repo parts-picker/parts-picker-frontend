@@ -16,7 +16,6 @@ import { useEntryLinkFor } from "../links/hooks/useEntryLinkFor";
 import { requestedSortRulesToQueryParam } from "../common/utils/pageQueries/usePageQueryParams";
 import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
 import ActionButtons from "../common/tables/subcomponents/ActionButtons";
-import { useDeleteRowFunction } from "../common/tables/hooks/useDeleteRowFunction";
 
 interface ItemTypeViewProps {
   pageQueryOptions: PaginationQueryOptions;
@@ -46,8 +45,6 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
     setEditData(undefined);
   };
 
-  const deleteRow = useDeleteRowFunction({ mutate });
-
   const itemTypeColumnHelper = createColumnHelper<ItemTypeModel>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const columns: ColumnDef<ItemTypeModel, any>[] = [
@@ -60,9 +57,9 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
       header: "Actions",
       cell: (props) => (
         <ActionButtons
-          backingRow={props.row.original}
+          object={props.row.original}
           setEditData={setEditData}
-          deleteRow={deleteRow}
+          objectListMutate={mutate}
           deleteNotification={
             <span>
               Item type <b>{props.row.original.name}</b> was deleted
