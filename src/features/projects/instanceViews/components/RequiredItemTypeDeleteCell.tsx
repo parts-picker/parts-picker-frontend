@@ -2,34 +2,24 @@ import { CellContext } from "@tanstack/react-table";
 import { FC } from "react";
 import { RequiredItemType } from "../../../workflow/models/RequiredItemTypeModel";
 import DeleteButton from "../../../common/tables/subcomponents/DeleteButton";
-import { DeleteRowFunction } from "../../../common/tables/hooks/useDeleteRowFunction";
-import LinkUtil from "../../../links/LinkUtil";
-import { LinkName } from "../../../links/types/LinkModel";
+import { KeyedMutator } from "swr";
+import { ReadRequiredItemTypesResponse } from "../../../workflow/models/ReadRequiredItemTypesResponse";
 
 const RequiredItemTypeDeleteCell: FC<CellContext<RequiredItemType, unknown>> = (
   props
 ) => {
-  const deleteRowAction = props.column.columnDef.meta as DeleteRowFunction;
-  const deleteSelfLink = LinkUtil.findLink(
-    props.row.original,
-    "self",
-    LinkName.DELETE
-  );
-
-  if (!deleteSelfLink) {
-    return null;
-  }
+  const mutate = props.column.columnDef
+    .meta as KeyedMutator<ReadRequiredItemTypesResponse>;
 
   return (
     <DeleteButton
-      deleteAction={() =>
-        deleteRowAction(
-          props.row.original,
-          <span>
-            Item type <b>{props.row.original.itemTypeName}</b> is no longer
-            required
-          </span>
-        )
+      objectToDelete={props.row.original}
+      objectListMutate={mutate}
+      deleteNotification={
+        <span>
+          Item type <b>{props.row.original.itemTypeName}</b> is no longer
+          required
+        </span>
       }
       confirmDescription={
         <span>

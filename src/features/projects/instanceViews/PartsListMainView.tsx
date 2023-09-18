@@ -17,7 +17,6 @@ import {
 import ProjectModel from "../models/ProjectModel";
 import { IconNames } from "@blueprintjs/icons";
 import RequiredItemDialog from "../dialogs/RequiredItemDialog";
-import { useDeleteRowFunction } from "../../common/tables/hooks/useDeleteRowFunction";
 import { ALLOWED_PAGE_SIZES } from "../../common/utils/ConfigReaderUtils";
 import { usePageQueryValidator } from "../../common/utils/pageQueries/usePageQueryValidator";
 import RequiredItemTypeCell from "./components/RequiredItemTypeCell";
@@ -66,8 +65,6 @@ const PartsListMainView: FC<PartsListMainViewProps> = ({
     mutate();
   }, [project]);
 
-  const deleteRowAction = useDeleteRowFunction({ mutate });
-
   const columnHelper = createColumnHelper<RequiredItemType>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const columns: ColumnDef<RequiredItemType, any>[] = [
@@ -80,7 +77,7 @@ const PartsListMainView: FC<PartsListMainViewProps> = ({
     columnHelper.display({
       id: "actions",
       header: "Actions",
-      meta: deleteRowAction,
+      meta: mutate,
       cell: RequiredItemTypeDeleteCell,
     }),
   ];

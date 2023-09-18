@@ -2,28 +2,37 @@ import { PropsWithChildren, ReactNode } from "react";
 import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";
 import { ResponseModel } from "../../../links/types/ResponseModel";
-import { DeleteRowFunction } from "../hooks/useDeleteRowFunction";
+import { KeyedMutator } from "swr";
+import { EmbeddedModels } from "../../models/EmbeddedModels";
 
-interface ActionButtonsProps<Content extends ResponseModel> {
-  backingRow: Content;
+interface ActionButtonsProps<
+  Content extends ResponseModel,
+  ListResponse extends EmbeddedModels
+> {
+  object: Content;
   setEditData: (editData: Content | undefined) => void;
-  deleteRow: DeleteRowFunction;
+  objectListMutate: KeyedMutator<ListResponse>;
   deleteNotification: ReactNode;
   deleteConfirmDescription?: ReactNode;
 }
 
-const ActionButtons = <Content extends ResponseModel>({
-  backingRow,
+const ActionButtons = <
+  Content extends ResponseModel,
+  ListResponse extends EmbeddedModels
+>({
+  object,
   setEditData,
-  deleteRow,
+  objectListMutate,
   deleteNotification,
   deleteConfirmDescription,
-}: PropsWithChildren<ActionButtonsProps<Content>>) => {
+}: PropsWithChildren<ActionButtonsProps<Content, ListResponse>>) => {
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <EditButton currentData={backingRow} setEditData={setEditData} />
+      <EditButton currentData={object} setEditData={setEditData} />
       <DeleteButton
-        deleteAction={() => deleteRow(backingRow, deleteNotification)}
+        objectToDelete={object}
+        objectListMutate={objectListMutate}
+        deleteNotification={deleteNotification}
         confirmDescription={deleteConfirmDescription}
       />
     </div>
