@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useDidUpdate } from "../../hooks/useDidUpdate";
 
 interface UseDebounceReturn<Type> {
   debouncedValue: Type;
@@ -13,7 +14,7 @@ export const useDebounce = <Type>(
   const [value, setValue] = useState<Type>(initialValue);
   const [debouncedValue, setDebouncedValue] = useState<Type>(initialValue);
 
-  useEffect(() => {
+  useDidUpdate(() => {
     if (value != debouncedValue) {
       const timer = setTimeout(() => setDebouncedValue(value), debounceTime);
 

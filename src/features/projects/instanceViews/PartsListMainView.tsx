@@ -1,6 +1,6 @@
 import { NonIdealState } from "@blueprintjs/core";
 import { ColumnDef, Row, createColumnHelper } from "@tanstack/react-table";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import SortableTable from "../../common/tables/SortableTable";
 import {
   requestedSortRulesToQueryParam,
@@ -19,7 +19,7 @@ import { IconNames } from "@blueprintjs/icons";
 import RequiredItemDialog from "../dialogs/RequiredItemDialog";
 import { ALLOWED_PAGE_SIZES } from "../../common/utils/ConfigReaderUtils";
 import { usePageQueryValidator } from "../../common/utils/pageQueries/usePageQueryValidator";
-import RequiredItemTypeCell from "./components/RequiredItemTypeCell";
+import RequiredItemTypeRequiredAmountCell from "./components/RequiredItemTypeRequiredAmountCell";
 import RequiredItemTypeDeleteCell from "./components/RequiredItemTypeDeleteCell";
 import { useDidUpdate } from "../../common/hooks/useDidUpdate";
 
@@ -67,20 +67,24 @@ const PartsListMainView: FC<PartsListMainViewProps> = ({
 
   const columnHelper = createColumnHelper<RequiredItemType>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columns: ColumnDef<RequiredItemType, any>[] = [
-    columnHelper.accessor("itemTypeName", { header: () => "Item Type Name" }),
-    columnHelper.display({
-      id: "amount",
-      header: "Amount (Assigned/Required)",
-      cell: RequiredItemTypeCell,
-    }),
-    columnHelper.display({
-      id: "actions",
-      header: "Actions",
-      meta: mutate,
-      cell: RequiredItemTypeDeleteCell,
-    }),
-  ];
+  const columns: ColumnDef<RequiredItemType, any>[] = useMemo(
+    () => [
+      columnHelper.accessor("itemTypeName", { header: () => "Item Type Name" }),
+      columnHelper.display({
+        id: "amount",
+        header: "Amount (Assigned/Required)",
+        meta: mutate,
+        cell: (props) => <RequiredItemTypeRequiredAmountCell {...props} />,
+      }),
+      columnHelper.display({
+        id: "actions",
+        header: "Actions",
+        meta: mutate,
+        cell: (props) => <RequiredItemTypeDeleteCell {...props} />,
+      }),
+    ],
+    [columnHelper, mutate]
+  );
 
   const onRowClick = (row: Row<RequiredItemType>) => {
     setDetailedRequiredItemType(row.original);
