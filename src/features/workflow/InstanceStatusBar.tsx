@@ -1,4 +1,10 @@
-import { Button, ButtonGroup, Callout, Intent } from "@blueprintjs/core";
+import {
+  Button,
+  ButtonGroup,
+  Callout,
+  Classes,
+  Intent,
+} from "@blueprintjs/core";
 import { FC } from "react";
 import { IconNames } from "@blueprintjs/icons";
 import { InstanceInfo } from "./models/InstanceInfoModel";
@@ -61,7 +67,7 @@ const WorkflowStatusBar: FC<WorkflowStatusBarProps> = ({
       intent={intent}
       title={instanceInfo.displayName}
     >
-      <div className="bp4-text-large">{instanceInfo.message}</div>
+      <div className={Classes.TEXT_LARGE}>{instanceInfo.message}</div>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <ButtonGroup>
           {instanceInfo.options?.map((option) => (
