@@ -39,7 +39,6 @@ const SortableTable = <Content extends ResponseModel>({
 }: PropsWithChildren<SortableTableProps<Content>>): ReactElement => {
   const handleOnSortingChange = (updaterOrValue: Updater<SortingState>) => {
     let newSortingState;
-
     if (typeof updaterOrValue === "function") {
       newSortingState = updaterOrValue(
         pageControlOptions?.requestedSortRules ?? []

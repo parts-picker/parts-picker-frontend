@@ -39,6 +39,10 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const columns: ColumnDef<ProjectModel, any>[] = [
     projectsColumnHelper.accessor("name", { header: () => "Name" }),
+    projectsColumnHelper.accessor((row) => row.displayStatus, {
+      id: "workflowInstance.currentNode.displayName",
+      header: () => "Status",
+    }),
     projectsColumnHelper.accessor("shortDescription", {
       header: () => "Short description",
     }),

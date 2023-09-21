@@ -4,6 +4,7 @@ import { ResponseModel } from "../../links/types/ResponseModel";
 export default class ProjectModel implements ResponseModel {
   name: string;
   status: string;
+  displayStatus: string;
   shortDescription?: string;
   description: string | null;
 
