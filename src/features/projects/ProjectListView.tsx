@@ -12,8 +12,9 @@ import { ReadProjectsResponse } from "./models/ReadProjectsResponse";
 import { IconNames } from "@blueprintjs/icons";
 import SortableTable from "../common/tables/SortableTable";
 import { NextRouter } from "next/router";
-import LinkUtil from "../links/LinkUtil";
 import DeleteButton from "../common/tables/subcomponents/DeleteButton";
+import ProjectCopyButton from "./copy/ProjectCopyButton";
+import { routeToProject } from "./util/ProjectRoutingUtil";
 
 interface ProjectViewProps {
   pageQueryOptions: PaginationQueryOptions;
@@ -50,31 +51,27 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
       id: "actions",
       header: "Actions",
       cell: (props) => (
-        <DeleteButton
-          objectToDelete={props.row.original}
-          objectListMutate={mutate}
-          confirmDescription={
-            <span>
-              Delete project <b>{props.row.original.name}</b>?
-            </span>
-          }
-        />
+        <div style={{ display: "flex", columnGap: "0.25em" }}>
+          <ProjectCopyButton
+            sourceProject={props.row.original}
+            mutate={mutate}
+          />
+          <DeleteButton
+            objectToDelete={props.row.original}
+            objectListMutate={mutate}
+            confirmDescription={
+              <span>
+                Delete project <b>{props.row.original.name}</b>?
+              </span>
+            }
+          />
+        </div>
       ),
     }),
   ];
 
   const rowClickAction = (row: Row<ProjectModel>, router: NextRouter) => {
-    const link = LinkUtil.findLink(row.original, "self", LinkName.READ);
-    if (!link) {
-      return;
-    }
-
-    const encodedLink = window.btoa(link.href);
-
-    router.push({
-      pathname: "/projects/[projectLink]",
-      query: { projectLink: encodedLink },
-    });
+    routeToProject(row.original, router);
   };
 
   const nonIdealState = (
