@@ -36,26 +36,24 @@ const EditItemDialog: FC<EditItemDialogProps> = ({
 
     if (selfUpdateLink) {
       fetch(selfUpdateLink.href, {
-        method: "PUT",
+        method: "PATCH",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(data),
-      })
-        .then((response) => response.json() as Promise<ItemModel>)
-        .then(() => {
-          const itemReadLink = LinkUtil.findLink(
-            entryLinks,
-            "itemTypes",
-            LinkName.READ
-          );
+      }).then(() => {
+        const itemReadLink = LinkUtil.findLink(
+          entryLinks,
+          "itemTypes",
+          LinkName.READ
+        );
 
-          mutateMatch(itemReadLink);
+        mutateMatch(itemReadLink);
 
-          AppToaster?.show?.({
-            message: "Item of type " + targetItemType?.name + " was updated",
-            intent: "success",
-            icon: IconNames.CONFIRM,
-          });
+        AppToaster?.show?.({
+          message: "Item of type " + targetItemType?.name + " was updated",
+          intent: "success",
+          icon: IconNames.CONFIRM,
         });
+      });
     }
     handleClose();
   };

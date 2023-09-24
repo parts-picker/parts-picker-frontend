@@ -77,10 +77,6 @@ const ItemListView: FC<ItemListViewProps> = ({
     }),
   ];
 
-  const nonIdealState = (
-    <NonIdealState icon={IconNames.CROSS} title={"No items were found"} />
-  );
-
   return (
     <>
       <EditItemDialog
@@ -111,3 +107,8 @@ const ItemListView: FC<ItemListViewProps> = ({
 };
 
 export default ItemListView;
+
+// utils
+const nonIdealState = (
+  <NonIdealState icon={IconNames.CROSS} title={"No items were found"} />
+);
