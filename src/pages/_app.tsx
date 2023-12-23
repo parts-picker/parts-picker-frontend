@@ -14,14 +14,21 @@ import { EntryLinksProvider } from "../features/links/EntryLinksContext";
 import ResponseError from "../features/common/models/ResponseError";
 import DefaultLoadingSpinner from "../features/common/loading/DefaultLoadingSpinner";
 import { EntryLinksResponse } from "../features/links/types/EntryLinksResponse";
-import { ENTRY_LINK } from "../features/common/utils/ConfigReaderUtils";
 import Layout from "../features/common/layout/Layout";
+import { EntryLinksUrlApiResponse } from "./api/entry";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const { data: entryLinksUrlApiResponse, error: entryLinksUrlError } =
+    useSWR<EntryLinksUrlApiResponse>("/api/entry", defaultFetcher);
+
   const { data, error } = useSWR<EntryLinksResponse>(
-    ENTRY_LINK,
+    entryLinksUrlApiResponse?.url,
     defaultFetcher
   );
+
+  if (entryLinksUrlError) {
+    return "ENTRY_LINKS_URL is a required value, but is missing or not configured properly";
+  }
 
   if (error) {
     if (error instanceof ResponseError) {
@@ -31,7 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     return "Unknown error occurred - please try again later";
   }
 
-  if (!data) {
+  if (!data || !entryLinksUrlApiResponse) {
     return <DefaultLoadingSpinner />;
   }
 
