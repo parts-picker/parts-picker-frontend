@@ -1,5 +1,12 @@
 # parts-picker-ui
 
+To run, you will need to set ENTRY_LINKS_URL as an evironment variable that points to the entry links endpoint in the backend.  
+Use the following command to run it locally in dev mode:
+
+```
+ENTRY_LINKS_URL=http://localhost:8080/api/v1/entry npm run dev
+```
+
 TODO
 
 ## Utilities
