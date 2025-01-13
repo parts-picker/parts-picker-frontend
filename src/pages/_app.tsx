@@ -16,10 +16,16 @@ import DefaultLoadingSpinner from "../features/common/loading/DefaultLoadingSpin
 import { EntryLinksResponse } from "../features/links/types/EntryLinksResponse";
 import Layout from "../features/common/layout/Layout";
 import { EntryLinksUrlApiResponse } from "./api/entry";
+import { useRouter } from "next/router";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
   const { data: entryLinksUrlApiResponse, error: entryLinksUrlError } =
-    useSWR<EntryLinksUrlApiResponse>("/api/entry", defaultFetcher);
+    useSWR<EntryLinksUrlApiResponse>(
+      router.basePath + "/api/entry",
+      defaultFetcher
+    );
 
   const { data, error } = useSWR<EntryLinksResponse>(
     entryLinksUrlApiResponse?.url,
