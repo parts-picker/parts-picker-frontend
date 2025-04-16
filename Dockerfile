@@ -1,4 +1,4 @@
-FROM node:18.20.4-alpine AS base
+FROM node:22.14.0-alpine AS base
 
 # -------------------
 # STEP: DEPENDENCIES

@@ -28,7 +28,7 @@ const ItemTypeDialog: FC<ItemTypeDialogProps> = ({
   onSubmit,
   initialData,
 }) => {
-  const methods = useForm<ItemTypeModel>({
+  const methods = useForm({
     mode: "onChange",
     resolver: zodResolver(schema),
     defaultValues: initialData,

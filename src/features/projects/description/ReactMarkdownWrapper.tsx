@@ -15,7 +15,7 @@ import {
   UL,
 } from "@blueprintjs/core";
 import { FC } from "react";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 interface ReactMarkdownWrapperProps {
@@ -28,7 +28,7 @@ const ReactMarkdownWrapper: FC<ReactMarkdownWrapperProps> = ({
   placeHolder,
 }) => {
   return (
-    <ReactMarkdown
+    <Markdown
       remarkPlugins={[remarkGfm]}
       components={{
         h1: ({ children }) => <H1>{children}</H1>,
@@ -57,8 +57,8 @@ const ReactMarkdownWrapper: FC<ReactMarkdownWrapperProps> = ({
         tbody: ({ children }) => <tbody>{children}</tbody>,
       }}
     >
-      {(text || placeHolder) ?? ""}
-    </ReactMarkdown>
+      {text ?? placeHolder ?? ""}
+    </Markdown>
   );
 };
 

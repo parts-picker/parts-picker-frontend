@@ -47,17 +47,18 @@ const PartsListMainView: FC<PartsListMainViewProps> = ({
     LinkName.READ
   );
 
-  const { data, loading, mutate } =
-    useSWRWithURILike<ReadRequiredItemTypesResponse>(
-      requiredItemTypeLinkTemplate,
-      {
-        size: pageQueryOptions.requestedPageSize.toString(),
-        page: pageQueryOptions.requestedPageNumber.toString(),
-        sort: requestedSortRulesToQueryParam(
-          pageQueryOptions.requestedSortRules
-        ),
-      }
-    );
+  const {
+    data,
+    isLoading: loading,
+    mutate,
+  } = useSWRWithURILike<ReadRequiredItemTypesResponse>(
+    requiredItemTypeLinkTemplate,
+    {
+      size: pageQueryOptions.requestedPageSize.toString(),
+      page: pageQueryOptions.requestedPageNumber.toString(),
+      sort: requestedSortRulesToQueryParam(pageQueryOptions.requestedSortRules),
+    }
+  );
   const requiredItemTypes = data?._embedded?.requiredItemTypes ?? [];
 
   // reload data if project changed

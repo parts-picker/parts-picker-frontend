@@ -5,7 +5,7 @@ export type EntryLinksUrlApiResponse = {
 };
 
 const handler: NextApiHandler = (
-  req: NextApiRequest,
+  _: NextApiRequest,
   res: NextApiResponse<EntryLinksUrlApiResponse | null>
 ) => {
   if (!process.env.ENTRY_LINKS_URL) {

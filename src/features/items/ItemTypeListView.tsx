@@ -27,14 +27,15 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
     ? new URITemplate(itemTypesReadLink.href)
     : undefined;
 
-  const { data, loading, mutate } = useSWRWithURILike<EmbeddedItemTypes>(
-    itemTypesReadLinkTemplate,
-    {
-      size: pageQueryOptions.requestedPageSize.toString(),
-      page: pageQueryOptions.requestedPageNumber.toString(),
-      sort: requestedSortRulesToQueryParam(pageQueryOptions.requestedSortRules),
-    }
-  );
+  const {
+    data,
+    isLoading: loading,
+    mutate,
+  } = useSWRWithURILike<EmbeddedItemTypes>(itemTypesReadLinkTemplate, {
+    size: pageQueryOptions.requestedPageSize.toString(),
+    page: pageQueryOptions.requestedPageNumber.toString(),
+    sort: requestedSortRulesToQueryParam(pageQueryOptions.requestedSortRules),
+  });
   const itemTypes = data?._embedded?.itemTypes ?? new Array<ItemTypeModel>();
 
   const [editData, setEditData] = useState<ItemTypeModel | undefined>(

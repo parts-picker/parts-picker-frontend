@@ -3,6 +3,7 @@ import { FC, ReactNode } from "react";
 import { ClickMouseEvent } from "../types/ClickMouseEvent";
 
 interface ConfirmPopoverProps {
+  children: ReactNode;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   actionName?: string;
