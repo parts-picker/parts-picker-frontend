@@ -21,7 +21,7 @@ const NavigationBar: FC = () => {
           href={navLink.href}
           key={navLink.href + "-" + navLink.text + "-" + navLink.icon}
         >
-          <a
+          <div
             className={
               router.pathname === navLink.href
                 ? "nav-container__href--selected"
@@ -29,11 +29,10 @@ const NavigationBar: FC = () => {
             }
           >
             <Icon icon={navLink.icon} size={25} />
-
             <span className={"href-text invisible-if-reduced"}>
               {navLink.text}
             </span>
-          </a>
+          </div>
         </Link>
       ))}
     </div>

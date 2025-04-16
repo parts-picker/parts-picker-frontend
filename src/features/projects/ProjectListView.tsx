@@ -26,14 +26,15 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
     ? new URITemplate(projectReadLink.href)
     : undefined;
 
-  const { data, loading, mutate } = useSWRWithURILike<ReadProjectsResponse>(
-    projectReadLinkTemplate,
-    {
-      size: pageQueryOptions.requestedPageSize.toString(),
-      page: pageQueryOptions.requestedPageNumber.toString(),
-      sort: requestedSortRulesToQueryParam(pageQueryOptions.requestedSortRules),
-    }
-  );
+  const {
+    data,
+    isLoading: loading,
+    mutate,
+  } = useSWRWithURILike<ReadProjectsResponse>(projectReadLinkTemplate, {
+    size: pageQueryOptions.requestedPageSize.toString(),
+    page: pageQueryOptions.requestedPageNumber.toString(),
+    sort: requestedSortRulesToQueryParam(pageQueryOptions.requestedSortRules),
+  });
   const projects = data?._embedded?.projects ?? new Array<ProjectModel>();
 
   const projectsColumnHelper = createColumnHelper<ProjectModel>();

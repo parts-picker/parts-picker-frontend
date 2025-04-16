@@ -1,4 +1,3 @@
-import { FC } from "react";
 import {
   FieldValues,
   FormProvider,
@@ -7,15 +6,18 @@ import {
 } from "react-hook-form";
 import TextFieldWrapper from "../../common/forms/wrapper/TextFieldWrapper";
 import TextAreaWrapper from "../../common/forms/wrapper/TextAreaWrapper";
-import ItemTypeModel from "../models/ItemTypeModel";
 
-interface ItemTypeFormProps {
+interface ItemTypeFormProps<T extends FieldValues> {
   formId: string;
-  onSubmit: SubmitHandler<FieldValues>;
-  methods: UseFormReturn<ItemTypeModel>;
+  onSubmit: SubmitHandler<T>;
+  methods: UseFormReturn<T>;
 }
 
-const ItemTypeForm: FC<ItemTypeFormProps> = ({ formId, onSubmit, methods }) => {
+const ItemTypeForm = <T extends FieldValues>({
+  formId,
+  onSubmit,
+  methods,
+}: ItemTypeFormProps<T>) => {
   const onFormSubmit = methods.handleSubmit(onSubmit);
 
   return (

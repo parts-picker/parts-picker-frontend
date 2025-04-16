@@ -30,14 +30,15 @@ const ItemListView: FC<ItemListViewProps> = ({
     ? new URITemplate(itemsReadLink.href)
     : undefined;
 
-  const { data, loading, mutate } = useSWRWithURILike<EmbeddedItems>(
-    itemsReadLinkTemplate,
-    {
-      size: pageQueryOptions.requestedPageSize.toString(),
-      page: pageQueryOptions.requestedPageNumber.toString(),
-      sort: requestedSortRulesToQueryParam(pageQueryOptions.requestedSortRules),
-    }
-  );
+  const {
+    data,
+    isLoading: loading,
+    mutate,
+  } = useSWRWithURILike<EmbeddedItems>(itemsReadLinkTemplate, {
+    size: pageQueryOptions.requestedPageSize.toString(),
+    page: pageQueryOptions.requestedPageNumber.toString(),
+    sort: requestedSortRulesToQueryParam(pageQueryOptions.requestedSortRules),
+  });
   const items = data?._embedded?.items ?? new Array<ItemModel>();
 
   const [editableData, setEditData] = useState<ItemModel | undefined>(

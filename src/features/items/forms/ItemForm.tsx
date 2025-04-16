@@ -1,4 +1,3 @@
-import { FC } from "react";
 import {
   FieldValues,
   FormProvider,
@@ -6,25 +5,24 @@ import {
   UseFormReturn,
 } from "react-hook-form";
 import { ItemCondition } from "../models/ItemConditionEnum";
-import ItemModel from "../models/ItemModel";
 import { ItemStatus, ItemStatusForCreate } from "../models/ItemStatusEnum";
 import EnumHtmlSelectWrapper from "../../common/forms/wrapper/EnumHtmlSelectWrapper";
 import TextAreaWrapper from "../../common/forms/wrapper/TextAreaWrapper";
 import { ItemFormMode } from "./ItemFormMode";
 
-interface ItemFormProps {
+interface ItemFormProps<T extends FieldValues> {
   formMode: ItemFormMode;
   formId: string;
-  onSubmit: SubmitHandler<FieldValues>;
-  methods: UseFormReturn<ItemModel>;
+  onSubmit: SubmitHandler<T>;
+  methods: UseFormReturn<T>;
 }
 
-const ItemForm: FC<ItemFormProps> = ({
+const ItemForm = <T extends FieldValues>({
   formMode,
   formId,
   onSubmit,
   methods,
-}) => {
+}: ItemFormProps<T>) => {
   const onFormSubmit = methods.handleSubmit(onSubmit);
 
   return (
@@ -45,7 +43,7 @@ const ItemForm: FC<ItemFormProps> = ({
           valueEnum={ItemCondition}
           defaultValue={ItemCondition.NEW}
         />
-        <TextAreaWrapper name="note" label="Note" />
+        <TextAreaWrapper name="note" label="Note" defaultValue={""} />
       </form>
     </FormProvider>
   );

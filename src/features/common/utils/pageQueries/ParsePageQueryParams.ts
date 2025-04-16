@@ -28,7 +28,7 @@ export const parsePageQueryParams = (
   let parsedSize: number;
   try {
     parsedSize = sizePreprocessingSchema.parse(size);
-  } catch (e: unknown) {
+  } catch (_: unknown) {
     parsedSize = DEFAULT_PAGE_SIZE;
     valid = false;
   }
@@ -36,7 +36,7 @@ export const parsePageQueryParams = (
   let parsedPage: number;
   try {
     parsedPage = pagePreprocessingSchema.parse(page);
-  } catch (e: unknown) {
+  } catch (_: unknown) {
     parsedPage = DEFAULT_PAGE_NUMBER;
     valid = false;
   }

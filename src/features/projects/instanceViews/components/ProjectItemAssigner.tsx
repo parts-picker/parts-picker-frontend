@@ -27,7 +27,7 @@ const ProjectItemAssigner: FC<ProjectItemAssignerProps> = ({
   );
   const {
     data: assignableItemsResponse,
-    loading: assignableItemsLoading,
+    isLoading: assignableItemsLoading,
     mutate: assignableItemsMutate,
   } = useSWRWithURILike<ReadAssignableItemsResponse>(readAllAssignableLink, {
     size: assignableItemsParams.size.toString(),
@@ -44,7 +44,7 @@ const ProjectItemAssigner: FC<ProjectItemAssignerProps> = ({
   );
   const {
     data: assignedItemsResponse,
-    loading: assignedItemsLoading,
+    isLoading: assignedItemsLoading,
     mutate: assignedItemsMutate,
   } = useSWRWithURILike<ReadAssignedItemsResponse>(readAllAssignedLink, {
     size: assignedItemsParams.size.toString(),

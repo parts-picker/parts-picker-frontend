@@ -5,7 +5,7 @@ type HealthApiResponse = {
 };
 
 const handler: NextApiHandler = (
-  req: NextApiRequest,
+  _: NextApiRequest,
   res: NextApiResponse<HealthApiResponse>
 ) => {
   res.status(200).json({ status: "UP" });
