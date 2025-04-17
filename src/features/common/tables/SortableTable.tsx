@@ -1,5 +1,4 @@
 import { HTMLTable } from "@blueprintjs/core";
-import React from "react";
 import { PropsWithChildren, ReactElement } from "react";
 import { ResponseModel } from "../../links/types/ResponseModel";
 import { TableContext } from "./context/TableContext";
@@ -52,7 +51,7 @@ const SortableTable = <Content extends ResponseModel>({
 
   const table = useReactTable({
     columns: columns,
-    data: data || [],
+    data: data ?? [],
     getCoreRowModel: getCoreRowModel(),
     manualSorting: true,
     state: {

@@ -24,14 +24,14 @@ const TextAreaWrapper: FC<TextAreaWrapperProps> = ({
     fieldState: { error, invalid },
   } = useController({
     name,
-    defaultValue: defaultValue || "",
+    defaultValue: defaultValue ?? "",
   });
 
   return (
     <FormGroup
       {...formGroupProps}
       label={label}
-      helperText={error?.message || ""}
+      helperText={error?.message ?? ""}
       intent={invalid ? "danger" : intent}
     >
       <TextArea

@@ -32,14 +32,14 @@ const HtmlSelectWrapper: FC<HtmlSelectWrapperProps> = ({
     fieldState: { error, invalid },
   } = useController({
     name,
-    defaultValue: defaultValue || values[0],
+    defaultValue: defaultValue ?? values[0],
   });
 
   return (
     <FormGroup
       {...formGroupProps}
       label={label}
-      helperText={error?.message || ""}
+      helperText={error?.message ?? ""}
       intent={invalid ? "danger" : intent}
     >
       <HTMLSelect

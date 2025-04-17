@@ -94,7 +94,7 @@ const ProjectDescriptionComponent: FC<ProjectDescriptionComponentProps> = ({
     <div style={{ display: "flex" }}>
       <div style={{ flexGrow: "1" }}>
         <TextArea
-          value={description || ""}
+          value={description ?? ""}
           placeholder="Write a description with markdown.."
           onChange={(event) => setDescription(event.target.value)}
           fill
