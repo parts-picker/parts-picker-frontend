@@ -53,7 +53,7 @@ const ProjectDetails: FC = () => {
           <Button
             icon={IconNames.CHEVRON_LEFT}
             onClick={backButtonOnClick}
-            large
+            size="large"
           />
         </div>
         <H1>Project - {project.name} </H1>
@@ -61,7 +61,7 @@ const ProjectDetails: FC = () => {
       <Divider />
 
       <Text style={{ marginBottom: "1.5em" }}>
-        {project.shortDescription || "No short description yet"}
+        {project.shortDescription ?? "No short description yet"}
       </Text>
       <div style={{ marginBottom: "1.5em" }}>
         <InstanceStatusBar
@@ -70,7 +70,7 @@ const ProjectDetails: FC = () => {
           optionalMutates={[projectMutate as KeyedMutator<unknown>]}
         />
       </div>
-      <Tabs id="project_tabs" large>
+      <Tabs id="project_tabs" size="large">
         <Tab
           id={"parts_list"}
           title={"Parts List"}

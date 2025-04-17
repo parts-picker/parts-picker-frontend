@@ -1,5 +1,5 @@
 import { Button, ControlGroup, Icon, NumericInput } from "@blueprintjs/core";
-import { Suggest2 } from "@blueprintjs/select";
+import { Suggest } from "@blueprintjs/select";
 import { FC, useState } from "react";
 import { IconNames } from "@blueprintjs/icons";
 import ProjectModel from "../models/ProjectModel";
@@ -71,64 +71,60 @@ const RequiredItemDialog: FC<RequiredItemDialogProps> = ({
   };
 
   return (
-    <>
-      <ControlGroup>
-        <Suggest2<AvailableItemType>
-          items={availableItemTypes}
-          selectedItem={selectedItemType}
-          onItemSelect={(selectedItem) => {
-            setSelectedItemType(selectedItem);
-            setSearchQueryName(selectedItem.name);
-          }}
-          query={searchQueryName}
-          onQueryChange={setSearchQueryName}
-          itemsEqual={(first, second) =>
-            ResponseUtil.equal(first, second, LinkName.READ, "subsetOf")
+    <ControlGroup>
+      <Suggest<AvailableItemType>
+        items={availableItemTypes}
+        selectedItem={selectedItemType}
+        onItemSelect={(selectedItem) => {
+          setSelectedItemType(selectedItem);
+          setSearchQueryName(selectedItem.name);
+        }}
+        query={searchQueryName}
+        onQueryChange={setSearchQueryName}
+        itemsEqual={(first, second) =>
+          ResponseUtil.equal(first, second, LinkName.READ, "subsetOf")
+        }
+        itemRenderer={(itemType, props) => {
+          return (
+            <AvailableItemTypeItem
+              availableItemType={itemType}
+              itemRendererProps={props}
+              key={LinkUtil.findLink(itemType, "subsetOf", LinkName.READ)?.href}
+            />
+          );
+        }}
+        inputValueRenderer={(itemType) => itemType.name}
+        noResults={
+          <AvailableItemTypeNoResults searchQueryName={searchQueryName} />
+        }
+        closeOnSelect
+        popoverProps={{ matchTargetWidth: true, minimal: true }}
+        inputProps={{
+          leftIcon: <Icon icon={IconNames.SEARCH} />,
+          style: { width: "25em" },
+          onFocus: () => mutate(),
+        }}
+      />
+      <NumericInput
+        value={amount}
+        onValueChange={setAmount}
+        minorStepSize={null}
+        min={1}
+      />
+      <Button
+        icon={IconNames.ADD}
+        style={{ marginLeft: "2em" }}
+        onClick={() => {
+          if (selectedItemType) {
+            createRequiredItemType(selectedItemType, amount, () => {
+              reset();
+              requiredItemTypesMutate();
+            });
           }
-          itemRenderer={(itemType, props) => {
-            return (
-              <AvailableItemTypeItem
-                availableItemType={itemType}
-                itemRendererProps={props}
-                key={
-                  LinkUtil.findLink(itemType, "subsetOf", LinkName.READ)?.href
-                }
-              />
-            );
-          }}
-          inputValueRenderer={(itemType) => itemType.name}
-          noResults={
-            <AvailableItemTypeNoResults searchQueryName={searchQueryName} />
-          }
-          closeOnSelect
-          popoverProps={{ matchTargetWidth: true, minimal: true }}
-          inputProps={{
-            leftIcon: <Icon icon={IconNames.SEARCH} />,
-            style: { width: "25em" },
-            onFocus: () => mutate(),
-          }}
-        />
-        <NumericInput
-          value={amount}
-          onValueChange={setAmount}
-          minorStepSize={null}
-          min={1}
-        />
-        <Button
-          icon={IconNames.ADD}
-          style={{ marginLeft: "2em" }}
-          onClick={() => {
-            if (selectedItemType) {
-              createRequiredItemType(selectedItemType, amount, () => {
-                reset();
-                requiredItemTypesMutate();
-              });
-            }
-          }}
-          disabled={!selectedItemType}
-        />
-      </ControlGroup>
-    </>
+        }}
+        disabled={!selectedItemType}
+      />
+    </ControlGroup>
   );
 };
 

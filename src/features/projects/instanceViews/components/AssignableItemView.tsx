@@ -44,7 +44,7 @@ const AssignableItemView: FC<AssignableItemViewProps> = ({
       data={assignableItems}
       loading={loading}
       pageControlOptions={
-        !loading && data && data.page
+        !loading && data?.page
           ? {
               ...data.page,
               setRequestedPageSize: params.setSize,

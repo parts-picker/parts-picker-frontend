@@ -80,29 +80,27 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
   );
 
   return (
-    <>
-      <SortableTable
-        columns={columns}
-        data={projects}
-        loading={loading}
-        options={{
-          nonIdealState: nonIdealState,
-          onRowClickAction: rowClickAction,
-        }}
-        pageControlOptions={
-          !loading && data && data.page
-            ? {
-                ...data.page,
-                setRequestedPageSize: pageQueryOptions.setRequestedPageSize,
-                setRequestedPageNumber: pageQueryOptions.setRequestedPageNumber,
-                requestedSortRules: pageQueryOptions.requestedSortRules,
-                setRequestedSortRules: pageQueryOptions.setRequestedSortRules,
-                allowedPageSizes: pageQueryOptions.allowedPageSizes,
-              }
-            : undefined
-        }
-      />
-    </>
+    <SortableTable
+      columns={columns}
+      data={projects}
+      loading={loading}
+      options={{
+        nonIdealState: nonIdealState,
+        onRowClickAction: rowClickAction,
+      }}
+      pageControlOptions={
+        !loading && data && data.page
+          ? {
+              ...data.page,
+              setRequestedPageSize: pageQueryOptions.setRequestedPageSize,
+              setRequestedPageNumber: pageQueryOptions.setRequestedPageNumber,
+              requestedSortRules: pageQueryOptions.requestedSortRules,
+              setRequestedSortRules: pageQueryOptions.setRequestedSortRules,
+              allowedPageSizes: pageQueryOptions.allowedPageSizes,
+            }
+          : undefined
+      }
+    />
   );
 };
 

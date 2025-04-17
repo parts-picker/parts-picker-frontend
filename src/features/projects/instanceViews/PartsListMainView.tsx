@@ -100,7 +100,7 @@ const PartsListMainView: FC<PartsListMainViewProps> = ({
         loading={loading}
         options={{ nonIdealState: nonIdealState, onRowClickAction: onRowClick }}
         pageControlOptions={
-          !loading && data && data.page
+          !loading && data?.page
             ? {
                 ...data.page,
                 setRequestedPageSize: pageQueryOptions.setRequestedPageSize,
