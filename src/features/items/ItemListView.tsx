@@ -1,6 +1,5 @@
 import { NonIdealState } from "@blueprintjs/core";
-import React, { useState } from "react";
-import { FC } from "react";
+import React, { useState, FC } from "react";
 import SortableTable from "../common/tables/SortableTable";
 import ItemModel from "./models/ItemModel";
 import { IconNames } from "@blueprintjs/icons";
@@ -91,7 +90,7 @@ const ItemListView: FC<ItemListViewProps> = ({
         loading={loading}
         options={{ nonIdealState: nonIdealState }}
         pageControlOptions={
-          !loading && data && data.page
+          !loading && data?.page
             ? {
                 ...data.page,
                 setRequestedPageSize: pageQueryOptions.setRequestedPageSize,

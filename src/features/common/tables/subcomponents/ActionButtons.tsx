@@ -7,7 +7,7 @@ import { EmbeddedModels } from "../../models/EmbeddedModels";
 
 interface ActionButtonsProps<
   Content extends ResponseModel,
-  ListResponse extends EmbeddedModels
+  ListResponse extends EmbeddedModels,
 > {
   object: Content;
   setEditData: (editData: Content | undefined) => void;
@@ -18,7 +18,7 @@ interface ActionButtonsProps<
 
 const ActionButtons = <
   Content extends ResponseModel,
-  ListResponse extends EmbeddedModels
+  ListResponse extends EmbeddedModels,
 >({
   object,
   setEditData,
