@@ -7,6 +7,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
 import { FlatCompat } from "@eslint/eslintrc";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,10 +25,8 @@ export default defineConfig([
       "plugin:jest/recommended",
       "plugin:testing-library/react",
       "next",
-      "next/core-web-vitals",
-      "prettier"
+      "next/core-web-vitals"
     ),
-
     plugins: {
       "@typescript-eslint": typescriptEslint,
       jest: jest,
@@ -65,4 +64,5 @@ export default defineConfig([
       ],
     },
   },
+  eslintPluginPrettierRecommended,
 ]);

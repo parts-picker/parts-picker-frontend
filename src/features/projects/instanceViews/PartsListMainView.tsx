@@ -70,7 +70,9 @@ const PartsListMainView: FC<PartsListMainViewProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const columns: ColumnDef<RequiredItemType, any>[] = useMemo(
     () => [
-      columnHelper.accessor("itemTypeName", { header: () => "Item Type Name" }),
+      columnHelper.accessor("itemTypeName", {
+        header: () => "Item Type Name",
+      }),
       columnHelper.display({
         id: "amount",
         header: "Amount (Assigned/Required)",
@@ -98,7 +100,10 @@ const PartsListMainView: FC<PartsListMainViewProps> = ({
         columns={columns}
         data={requiredItemTypes}
         loading={loading}
-        options={{ nonIdealState: nonIdealState, onRowClickAction: onRowClick }}
+        options={{
+          nonIdealState: nonIdealState,
+          onRowClickAction: onRowClick,
+        }}
         pageControlOptions={
           !loading && data?.page
             ? {

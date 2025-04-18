@@ -76,7 +76,11 @@ const ProjectCopyButton: FC<ProjectCopyButtonProps> = ({
 
   return (
     <div onClick={stopPropagation}>
-      <Button minimal icon={IconNames.DUPLICATE} onClick={handleOnClick} />
+      <Button
+        variant="minimal"
+        icon={IconNames.DUPLICATE}
+        onClick={handleOnClick}
+      />
       <ProjectCopyDialog
         open={open}
         close={closeDialog}

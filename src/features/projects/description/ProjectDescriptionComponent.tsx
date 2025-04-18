@@ -112,10 +112,10 @@ const ProjectDescriptionComponent: FC<ProjectDescriptionComponentProps> = ({
             position: "sticky",
           }}
         >
-          <Button icon={IconNames.CROSS} large onClick={abortEditing} />
+          <Button icon={IconNames.CROSS} size="large" onClick={abortEditing} />
           <Button
             icon={IconNames.CONFIRM}
-            large
+            size="large"
             intent="success"
             onClick={updateDescription}
             disabled={project.description == description}

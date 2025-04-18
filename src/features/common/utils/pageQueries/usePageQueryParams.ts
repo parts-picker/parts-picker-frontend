@@ -48,7 +48,6 @@ export const usePageQueryParams = (): PageQueryOptions => {
     router.push({ query: { ...router.query, size, page, sort } }, undefined, {
       shallow: true,
     });
-
     (document?.activeElement as HTMLElement)?.blur();
   };
 
@@ -109,7 +108,7 @@ export const queryParamToSortRules = (
             ({
               id: columnName,
               desc: desc,
-            } as ColumnSort)
+            }) as ColumnSort
         )
     );
   });

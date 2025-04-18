@@ -7,7 +7,6 @@ import ItemListView from "../../features/items/ItemListView";
 import ItemTypeModel from "../../features/items/models/ItemTypeModel";
 import { IconNames } from "@blueprintjs/icons";
 import DefaultLoadingSpinner from "../../features/common/loading/DefaultLoadingSpinner";
-import React from "react";
 import LinkUtil from "../../features/links/LinkUtil";
 import { LinkName } from "../../features/links/types/LinkModel";
 import { GetServerSideProps } from "next";

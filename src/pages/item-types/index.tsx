@@ -1,6 +1,5 @@
 import { Button, H1 } from "@blueprintjs/core";
-import React, { useState } from "react";
-import { FC } from "react";
+import React, { useState, FC } from "react";
 import ItemTypeListView from "../../features/items/ItemTypeListView";
 import { IconNames } from "@blueprintjs/icons";
 import CreateItemTypeDialog from "../../features/items/dialogs/CreateItemTypeDialog";

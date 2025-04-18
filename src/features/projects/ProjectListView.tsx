@@ -89,7 +89,7 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
         onRowClickAction: rowClickAction,
       }}
       pageControlOptions={
-        !loading && data && data.page
+        !loading && data?.page
           ? {
               ...data.page,
               setRequestedPageSize: pageQueryOptions.setRequestedPageSize,

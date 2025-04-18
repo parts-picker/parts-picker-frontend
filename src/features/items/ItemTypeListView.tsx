@@ -1,7 +1,6 @@
 import { NonIdealState } from "@blueprintjs/core";
 import { NextRouter } from "next/router";
-import React, { useState } from "react";
-import { FC } from "react";
+import React, { useState, FC } from "react";
 import SortableTable from "../common/tables/SortableTable";
 import ItemTypeModel from "./models/ItemTypeModel";
 import { IconNames } from "@blueprintjs/icons";
@@ -106,7 +105,7 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
           onRowClickAction: rowClickAction,
         }}
         pageControlOptions={
-          !loading && data && data.page
+          !loading && data?.page
             ? {
                 ...data.page,
                 setRequestedPageSize: pageQueryOptions.setRequestedPageSize,
