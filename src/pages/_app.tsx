@@ -18,6 +18,9 @@ import Layout from "../features/common/layout/Layout";
 import { EntryLinksUrlApiResponse } from "./api/entry";
 import { useRouter } from "next/router";
 
+/**
+ * @deprecated Will be removed when migration to app router is finished.
+ */
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
@@ -33,7 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 
   if (entryLinksUrlError) {
-    return "ENTRY_LINKS_URL is a required value, but is missing or not configured properly";
+    return "ENTRY_LINKS_URL is a required value, but is missing or not configured properly DEPRECATED";
   }
 
   if (error) {
