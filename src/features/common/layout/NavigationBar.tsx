@@ -1,9 +1,11 @@
+"use client";
+
 import { Icon, IconName } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 
 import { FC } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 
 const navLinks: NavLink[] = [
   { href: "/", text: "Dashboard", icon: IconNames.TIMELINE_AREA_CHART },
@@ -12,7 +14,7 @@ const navLinks: NavLink[] = [
 ];
 
 const NavigationBar: FC = () => {
-  const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <div className={"nav-container"}>
@@ -23,7 +25,7 @@ const NavigationBar: FC = () => {
         >
           <div
             className={
-              router.pathname === navLink.href
+              pathname === navLink.href
                 ? "nav-container__href--selected"
                 : "nav-container__href"
             }

@@ -10,6 +10,9 @@ export const EntryLinksContext = React.createContext<
   EntryLinksResponse | undefined
 >(undefined);
 
+/**
+ * @deprecated Will be removed when migration to app router is finished. Use V2 instead.
+ */
 export const EntryLinksProvider = ({
   children,
   value,

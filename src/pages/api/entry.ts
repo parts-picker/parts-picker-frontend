@@ -4,6 +4,9 @@ export type EntryLinksUrlApiResponse = {
   url: string;
 };
 
+/**
+ * @deprecated Will be removed when migration to app router is finished.
+ */
 const handler: NextApiHandler = (
   _: NextApiRequest,
   res: NextApiResponse<EntryLinksUrlApiResponse | null>

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@blueprintjs/core";
 import { FC } from "react";
 import { IconNames } from "@blueprintjs/icons";
@@ -16,7 +18,7 @@ const Sidebar: FC = () => {
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <Button
           icon={reduced ? IconNames.CHEVRON_RIGHT : IconNames.CHEVRON_LEFT}
-          minimal
+          variant="minimal"
           onClick={handleButton}
         />
       </div>
