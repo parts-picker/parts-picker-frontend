@@ -37,7 +37,7 @@ const EditItemTypeDialog: FC<EditItemTypeDialogProps> = ({
         body: JSON.stringify(data),
       })
         .then((response) => response.json() as Promise<ItemTypeModel>)
-        .then((updatedItemType) => {
+        .then(async (updatedItemType) => {
           const itemTypesReadLink = LinkUtil.findLink(
             entryLinks,
             "itemTypes",
@@ -45,7 +45,7 @@ const EditItemTypeDialog: FC<EditItemTypeDialogProps> = ({
           );
           mutateMatch(itemTypesReadLink);
 
-          AppToaster?.show?.({
+          (await AppToaster)?.show?.({
             message: "Item type " + updatedItemType.name + " was updated",
             intent: "success",
             icon: IconNames.CONFIRM,

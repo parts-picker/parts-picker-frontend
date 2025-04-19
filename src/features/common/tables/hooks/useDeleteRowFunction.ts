@@ -14,7 +14,7 @@ interface UseDeleteRowFunctionProps<DataList extends EmbeddedModels> {
 export const useDeleteRowFunction = <DataList extends EmbeddedModels>({
   mutate,
 }: UseDeleteRowFunctionProps<DataList>) => {
-  const deleteRow: DeleteRowFunction = (
+  const deleteRow: DeleteRowFunction = async (
     rowToDelete: ResponseModel,
     deleteNotification: ReactNode
   ) => {
@@ -72,7 +72,7 @@ export const useDeleteRowFunction = <DataList extends EmbeddedModels>({
     );
 
     if (deleteNotification) {
-      AppToaster?.show?.({
+      (await AppToaster)?.show?.({
         message: deleteNotification,
         intent: "success",
         icon: IconNames.CONFIRM,

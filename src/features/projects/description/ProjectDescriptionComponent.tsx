@@ -38,8 +38,8 @@ const ProjectDescriptionComponent: FC<ProjectDescriptionComponentProps> = ({
             method: "PATCH",
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({ description: description }),
-          }).then((response) => {
-            AppToaster?.show?.({
+          }).then(async (response) => {
+            (await AppToaster)?.show?.({
               message:
                 "Description of project " + project.name + " was updated",
               intent: "success",

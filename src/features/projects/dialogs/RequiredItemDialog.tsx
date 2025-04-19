@@ -147,10 +147,10 @@ const createRequiredItemType = (
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({ requiredAmount: requiredAmount }),
-    }).then(() => {
+    }).then(async () => {
       postCreateAction?.();
 
-      AppToaster?.show?.({
+      (await AppToaster)?.show?.({
         message: (
           <>
             Added {requiredAmount} of item type <b>{availableItemType.name}</b>{" "}

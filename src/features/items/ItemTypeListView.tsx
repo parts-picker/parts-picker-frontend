@@ -1,5 +1,6 @@
+"use client";
+
 import { NonIdealState } from "@blueprintjs/core";
-import { NextRouter } from "next/router";
 import React, { useState, FC } from "react";
 import SortableTable from "../common/tables/SortableTable";
 import ItemTypeModel from "./models/ItemTypeModel";
@@ -12,9 +13,10 @@ import { useSWRWithURILike } from "../common/utils/swr/useSWRWithURILike";
 import URITemplate from "urijs/src/URITemplate";
 import { EmbeddedItemTypes } from "./models/ItemEmbeddedTypes";
 import { useEntryLinkFor } from "../links/hooks/useEntryLinkFor";
-import { requestedSortRulesToQueryParam } from "../common/utils/pageQueries/usePageQueryParams";
 import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
 import ActionButtons from "../common/tables/subcomponents/ActionButtons";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { requestedSortRulesToQueryParam } from "../common/utils/pageQueries/usePageQueryParamsV2";
 
 interface ItemTypeViewProps {
   pageQueryOptions: PaginationQueryOptions;
@@ -75,18 +77,17 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
     }),
   ];
 
-  const rowClickAction = (row: Row<ItemTypeModel>, router: NextRouter) => {
+  const rowClickAction = (
+    row: Row<ItemTypeModel>,
+    router: AppRouterInstance
+  ) => {
     const link = LinkUtil.findLink(row.original, "self", LinkName.READ);
     if (!link) {
       return;
     }
 
     const encodedLink = window.btoa(link.href);
-
-    router.push({
-      pathname: "/item-types/[itemTypeLink]",
-      query: { itemTypeLink: encodedLink, page: 0, size: 10 },
-    });
+    router.push(`/item-types/${encodedLink}`);
   };
 
   const nonIdealState = (

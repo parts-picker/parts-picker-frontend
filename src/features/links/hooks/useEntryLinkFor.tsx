@@ -1,7 +1,7 @@
-import React from "react";
+import { EntryLinksContext } from "../EntryLinksContextV2";
 import LinkUtil from "../LinkUtil";
 import { LinkName } from "../types/LinkModel";
-import { EntryLinksContext } from "../EntryLinksContext";
+import { useContext } from "react";
 
 /**
  * Fetches a specific entry link from the entry links context.
@@ -10,7 +10,7 @@ import { EntryLinksContext } from "../EntryLinksContext";
  * @returns the entry link matching the given parameters or undefined
  */
 export const useEntryLinkFor = (name: LinkName, ref: string) => {
-  const entryLinks = React.useContext(EntryLinksContext);
+  const entryLinks = useContext(EntryLinksContext);
 
   return LinkUtil.findLink(entryLinks, ref, name);
 };

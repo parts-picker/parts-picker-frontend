@@ -1,3 +1,5 @@
+"use client";
+
 import { FC } from "react";
 import { IconNames } from "@blueprintjs/icons";
 import { FieldValues } from "react-hook-form";
@@ -39,7 +41,7 @@ const EditItemDialog: FC<EditItemDialogProps> = ({
         method: "PATCH",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(data),
-      }).then(() => {
+      }).then(async () => {
         const itemReadLink = LinkUtil.findLink(
           entryLinks,
           "itemTypes",
@@ -48,7 +50,7 @@ const EditItemDialog: FC<EditItemDialogProps> = ({
 
         mutateMatch(itemReadLink);
 
-        AppToaster?.show?.({
+        (await AppToaster)?.show?.({
           message: "Item of type " + targetItemType?.name + " was updated",
           intent: "success",
           icon: IconNames.CONFIRM,
