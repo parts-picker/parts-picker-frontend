@@ -44,7 +44,7 @@ export const parsePageQueryParams = (
   return { valid, parsedPage, parsedSize };
 };
 
-type QueryParam = string | string[] | undefined;
+type QueryParam = string | string[] | undefined | null;
 
 type PageQueryParseResult = {
   valid: boolean;

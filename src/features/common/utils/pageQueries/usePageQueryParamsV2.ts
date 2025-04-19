@@ -1,25 +1,32 @@
 import { ColumnSort } from "@tanstack/react-table";
-import { useRouter } from "next/router";
 import {
   SetRequestedPageNumber,
   SetRequestedPageSize,
   SetRequestedSortRules,
 } from "../../tables/types/PaginationQueryOptions";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 /**
  * Custom hook to simplify the usage of the size, page & sort query parameters used in pagination.
  * The hook assumes that all parameters were validated before entering the page.
  * @returns the current values of size, page number & sorting rules as well as setters for them
  */
-export const usePageQueryParams = (): PageQueryOptions => {
+export const usePageQueryParamsV2 = (): PageQueryOptions => {
   const router = useRouter();
-  const requestedPageNumber = isNaN(Number(router.query.page))
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const pageParam = searchParams?.get("page");
+  const sizeParam = searchParams?.get("size");
+  const sortParam = searchParams?.getAll("sort");
+
+  const requestedPageNumber = isNaN(Number(pageParam))
     ? Number(process.env.NEXT_PUBLIC_DEFAULT_PAGE_NUMBER)
-    : Number(router.query.page);
-  const requestedPageSize = isNaN(Number(router.query.size))
+    : Number(pageParam);
+  const requestedPageSize = isNaN(Number(sizeParam))
     ? Number(process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE)
-    : Number(router.query.size);
-  const requestedSortRules = queryParamToSortRules(router.query.sort);
+    : Number(sizeParam);
+  const requestedSortRules = queryParamToSortRules(sortParam);
 
   const setRequestedPageNumber = (page: number) =>
     shallowRouteWithParams(
@@ -45,9 +52,14 @@ export const usePageQueryParams = (): PageQueryOptions => {
     size: number,
     sort: string[]
   ) => {
-    router.push({ query: { ...router.query, size, page, sort } }, undefined, {
-      shallow: true,
-    });
+    const updatedParams = new URLSearchParams(searchParams ?? "");
+
+    updatedParams.set("page", page.toString());
+    updatedParams.set("size", size.toString());
+    updatedParams.delete("sort");
+    sort.forEach((sortEntry) => updatedParams.append("sort", sortEntry));
+
+    router.replace(`${pathname}?${updatedParams.toString()}`);
     (document?.activeElement as HTMLElement)?.blur();
   };
 

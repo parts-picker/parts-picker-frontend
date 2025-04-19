@@ -1,4 +1,4 @@
 import React from "react";
-import { EntryLinksContext } from "../EntryLinksContext";
+import { EntryLinksContext } from "../EntryLinksContextV2";
 
 export const useEntryLinks = () => React.useContext(EntryLinksContext);

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import { FC, useCallback, useMemo, useState } from "react";
@@ -11,8 +13,8 @@ import { FieldValues } from "react-hook-form";
 import LinkUtil from "../../links/LinkUtil";
 import { LinkName } from "../../links/types/LinkModel";
 import { AppToaster } from "../../common/utils/Toaster";
-import { useRouter } from "next/router";
 import { routeToProject } from "../util/ProjectRoutingUtil";
+import { useRouter } from "next/navigation";
 
 interface ProjectCopyButtonProps {
   sourceProject: ProjectModel;
@@ -50,11 +52,11 @@ const ProjectCopyButton: FC<ProjectCopyButtonProps> = ({
           body: JSON.stringify(data),
         })
           .then((response) => response.json() as Promise<ProjectModel>)
-          .then((project) => {
+          .then(async (project) => {
             mutate();
             routeToProject(project, router);
 
-            AppToaster?.show?.({
+            (await AppToaster)?.show?.({
               message:
                 "Project '" +
                 sourceProject.name +

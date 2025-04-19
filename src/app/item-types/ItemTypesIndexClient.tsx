@@ -1,18 +1,18 @@
-import { Button, H1 } from "@blueprintjs/core";
+"use client";
+
+import { Button } from "@blueprintjs/core";
 import React, { useState, FC } from "react";
 import ItemTypeListView from "../../features/items/ItemTypeListView";
 import { IconNames } from "@blueprintjs/icons";
 import CreateItemTypeDialog from "../../features/items/dialogs/CreateItemTypeDialog";
 import { LinkName } from "../../features/links/types/LinkModel";
-import { GetServerSideProps } from "next";
 import { ALLOWED_PAGE_SIZES } from "../../features/common/utils/ConfigReaderUtils";
-import { parsePageQueryParams } from "../../features/common/utils/pageQueries/ParsePageQueryParams";
-import { usePageQueryParams } from "../../features/common/utils/pageQueries/usePageQueryParams";
 import { useEntryLinkFor } from "../../features/links/hooks/useEntryLinkFor";
+import { usePageQueryParamsV2 } from "../../features/common/utils/pageQueries/usePageQueryParamsV2";
 
-const ItemTypesIndex: FC = () => {
+const ItemTypesIndexClient: FC = () => {
   const itemTypeCreateLink = useEntryLinkFor(LinkName.CREATE, "itemTypes");
-  const pageQueryOptions = usePageQueryParams();
+  const pageQueryOptions = usePageQueryParamsV2();
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
@@ -25,8 +25,7 @@ const ItemTypesIndex: FC = () => {
   };
 
   return (
-    <div>
-      <H1> Item Inventory </H1>
+    <>
       {itemTypeCreateLink ? (
         <Button icon={IconNames.ADD} onClick={handleOpenCreateDialog} />
       ) : null}
@@ -40,26 +39,8 @@ const ItemTypesIndex: FC = () => {
           allowedPageSizes: ALLOWED_PAGE_SIZES,
         }}
       />
-    </div>
+    </>
   );
 };
 
-export default ItemTypesIndex;
-
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { valid, parsedPage, parsedSize } = parsePageQueryParams(
-    query.size,
-    query.page
-  );
-
-  if (!valid) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: `/item-types?page=${parsedPage}&size=${parsedSize}`,
-      },
-    };
-  }
-
-  return { props: {} };
-};
+export default ItemTypesIndexClient;

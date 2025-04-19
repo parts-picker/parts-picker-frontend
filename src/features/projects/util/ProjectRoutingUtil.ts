@@ -1,9 +1,12 @@
-import { NextRouter } from "next/router";
 import LinkUtil from "../../links/LinkUtil";
 import { LinkName } from "../../links/types/LinkModel";
 import ProjectModel from "../models/ProjectModel";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-export const routeToProject = (project: ProjectModel, router: NextRouter) => {
+export const routeToProject = (
+  project: ProjectModel,
+  router: AppRouterInstance
+) => {
   const link = LinkUtil.findLink(project, "self", LinkName.READ);
   if (!link) {
     return;
@@ -11,8 +14,5 @@ export const routeToProject = (project: ProjectModel, router: NextRouter) => {
 
   const encodedLink = window.btoa(link.href);
 
-  router.push({
-    pathname: "/projects/[projectLink]",
-    query: { projectLink: encodedLink },
-  });
+  router.push(`/projects/${encodedLink}`);
 };

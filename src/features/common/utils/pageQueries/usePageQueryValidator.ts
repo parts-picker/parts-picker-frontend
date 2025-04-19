@@ -1,21 +1,27 @@
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { parsePageQueryParams } from "./ParsePageQueryParams";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export const usePageQueryValidator = () => {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const pageParam = searchParams?.get("page");
+  const sizeParam = searchParams?.get("size");
 
   useEffect(() => {
     const {
       valid,
       parsedPage: page,
       parsedSize: size,
-    } = parsePageQueryParams(router.query.size, router.query.page);
+    } = parsePageQueryParams(sizeParam, pageParam);
 
     if (!valid) {
-      router.push({ query: { ...router.query, size, page } }, undefined, {
-        shallow: true,
-      });
+      const updatedSearchParams = new URLSearchParams(searchParams ?? "");
+      updatedSearchParams.set("page", page.toString());
+      updatedSearchParams.set("size", size.toString());
+
+      router.replace(`${pathname}?${updatedSearchParams.toString()}`);
     }
-  }, [router, router.query.size, router.query.page]);
+  }, [router, pathname, searchParams, sizeParam, pageParam]);
 };

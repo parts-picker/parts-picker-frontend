@@ -2,13 +2,13 @@ import { FC, useCallback } from "react";
 import { RequiredItemType } from "../../../workflow/models/RequiredItemTypeModel";
 import AssignableItemView from "./AssignableItemView";
 import AssignedItemView from "./AssignedItemView";
-import { requestedSortRulesToQueryParam } from "../../../common/utils/pageQueries/usePageQueryParams";
 import { usePaginationParamState } from "../../../common/utils/pageQueries/usePaginationParamsState";
 import { useSWRWithURILike } from "../../../common/utils/swr/useSWRWithURILike";
 import { ReadAssignedItemsResponse } from "../../../inventory/models/ReadAssignedItemsResponse";
 import LinkUtil from "../../../links/LinkUtil";
 import { LinkName } from "../../../links/types/LinkModel";
 import { ReadAssignableItemsResponse } from "../../../inventory/models/ReadAssignableItemsResponse";
+import { requestedSortRulesToQueryParam } from "../../../common/utils/pageQueries/usePageQueryParamsV2";
 
 interface ProjectItemAssignerProps {
   requiredItemType: RequiredItemType;

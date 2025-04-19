@@ -1,3 +1,5 @@
+"use client";
+
 import { NonIdealState } from "@blueprintjs/core";
 import React, { useState, FC } from "react";
 import SortableTable from "../common/tables/SortableTable";
@@ -11,9 +13,9 @@ import { EmbeddedItems } from "./models/ItemEmbeddedTypes";
 import LinkUtil from "../links/LinkUtil";
 import EditItemDialog from "./dialogs/EditItemDialog";
 import ItemTypeModel from "./models/ItemTypeModel";
-import { requestedSortRulesToQueryParam } from "../common/utils/pageQueries/usePageQueryParams";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import ActionButtons from "../common/tables/subcomponents/ActionButtons";
+import { requestedSortRulesToQueryParam } from "../common/utils/pageQueries/usePageQueryParamsV2";
 
 interface ItemListViewProps {
   itemType: ItemTypeModel;

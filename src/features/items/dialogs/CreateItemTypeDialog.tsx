@@ -1,3 +1,5 @@
+"use client";
+
 import { IconNames } from "@blueprintjs/icons";
 import { FC } from "react";
 import { FieldValues } from "react-hook-form";
@@ -37,7 +39,7 @@ const CreateItemTypeDialog: FC<CreateItemTypeDialogProps> = ({
         body: JSON.stringify(data),
       })
         .then((response) => response.json() as Promise<ItemTypeModel>)
-        .then((newItemType) => {
+        .then(async (newItemType) => {
           // invalidate all pages
           const itemTypesREADLink = LinkUtil.findLink(
             entryLinks,
@@ -46,7 +48,7 @@ const CreateItemTypeDialog: FC<CreateItemTypeDialogProps> = ({
           );
           mutateMatch(itemTypesREADLink);
 
-          AppToaster?.show?.({
+          (await AppToaster)?.show?.({
             message: "Item type " + newItemType.name + " was created",
             intent: "success",
             icon: IconNames.CONFIRM,
