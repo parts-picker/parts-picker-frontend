@@ -1,23 +1,30 @@
+"use client";
+
 import { Button, Divider, H1, Tab, Tabs, Text } from "@blueprintjs/core";
-import { useRouter } from "next/router";
+import { IconNames } from "@blueprintjs/icons";
 import { FC, useCallback } from "react";
 import useSWR, { KeyedMutator } from "swr";
-import defaultFetcher from "../../features/common/utils/swr/DefaultFetcher";
-import ProjectModel from "../../features/projects/models/ProjectModel";
-import { IconNames } from "@blueprintjs/icons";
-import DefaultLoadingSpinner from "../../features/common/loading/DefaultLoadingSpinner";
-import InstanceStatusBar from "../../features/workflow/InstanceStatusBar";
-import LinkUtil from "../../features/links/LinkUtil";
-import { LinkName } from "../../features/links/types/LinkModel";
-import { InstanceInfo } from "../../features/workflow/models/InstanceInfoModel";
-import PartsListView from "../../features/projects/instanceViews/PartsListView";
-import ProjectDescriptionComponent from "../../features/projects/description/ProjectDescriptionComponent";
+import DefaultLoadingSpinner from "../../../features/common/loading/DefaultLoadingSpinner";
+import defaultFetcher from "../../../features/common/utils/swr/DefaultFetcher";
+import LinkUtil from "../../../features/links/LinkUtil";
+import { LinkName } from "../../../features/links/types/LinkModel";
+import ProjectDescriptionComponent from "../../../features/projects/description/ProjectDescriptionComponent";
+import PartsListView from "../../../features/projects/instanceViews/PartsListView";
+import ProjectModel from "../../../features/projects/models/ProjectModel";
+import InstanceStatusBar from "../../../features/workflow/InstanceStatusBar";
+import { InstanceInfo } from "../../../features/workflow/models/InstanceInfoModel";
+import { useParams, useRouter } from "next/navigation";
 
-const ProjectDetails: FC = () => {
+type Params = { projectLink?: string };
+
+const ProjectDetailsClient: FC = () => {
   const router = useRouter();
+  const params = useParams<Params>();
+  const projectLink = params?.projectLink;
 
-  const { projectLink } = router.query as { projectLink: string };
-  const decodedLink = projectLink ? window.atob(projectLink) : undefined;
+  const decodedLink = projectLink
+    ? window.atob(decodeURIComponent(projectLink))
+    : undefined;
   const { data: project, mutate: projectMutate } = useSWR<ProjectModel>(
     decodedLink,
     defaultFetcher
@@ -27,6 +34,7 @@ const ProjectDetails: FC = () => {
     "status",
     LinkName.READ
   )?.href;
+
   const { data: instanceInfo, mutate: instanceMutate } = useSWR<InstanceInfo>(
     instanceInfoLink,
     defaultFetcher,
@@ -39,7 +47,7 @@ const ProjectDetails: FC = () => {
   );
 
   const backButtonOnClick = useCallback(() => {
-    router.push({ pathname: "/projects" });
+    router.push("/projects");
   }, [router]);
 
   if (!project) {
@@ -91,4 +99,4 @@ const ProjectDetails: FC = () => {
   );
 };
 
-export default ProjectDetails;
+export default ProjectDetailsClient;

@@ -9,8 +9,17 @@ import ItemModel from "../models/ItemModel";
 import ItemTypeModel from "../models/ItemTypeModel";
 import ItemDialog from "./ItemDialog";
 import { ItemFormMode } from "../forms/ItemFormMode";
+import { ItemStatus } from "../models/ItemStatusEnum";
+import { ItemCondition } from "../models/ItemConditionEnum";
 
 const formId = "createItemForm";
+
+const defaultItemModel: ItemModel = {
+  status: ItemStatus.IN_STOCK,
+  condition: ItemCondition.WRAPPED,
+  note: "",
+  _links: {},
+};
 
 interface CreateItemDialogProps {
   isOpen: boolean;
@@ -39,7 +48,7 @@ const CreateItemDialog: FC<CreateItemDialogProps> = ({
         body: JSON.stringify(data),
       })
         .then((response) => response.json() as Promise<ItemModel>)
-        .then(() => {
+        .then(async () => {
           // invalidate all pages
           const itemReadLink = LinkUtil.findLink(
             targetItemType,
@@ -48,7 +57,7 @@ const CreateItemDialog: FC<CreateItemDialogProps> = ({
           );
           mutateMatch(itemReadLink);
 
-          AppToaster?.show?.({
+          (await AppToaster)?.show?.({
             message: "Item for type " + targetItemType?.name + " was created",
             intent: "success",
             icon: IconNames.CONFIRM,
@@ -69,6 +78,7 @@ const CreateItemDialog: FC<CreateItemDialogProps> = ({
       formMode={ItemFormMode.CREATE}
       onSubmit={onSubmit}
       targetItemType={targetItemType}
+      initialData={defaultItemModel}
     />
   );
 };

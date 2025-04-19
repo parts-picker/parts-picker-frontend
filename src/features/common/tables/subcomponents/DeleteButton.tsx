@@ -58,7 +58,7 @@ const DeleteButton = <ListResponse extends EmbeddedModels>({
       heading={"Confirm delete"}
       description={confirmDescription}
     >
-      <Button minimal icon={IconNames.DELETE} onClick={handleOpen} />
+      <Button variant="minimal" icon={IconNames.DELETE} onClick={handleOpen} />
     </ConfirmPopover>
   );
 };

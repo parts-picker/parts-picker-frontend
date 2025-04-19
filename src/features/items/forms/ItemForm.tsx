@@ -43,7 +43,7 @@ const ItemForm = <T extends FieldValues>({
           valueEnum={ItemCondition}
           defaultValue={ItemCondition.NEW}
         />
-        <TextAreaWrapper name="note" label="Note" defaultValue={""} />
+        <TextAreaWrapper name="note" label="Note" />
       </form>
     </FormProvider>
   );

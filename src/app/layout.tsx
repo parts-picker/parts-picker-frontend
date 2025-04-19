@@ -1,6 +1,7 @@
 import { FC, ReactNode } from "react";
 import Sidebar from "../features/common/layout/Sidebar";
 import { EntryLinksProviderV2 } from "../features/links/EntryLinksContextV2";
+import OverlaysProviderClientWrapper from "../features/common/utils/OverlaysProviderClientWrapper";
 
 import "../../styles/globals.scss";
 import "../../styles/layout.scss";
@@ -20,13 +21,15 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   return (
     <html lang="en">
       <body>
-        <EntryLinksProviderV2 entryLinksUrl={entryLinksUrl}>
-          <div className={"layout"}>
-            <header className={"header"}>HEADER</header>
-            <Sidebar />
-            <main className={"content"}>{children}</main>
-          </div>
-        </EntryLinksProviderV2>
+        <OverlaysProviderClientWrapper>
+          <EntryLinksProviderV2 entryLinksUrl={entryLinksUrl}>
+            <div className={"layout"}>
+              <header className={"header"}>HEADER</header>
+              <Sidebar />
+              <main className={"content"}>{children}</main>
+            </div>
+          </EntryLinksProviderV2>
+        </OverlaysProviderClientWrapper>
       </body>
     </html>
   );
