@@ -1,8 +1,8 @@
 import { Row } from "@tanstack/react-table";
-import { NextRouter } from "next/router";
 import { ResponseModel } from "../../../links/types/ResponseModel";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export type RowClickAction<Content extends ResponseModel> = (
   row: Row<Content>,
-  router: NextRouter
+  router: AppRouterInstance
 ) => void | undefined;

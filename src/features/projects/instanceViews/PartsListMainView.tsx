@@ -1,11 +1,9 @@
+"use client";
+
 import { NonIdealState } from "@blueprintjs/core";
 import { ColumnDef, Row, createColumnHelper } from "@tanstack/react-table";
 import { FC, useMemo } from "react";
 import SortableTable from "../../common/tables/SortableTable";
-import {
-  requestedSortRulesToQueryParam,
-  usePageQueryParams,
-} from "../../common/utils/pageQueries/usePageQueryParams";
 import { useSWRWithURILike } from "../../common/utils/swr/useSWRWithURILike";
 import LinkUtil from "../../links/LinkUtil";
 import { LinkName } from "../../links/types/LinkModel";
@@ -22,6 +20,10 @@ import { usePageQueryValidator } from "../../common/utils/pageQueries/usePageQue
 import RequiredItemTypeRequiredAmountCell from "./components/RequiredItemTypeRequiredAmountCell";
 import RequiredItemTypeDeleteCell from "./components/RequiredItemTypeDeleteCell";
 import { useDidUpdate } from "../../common/hooks/useDidUpdate";
+import {
+  requestedSortRulesToQueryParam,
+  usePageQueryParamsV2,
+} from "../../common/utils/pageQueries/usePageQueryParamsV2";
 
 interface PartsListMainViewProps {
   project: ProjectModel;
@@ -36,7 +38,7 @@ const PartsListMainView: FC<PartsListMainViewProps> = ({
 }) => {
   // prepare page query options & validate params
   const pageQueryOptions = {
-    ...usePageQueryParams(),
+    ...usePageQueryParamsV2(),
     allowedPageSizes: ALLOWED_PAGE_SIZES,
   };
   usePageQueryValidator();

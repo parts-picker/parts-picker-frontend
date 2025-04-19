@@ -1,8 +1,8 @@
 import { flexRender } from "@tanstack/react-table";
-import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import DefaultLoadingSpinner from "../../loading/DefaultLoadingSpinner";
 import { useTableContext } from "../context/TableContext";
+import { useRouter } from "next/navigation";
 
 const TableBody = (): ReactElement => {
   const { loading, table, tableOptions } = useTableContext();

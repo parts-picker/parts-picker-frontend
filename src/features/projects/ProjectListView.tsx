@@ -1,9 +1,10 @@
+"use client";
+
 import { NonIdealState } from "@blueprintjs/core";
 import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
 import { FC } from "react";
 import URITemplate from "urijs/src/URITemplate";
 import PaginationQueryOptions from "../common/tables/types/PaginationQueryOptions";
-import { requestedSortRulesToQueryParam } from "../common/utils/pageQueries/usePageQueryParams";
 import { useSWRWithURILike } from "../common/utils/swr/useSWRWithURILike";
 import { useEntryLinkFor } from "../links/hooks/useEntryLinkFor";
 import { LinkName } from "../links/types/LinkModel";
@@ -11,10 +12,11 @@ import ProjectModel from "./models/ProjectModel";
 import { ReadProjectsResponse } from "./models/ReadProjectsResponse";
 import { IconNames } from "@blueprintjs/icons";
 import SortableTable from "../common/tables/SortableTable";
-import { NextRouter } from "next/router";
 import DeleteButton from "../common/tables/subcomponents/DeleteButton";
 import ProjectCopyButton from "./copy/ProjectCopyButton";
 import { routeToProject } from "./util/ProjectRoutingUtil";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { requestedSortRulesToQueryParam } from "../common/utils/pageQueries/usePageQueryParamsV2";
 
 interface ProjectViewProps {
   pageQueryOptions: PaginationQueryOptions;
@@ -71,7 +73,10 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
     }),
   ];
 
-  const rowClickAction = (row: Row<ProjectModel>, router: NextRouter) => {
+  const rowClickAction = (
+    row: Row<ProjectModel>,
+    router: AppRouterInstance
+  ) => {
     routeToProject(row.original, router);
   };
 

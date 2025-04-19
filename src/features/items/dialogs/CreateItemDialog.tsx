@@ -39,7 +39,7 @@ const CreateItemDialog: FC<CreateItemDialogProps> = ({
         body: JSON.stringify(data),
       })
         .then((response) => response.json() as Promise<ItemModel>)
-        .then(() => {
+        .then(async () => {
           // invalidate all pages
           const itemReadLink = LinkUtil.findLink(
             targetItemType,
@@ -48,7 +48,7 @@ const CreateItemDialog: FC<CreateItemDialogProps> = ({
           );
           mutateMatch(itemReadLink);
 
-          AppToaster?.show?.({
+          (await AppToaster)?.show?.({
             message: "Item for type " + targetItemType?.name + " was created",
             intent: "success",
             icon: IconNames.CONFIRM,
