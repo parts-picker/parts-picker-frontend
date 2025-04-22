@@ -51,12 +51,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Make nextjs user owner of app directory
 RUN chown nextjs:nodejs ../app
-# Copy entrypoint.sh
-COPY entrypoint.sh ./
-# Allow entrypoint.sh to be executed
-# and install full version of sed
-RUN chmod +x ./entrypoint.sh \
-    && apk --no-cache add sed
 
 USER nextjs
 
@@ -65,6 +59,5 @@ ENV PORT 3000
 # Set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
-ENTRYPOINT ["./entrypoint.sh"]
 # Start app
 CMD ["node", "server.js"]
