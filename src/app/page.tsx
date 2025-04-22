@@ -1,6 +1,8 @@
 import { H1 } from "@blueprintjs/core";
 import { FC } from "react";
 
+export const dynamic = "force-dynamic";
+
 const Home: FC = () => {
   return (
     <div>
