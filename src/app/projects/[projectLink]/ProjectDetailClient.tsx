@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Divider, H1, Tab, Tabs, Text } from "@blueprintjs/core";
+import { Button, Divider, Tab, Tabs, Text } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import { FC, useCallback } from "react";
 import useSWR, { KeyedMutator } from "swr";
@@ -14,6 +14,7 @@ import ProjectModel from "../../../features/projects/models/ProjectModel";
 import InstanceStatusBar from "../../../features/workflow/InstanceStatusBar";
 import { InstanceInfo } from "../../../features/workflow/models/InstanceInfoModel";
 import { useParams, useRouter } from "next/navigation";
+import ProjectNameComponent from "../../../features/projects/instanceViews/components/ProjectNameComponent";
 
 type Params = { projectLink?: string };
 
@@ -56,15 +57,15 @@ const ProjectDetailsClient: FC = () => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      <div style={{ display: "flex" }}>
-        <div style={{ marginRight: "1em" }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ marginRight: "1em", paddingBottom: "0.2em" }}>
           <Button
             icon={IconNames.CHEVRON_LEFT}
             onClick={backButtonOnClick}
             size="large"
           />
         </div>
-        <H1>Project - {project.name} </H1>
+        <ProjectNameComponent project={project} projectMutate={projectMutate} />
       </div>
       <Divider />
 
