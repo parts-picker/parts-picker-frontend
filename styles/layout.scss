@@ -48,8 +48,43 @@
 
 .header {
   grid-area: header;
-  font-size: 2em;
-  background-color: rgb(100, 240, 240);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 1.5rem;
+  background-color: bp.$light-gray4;
+  border-bottom: 0.1rem solid bp.$light-gray1;
+
+  .#{bp.$ns}-dark & {
+    background-color: bp.$dark-gray3;
+    border-bottom: 0.1rem solid bp.$dark-gray5;
+  }
+}
+
+.user-avatar {
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: bp.$blue4;
+  color: bp.$white;
+  font-size: 1.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: bp.$blue3;
+  }
+
+  &:focus-visible {
+    outline: 0.15rem solid bp.$blue1;
+    outline-offset: 0.15rem;
+  }
 }
 
 .content {

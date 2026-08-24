@@ -1,5 +1,4 @@
 import { URILike } from "../../../links/types/URILike";
-import defaultFetcher from "./DefaultFetcher";
 import URITemplate, { URITemplateInput } from "urijs/src/URITemplate";
 import URI from "urijs";
 import useSWR, { SWRConfiguration, SWRResponse } from "swr";
@@ -19,5 +18,5 @@ export const useSWRWithURILike = <ReturnType = unknown, ErrorType = unknown>(
     key = uriLike;
   }
 
-  return useSWR<ReturnType, ErrorType>(key, defaultFetcher, swrOptions);
+  return useSWR<ReturnType, ErrorType>(key, swrOptions);
 };

@@ -1,13 +1,12 @@
-import { defineConfig } from "eslint/config";
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
+import { defineConfig, globalIgnores } from "eslint/config";
 import jest from "eslint-plugin-jest";
-import testingLibrary from "eslint-plugin-testing-library";
 import tsParser from "@typescript-eslint/parser";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
 import { FlatCompat } from "@eslint/eslintrc";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,21 +16,14 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
-export default defineConfig([
+const config = defineConfig([
+  ...nextCoreWebVitals,
   {
     extends: compat.extends(
       "eslint:recommended",
-      "plugin:@typescript-eslint/recommended",
       "plugin:jest/recommended",
-      "plugin:testing-library/react",
-      "next",
-      "next/core-web-vitals"
+      "plugin:testing-library/react"
     ),
-    plugins: {
-      "@typescript-eslint": typescriptEslint,
-      jest: jest,
-      "testing-library": testingLibrary,
-    },
 
     languageOptions: {
       globals: {
@@ -48,8 +40,13 @@ export default defineConfig([
         },
       },
     },
-
+  },
+  {
+    files: ["**/*.{ts,tsx}"],
     rules: {
+      // disable non-typescript undef/unused rules
+      "no-undef": "off",
+      "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
@@ -65,4 +62,7 @@ export default defineConfig([
     },
   },
   eslintPluginPrettierRecommended,
+  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
 ]);
+
+export default config;

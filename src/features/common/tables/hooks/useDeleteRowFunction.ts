@@ -6,6 +6,7 @@ import { IconNames } from "@blueprintjs/icons";
 import { KeyedMutator } from "swr";
 import { EmbeddedModels } from "../../models/EmbeddedModels";
 import { ReactNode } from "react";
+import { useAuthedFetch } from "../../security/hooks/useAuthedFetch";
 
 interface UseDeleteRowFunctionProps<DataList extends EmbeddedModels> {
   mutate: KeyedMutator<DataList>;
@@ -14,6 +15,8 @@ interface UseDeleteRowFunctionProps<DataList extends EmbeddedModels> {
 export const useDeleteRowFunction = <DataList extends EmbeddedModels>({
   mutate,
 }: UseDeleteRowFunctionProps<DataList>) => {
+  const authedFetch = useAuthedFetch();
+
   const deleteRow: DeleteRowFunction = async (
     rowToDelete: ResponseModel,
     deleteNotification: ReactNode
@@ -58,7 +61,7 @@ export const useDeleteRowFunction = <DataList extends EmbeddedModels>({
 
     mutate(
       async () => {
-        await fetch(deleteSelfLink.href, {
+        await authedFetch(deleteSelfLink.href, {
           method: "DELETE",
         });
 

@@ -1,11 +1,27 @@
 # parts-picker-ui
 
-To run, you will need to set ENTRY_LINKS_URL as an evironment variable that points to the entry links endpoint in the backend.  
-Use the following command to run it locally in dev mode:
+## Running
+
+The app requires the following environment variables:
+
+| Variable              | Purpose                                   |
+| --------------------- | ----------------------------------------- |
+| `ENTRY_LINKS_URL`     | Entry-links endpoint of the backend       |
+| `PUBLIC_BASE_URL`     | Public base URL the app is served at      |
+| `PUBLIC_BASE_PATH`    | Base path the app is mounted under        |
+| `OIDC_ISSUER_URL`     | Keycloak realm issuer URL                 |
+| `OIDC_CLIENT_ID`      | OIDC client id                            |
+| `OIDC_CLIENT_SECRET`  | OIDC client secret                        |
+| `SESSION_COOKIE_NAME` | Name of the session cookie                |
+| `SESSION_PASSWORD`    | Secret used to encrypt the session cookie |
+
+For dev mode most of these are provided by `.env.development` (and `.env`); only `ENTRY_LINKS_URL` has to be supplied:
 
 ```
 ENTRY_LINKS_URL=http://localhost:8080/api/v1/entry npm run dev
 ```
+
+The app is then served under the base path, at http://localhost:3000/__BASE_PATH_PLACEHOLDER__.
 
 TODO
 

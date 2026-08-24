@@ -12,6 +12,8 @@ import { LinkModel, LinkName } from "../links/types/LinkModel";
 import LinkUtil from "../links/LinkUtil";
 import { KeyedMutator } from "swr";
 import { DisplayType } from "./models/DisplayTypeModel";
+import { AuthedFetch } from "../common/utils/swr/DefaultFetcher";
+import { useAuthedFetch } from "../common/security/hooks/useAuthedFetch";
 
 interface WorkflowStatusBarProps {
   instanceInfo?: InstanceInfo;
@@ -20,15 +22,16 @@ interface WorkflowStatusBarProps {
 }
 
 const chooseOption = (
+  authedFetch: AuthedFetch,
   instanceMutate: KeyedMutator<InstanceInfo>,
   optionalMutates?: Array<KeyedMutator<unknown>>,
   link?: LinkModel
 ) => {
   if (link) {
     instanceMutate(
-      fetch(link.href, {
+      authedFetch<InstanceInfo>(link.href, {
         method: "POST",
-      }).then((response) => response.json() as Promise<InstanceInfo>),
+      }),
       { revalidate: false }
     ).then(() => {
       optionalMutates?.forEach((mutate) => {
@@ -43,6 +46,7 @@ const WorkflowStatusBar: FC<WorkflowStatusBarProps> = ({
   instanceMutate,
   optionalMutates,
 }) => {
+  const authedFetch = useAuthedFetch();
   if (!instanceInfo) {
     return null;
   }
@@ -75,6 +79,7 @@ const WorkflowStatusBar: FC<WorkflowStatusBarProps> = ({
               key={option.name}
               onClick={() =>
                 chooseOption(
+                  authedFetch,
                   instanceMutate,
                   optionalMutates,
                   LinkUtil.findLink(option, "advance", LinkName.UPDATE)

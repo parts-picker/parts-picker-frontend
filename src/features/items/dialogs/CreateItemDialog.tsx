@@ -11,6 +11,7 @@ import ItemDialog from "./ItemDialog";
 import { ItemFormMode } from "../forms/ItemFormMode";
 import { ItemStatus } from "../models/ItemStatusEnum";
 import { ItemCondition } from "../models/ItemConditionEnum";
+import { useAuthedFetch } from "../../common/security/hooks/useAuthedFetch";
 
 const formId = "createItemForm";
 
@@ -33,6 +34,7 @@ const CreateItemDialog: FC<CreateItemDialogProps> = ({
   targetItemType,
 }) => {
   const mutateMatch = useMatchMutate();
+  const authedFetch = useAuthedFetch();
 
   const onSubmit = (data: FieldValues) => {
     const itemCreateLink = LinkUtil.findLink(
@@ -42,27 +44,25 @@ const CreateItemDialog: FC<CreateItemDialogProps> = ({
     );
 
     if (itemCreateLink) {
-      fetch(itemCreateLink.href, {
+      authedFetch<ItemModel>(itemCreateLink.href, {
         method: "POST",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(data),
-      })
-        .then((response) => response.json() as Promise<ItemModel>)
-        .then(async () => {
-          // invalidate all pages
-          const itemReadLink = LinkUtil.findLink(
-            targetItemType,
-            "describes",
-            LinkName.READ
-          );
-          mutateMatch(itemReadLink);
+      }).then(async () => {
+        // invalidate all pages
+        const itemReadLink = LinkUtil.findLink(
+          targetItemType,
+          "describes",
+          LinkName.READ
+        );
+        mutateMatch(itemReadLink);
 
-          (await AppToaster)?.show?.({
-            message: "Item for type " + targetItemType?.name + " was created",
-            intent: "success",
-            icon: IconNames.CONFIRM,
-          });
+        (await AppToaster)?.show?.({
+          message: "Item for type " + targetItemType?.name + " was created",
+          intent: "success",
+          icon: IconNames.CONFIRM,
         });
+      });
     }
     handleClose();
   };

@@ -5,7 +5,6 @@ import { IconNames } from "@blueprintjs/icons";
 import { FC, useCallback } from "react";
 import useSWR, { KeyedMutator } from "swr";
 import DefaultLoadingSpinner from "../../../features/common/loading/DefaultLoadingSpinner";
-import defaultFetcher from "../../../features/common/utils/swr/DefaultFetcher";
 import LinkUtil from "../../../features/links/LinkUtil";
 import { LinkName } from "../../../features/links/types/LinkModel";
 import ProjectDescriptionComponent from "../../../features/projects/description/ProjectDescriptionComponent";
@@ -26,10 +25,8 @@ const ProjectDetailsClient: FC = () => {
   const decodedLink = projectLink
     ? window.atob(decodeURIComponent(projectLink))
     : undefined;
-  const { data: project, mutate: projectMutate } = useSWR<ProjectModel>(
-    decodedLink,
-    defaultFetcher
-  );
+  const { data: project, mutate: projectMutate } =
+    useSWR<ProjectModel>(decodedLink);
   const instanceInfoLink = LinkUtil.findLink(
     project,
     "status",
@@ -38,7 +35,6 @@ const ProjectDetailsClient: FC = () => {
 
   const { data: instanceInfo, mutate: instanceMutate } = useSWR<InstanceInfo>(
     instanceInfoLink,
-    defaultFetcher,
     {
       refreshInterval: 5000,
       onSuccess: () => {

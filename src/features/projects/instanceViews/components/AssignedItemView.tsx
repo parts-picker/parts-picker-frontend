@@ -26,7 +26,7 @@ const AssignedItemView: FC<AssignedItemViewProps> = ({
   const assignedItems = data?._embedded?.assignedItems ?? [];
 
   const columnHelper = createColumnHelper<AssignedItemModel>();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const columns: ColumnDef<AssignedItemModel, any>[] = [
     columnHelper.display({
       id: "actions",

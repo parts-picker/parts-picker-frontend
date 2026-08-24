@@ -18,6 +18,8 @@ import { ReadRequiredItemTypesResponse } from "../../workflow/models/ReadRequire
 import ResponseUtil from "../../links/ResponseUtil";
 import AvailableItemTypeNoResults from "./components/AvailableItemTypeNoResults";
 import AvailableItemTypeItem from "./components/AvailableItemTypeItem";
+import { AuthedFetch } from "../../common/utils/swr/DefaultFetcher";
+import { useAuthedFetch } from "../../common/security/hooks/useAuthedFetch";
 
 const DEFAULT_SEARCH_QUERY = "";
 const DEFAULT_AMOUNT = 1;
@@ -37,6 +39,8 @@ const RequiredItemDialog: FC<RequiredItemDialogProps> = ({
   const [selectedItemType, setSelectedItemType] =
     useState<NullableAvailableItemType>();
   const [amount, setAmount] = useState<number>(DEFAULT_AMOUNT);
+
+  const authedFetch = useAuthedFetch();
 
   // fetch available item type search result
   const itemTypeSearchLinkTemplate = LinkUtil.findTemplatedLink(
@@ -116,10 +120,15 @@ const RequiredItemDialog: FC<RequiredItemDialogProps> = ({
         style={{ marginLeft: "2em" }}
         onClick={() => {
           if (selectedItemType) {
-            createRequiredItemType(selectedItemType, amount, () => {
-              reset();
-              requiredItemTypesMutate();
-            });
+            createRequiredItemType(
+              selectedItemType,
+              amount,
+              authedFetch,
+              () => {
+                reset();
+                requiredItemTypesMutate();
+              }
+            );
           }
         }}
         disabled={!selectedItemType}
@@ -134,6 +143,7 @@ export default RequiredItemDialog;
 const createRequiredItemType = (
   availableItemType: AvailableItemType,
   requiredAmount: number,
+  authedFetch: AuthedFetch,
   postCreateAction?: () => void
 ) => {
   const editRequiredItemTypeLink = LinkUtil.findLink(
@@ -143,7 +153,7 @@ const createRequiredItemType = (
   );
 
   if (editRequiredItemTypeLink) {
-    fetch(editRequiredItemTypeLink.href, {
+    authedFetch(editRequiredItemTypeLink.href, {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({ requiredAmount: requiredAmount }),

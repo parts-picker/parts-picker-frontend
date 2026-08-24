@@ -49,6 +49,7 @@ const SortableTable = <Content extends ResponseModel>({
     pageControlOptions?.setRequestedSortRules(newSortingState);
   };
 
+  // eslint-disable-next-line react-hooks/incompatible-library -- TanStack Table returns non-memoizable functions by design
   const table = useReactTable({
     columns: columns,
     data: data ?? [],

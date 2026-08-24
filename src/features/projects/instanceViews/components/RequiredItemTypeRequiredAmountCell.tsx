@@ -9,10 +9,12 @@ import { LinkName } from "../../../links/types/LinkModel";
 import LinkUtil from "../../../links/LinkUtil";
 import { ReadRequiredItemTypesResponse } from "../../../workflow/models/ReadRequiredItemTypesResponse";
 import { Classes } from "@blueprintjs/core";
+import { useAuthedFetch } from "../../../common/security/hooks/useAuthedFetch";
 
 const RequiredItemTypeRequiredAmountCell: FC<
   CellContext<RequiredItemType, unknown>
 > = (props) => {
+  const authedFetch = useAuthedFetch();
   const mutate = props.column.columnDef
     .meta as KeyedMutator<ReadRequiredItemTypesResponse>;
 
@@ -27,7 +29,7 @@ const RequiredItemTypeRequiredAmountCell: FC<
       if (selfPatchLink) {
         mutate(
           async () => {
-            await fetch(selfPatchLink.href, {
+            await authedFetch(selfPatchLink.href, {
               method: "PATCH",
               headers: { "Content-type": "application/json" },
               body: JSON.stringify({
@@ -69,7 +71,7 @@ const RequiredItemTypeRequiredAmountCell: FC<
         );
       }
     },
-    [props.row.original, mutate]
+    [props.row.original, mutate, authedFetch]
   );
 
   const selfPatchLink = LinkUtil.findLink(

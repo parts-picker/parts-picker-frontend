@@ -40,7 +40,7 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
   const projects = data?._embedded?.projects ?? new Array<ProjectModel>();
 
   const projectsColumnHelper = createColumnHelper<ProjectModel>();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const columns: ColumnDef<ProjectModel, any>[] = [
     projectsColumnHelper.accessor("name", { header: () => "Name" }),
     projectsColumnHelper.accessor((row) => row.displayStatus, {

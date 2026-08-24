@@ -7,7 +7,6 @@ import { FC, useState } from "react";
 import useSWR from "swr";
 import DefaultLoadingSpinner from "../../../features/common/loading/DefaultLoadingSpinner";
 import { ALLOWED_PAGE_SIZES } from "../../../features/common/utils/ConfigReaderUtils";
-import defaultFetcher from "../../../features/common/utils/swr/DefaultFetcher";
 import CreateItemDialog from "../../../features/items/dialogs/CreateItemDialog";
 import ItemListView from "../../../features/items/ItemListView";
 import ItemTypeModel from "../../../features/items/models/ItemTypeModel";
@@ -26,7 +25,7 @@ const ItemTypeDetails: FC = () => {
   const decodedLink = itemTypeLink
     ? window.atob(decodeURIComponent(itemTypeLink))
     : undefined;
-  const { data: itemType } = useSWR<ItemTypeModel>(decodedLink, defaultFetcher);
+  const { data: itemType } = useSWR<ItemTypeModel>(decodedLink);
 
   const itemCreateLink = LinkUtil.findLink(
     itemType,
