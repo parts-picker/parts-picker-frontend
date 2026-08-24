@@ -51,7 +51,7 @@ const ItemListView: FC<ItemListViewProps> = ({
   };
 
   const itemColumnHelper = createColumnHelper<ItemModel>();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const columns: ColumnDef<ItemModel, any>[] = [
     itemColumnHelper.accessor("condition", { header: () => "Condition" }),
     itemColumnHelper.accessor("status", { header: () => "Status" }),

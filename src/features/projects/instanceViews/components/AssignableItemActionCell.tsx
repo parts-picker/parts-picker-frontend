@@ -6,10 +6,13 @@ import { KeyedMutator } from "swr";
 import { ReadAssignableItemsResponse } from "../../../inventory/models/ReadAssignableItemsResponse";
 import LinkUtil from "../../../links/LinkUtil";
 import { LinkName } from "../../../links/types/LinkModel";
+import { AuthedFetch } from "../../../common/utils/swr/DefaultFetcher";
+import { useAuthedFetch } from "../../../common/security/hooks/useAuthedFetch";
 
 const AssignableItemActionCell: FC<
   CellContext<AssignableItemModel, unknown>
 > = (props) => {
+  const authedFetch = useAuthedFetch();
   const itemPatchLink = LinkUtil.findLink(
     props.row.original,
     "assignedTo",
@@ -27,7 +30,8 @@ const AssignableItemActionCell: FC<
         onClick(
           itemPatchLink.href,
           columnMeta.mutate,
-          columnMeta.invalidateData
+          columnMeta.invalidateData,
+          authedFetch
         )
       }
     />
@@ -44,11 +48,12 @@ export type AssignableItemActionCellMeta = {
 const onClick = (
   patchLink: string,
   mutate: KeyedMutator<ReadAssignableItemsResponse>,
-  invalidateData: () => void
+  invalidateData: () => void,
+  authedFetch: AuthedFetch
 ) => {
   mutate(
     async () => {
-      await fetch(patchLink, { method: "PATCH" });
+      await authedFetch(patchLink, { method: "PATCH" });
       invalidateData();
 
       return undefined;

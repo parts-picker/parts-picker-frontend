@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import ReactMarkdownWrapper from "./ReactMarkdownWrapper";
 import { Button, ButtonGroup, TextArea } from "@blueprintjs/core";
 import ProjectModel from "../models/ProjectModel";
@@ -7,6 +7,7 @@ import { LinkName } from "../../links/types/LinkModel";
 import { AppToaster } from "../../common/utils/Toaster";
 import { IconNames } from "@blueprintjs/icons";
 import { KeyedMutator } from "swr";
+import { useAuthedFetch } from "../../common/security/hooks/useAuthedFetch";
 
 interface ProjectDescriptionComponentProps {
   project: ProjectModel;
@@ -19,12 +20,15 @@ const ProjectDescriptionComponent: FC<ProjectDescriptionComponentProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [description, setDescription] = useState(project.description);
+  const [lastSynced, setLastSynced] = useState(project.description);
 
-  useEffect(() => {
-    if (!isEditing) {
-      setDescription(project.description);
-    }
-  }, [isEditing, project.description]);
+  const authedFetch = useAuthedFetch();
+
+  // keep the buffer in sync with the prop while not editing (external updates)
+  if (!isEditing && project.description !== lastSynced) {
+    setLastSynced(project.description);
+    setDescription(project.description);
+  }
 
   const selfUpdateLink = LinkUtil.findLink(project, "self", LinkName.UPDATE);
 
@@ -34,7 +38,7 @@ const ProjectDescriptionComponent: FC<ProjectDescriptionComponentProps> = ({
     if (selfUpdateLink) {
       projectMutate(
         async () =>
-          fetch(selfUpdateLink.href, {
+          authedFetch<ProjectModel>(selfUpdateLink.href, {
             method: "PATCH",
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({ description: description }),
@@ -46,7 +50,7 @@ const ProjectDescriptionComponent: FC<ProjectDescriptionComponentProps> = ({
               icon: IconNames.CONFIRM,
             });
 
-            return response.json() as Promise<ProjectModel>;
+            return response;
           }),
         {
           optimisticData: (currentData) => {

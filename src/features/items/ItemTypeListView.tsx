@@ -48,7 +48,7 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
   };
 
   const itemTypeColumnHelper = createColumnHelper<ItemTypeModel>();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const columns: ColumnDef<ItemTypeModel, any>[] = [
     itemTypeColumnHelper.accessor("name", { header: () => "Name" }),
     itemTypeColumnHelper.accessor("description", {

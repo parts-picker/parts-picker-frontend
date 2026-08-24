@@ -4,7 +4,7 @@ import { ResponseModel } from "../../../links/types/ResponseModel";
 import PaginationControlOptions from "../types/PaginationControlOptions";
 import { RowClickAction } from "../types/RowClickAction";
 
-export const TableContext = React.createContext<TableContextModel<any>>( //eslint-disable-line @typescript-eslint/no-explicit-any
+export const TableContext = React.createContext<TableContextModel<any>>(
   {} as TableContextModel<ResponseModel>
 );
 

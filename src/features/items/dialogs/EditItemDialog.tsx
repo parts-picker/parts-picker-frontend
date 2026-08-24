@@ -12,6 +12,7 @@ import ItemModel from "../models/ItemModel";
 import ItemDialog from "./ItemDialog";
 import ItemTypeModel from "../models/ItemTypeModel";
 import { ItemFormMode } from "../forms/ItemFormMode";
+import { useAuthedFetch } from "../../common/security/hooks/useAuthedFetch";
 
 const formId = "editItemForm";
 
@@ -28,6 +29,7 @@ const EditItemDialog: FC<EditItemDialogProps> = ({
 }) => {
   const entryLinks = useEntryLinks();
   const mutateMatch = useMatchMutate();
+  const authedFetch = useAuthedFetch();
 
   const onSubmit = (data: FieldValues) => {
     const selfUpdateLink = LinkUtil.findLink(
@@ -37,7 +39,7 @@ const EditItemDialog: FC<EditItemDialogProps> = ({
     );
 
     if (selfUpdateLink) {
-      fetch(selfUpdateLink.href, {
+      authedFetch(selfUpdateLink.href, {
         method: "PATCH",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(data),

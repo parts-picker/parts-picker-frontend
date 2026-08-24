@@ -6,10 +6,13 @@ import { AssignedItemModel } from "../../../inventory/models/AssignedItemModel";
 import { ReadAssignedItemsResponse } from "../../../inventory/models/ReadAssignedItemsResponse";
 import LinkUtil from "../../../links/LinkUtil";
 import { LinkName } from "../../../links/types/LinkModel";
+import { AuthedFetch } from "../../../common/utils/swr/DefaultFetcher";
+import { useAuthedFetch } from "../../../common/security/hooks/useAuthedFetch";
 
 const AssignedItemActionCell: FC<CellContext<AssignedItemModel, unknown>> = (
   props
 ) => {
+  const authedFetch = useAuthedFetch();
   const itemPatchLink = LinkUtil.findLink(
     props.row.original,
     "assignedTo",
@@ -20,13 +23,14 @@ const AssignedItemActionCell: FC<CellContext<AssignedItemModel, unknown>> = (
 
   return itemPatchLink ? (
     <Button
-      minimal
+      variant="minimal"
       icon={"chevron-left"}
       onClick={() =>
         onClick(
           itemPatchLink.href,
           columnMeta.mutate,
-          columnMeta.invalidateData
+          columnMeta.invalidateData,
+          authedFetch
         )
       }
     />
@@ -43,11 +47,12 @@ export type AssignedItemActionCellMeta = {
 const onClick = (
   patchLink: string,
   mutate: KeyedMutator<ReadAssignedItemsResponse>,
-  invalidateData: () => void
+  invalidateData: () => void,
+  authedFetch: AuthedFetch
 ) => {
   mutate(
     async () => {
-      await fetch(patchLink, { method: "PATCH" });
+      await authedFetch(patchLink, { method: "PATCH" });
       invalidateData();
 
       return undefined;

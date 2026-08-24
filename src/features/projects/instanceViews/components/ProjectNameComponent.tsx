@@ -8,6 +8,8 @@ import LinkUtil from "../../../links/LinkUtil";
 import { LinkModel, LinkName } from "../../../links/types/LinkModel";
 import { AppToaster } from "../../../common/utils/Toaster";
 import { IconNames } from "@blueprintjs/icons";
+import { AuthedFetch } from "../../../common/utils/swr/DefaultFetcher";
+import { useAuthedFetch } from "../../../common/security/hooks/useAuthedFetch";
 
 interface ProjectNameComponentProps {
   project: ProjectModel;
@@ -18,6 +20,7 @@ const ProjectNameComponent: FC<ProjectNameComponentProps> = ({
   project,
   projectMutate,
 }) => {
+  const authedFetch = useAuthedFetch();
   const selfUpdateLink = LinkUtil.findLink(project, "self", LinkName.UPDATE);
 
   return (
@@ -28,7 +31,13 @@ const ProjectNameComponent: FC<ProjectNameComponentProps> = ({
         selectAllOnFocus
         defaultValue={project.name}
         onConfirm={(value) =>
-          updateProjectName(value, project.name, selfUpdateLink, projectMutate)
+          updateProjectName(
+            value,
+            project.name,
+            selfUpdateLink,
+            projectMutate,
+            authedFetch
+          )
         }
       />
       {selfUpdateLink ? (
@@ -59,23 +68,24 @@ const updateProjectName = (
   updatedProjectName: string,
   currentProjectName: string,
   selfUpdateLink: LinkModel | undefined,
-  projectMutate: KeyedMutator<ProjectModel>
+  projectMutate: KeyedMutator<ProjectModel>,
+  authedFetch: AuthedFetch
 ) => {
   if (selfUpdateLink && updatedProjectName != currentProjectName) {
     projectMutate(
       async () =>
-        fetch(selfUpdateLink.href, {
+        authedFetch<ProjectModel>(selfUpdateLink.href, {
           method: "PATCH",
           headers: { "Content-type": "application/json" },
           body: JSON.stringify({ name: updatedProjectName }),
-        }).then(async (response) => {
+        }).then(async (projectModel) => {
           (await AppToaster)?.show?.({
             message: "Name of project was updated to " + updatedProjectName,
             intent: "success",
             icon: IconNames.CONFIRM,
           });
 
-          return response.json() as Promise<ProjectModel>;
+          return projectModel;
         }),
       {
         optimisticData: (currentData) => {

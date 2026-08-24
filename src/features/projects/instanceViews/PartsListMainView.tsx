@@ -69,7 +69,7 @@ const PartsListMainView: FC<PartsListMainViewProps> = ({
   }, [project]);
 
   const columnHelper = createColumnHelper<RequiredItemType>();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const columns: ColumnDef<RequiredItemType, any>[] = useMemo(
     () => [
       columnHelper.accessor("itemTypeName", {

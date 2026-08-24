@@ -8,6 +8,7 @@ import { LinkName } from "../../links/types/LinkModel";
 import LinkUtil from "../../links/LinkUtil";
 import { useMatchMutate } from "../../common/utils/swr/useMutateMatch";
 import ItemTypeDialog from "./ItemTypeDialog";
+import { useAuthedFetch } from "../../common/security/hooks/useAuthedFetch";
 
 const formId = "editItemTypeForm";
 
@@ -22,6 +23,7 @@ const EditItemTypeDialog: FC<EditItemTypeDialogProps> = ({
 }) => {
   const entryLinks = useEntryLinks();
   const mutateMatch = useMatchMutate();
+  const authedFetch = useAuthedFetch();
 
   const onSubmit = (data: FieldValues) => {
     const selfUpdateLink = LinkUtil.findLink(
@@ -31,26 +33,26 @@ const EditItemTypeDialog: FC<EditItemTypeDialogProps> = ({
     );
 
     if (selfUpdateLink) {
-      fetch(selfUpdateLink.href, {
+      authedFetch<ItemTypeModel>(selfUpdateLink.href, {
         method: "PUT",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(data),
-      })
-        .then((response) => response.json() as Promise<ItemTypeModel>)
-        .then(async (updatedItemType) => {
-          const itemTypesReadLink = LinkUtil.findLink(
-            entryLinks,
-            "itemTypes",
-            LinkName.READ
-          );
-          mutateMatch(itemTypesReadLink);
+      }).then(async (updatedItemType) => {
+        const itemTypesReadLink = LinkUtil.findLink(
+          entryLinks,
+          "itemTypes",
+          LinkName.READ
+        );
+        mutateMatch(itemTypesReadLink);
 
+        if (updatedItemType) {
           (await AppToaster)?.show?.({
             message: "Item type " + updatedItemType.name + " was updated",
             intent: "success",
             icon: IconNames.CONFIRM,
           });
-        });
+        }
+      });
     }
     handleClose();
   };

@@ -15,6 +15,7 @@ import { LinkName } from "../../links/types/LinkModel";
 import { AppToaster } from "../../common/utils/Toaster";
 import { routeToProject } from "../util/ProjectRoutingUtil";
 import { useRouter } from "next/navigation";
+import { useAuthedFetch } from "../../common/security/hooks/useAuthedFetch";
 
 interface ProjectCopyButtonProps {
   sourceProject: ProjectModel;
@@ -27,6 +28,7 @@ const ProjectCopyButton: FC<ProjectCopyButtonProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const authedFetch = useAuthedFetch();
 
   const handleOnClick = (event: ClickMouseEvent) => {
     event.stopPropagation();
@@ -46,14 +48,14 @@ const ProjectCopyButton: FC<ProjectCopyButtonProps> = ({
   const onSubmit = useCallback(
     (data: FieldValues) => {
       if (copyLink) {
-        fetch(copyLink.href, {
+        authedFetch<ProjectModel>(copyLink.href, {
           method: "POST",
           headers: { "Content-type": "application/json" },
           body: JSON.stringify(data),
-        })
-          .then((response) => response.json() as Promise<ProjectModel>)
-          .then(async (project) => {
-            mutate();
+        }).then(async (project) => {
+          mutate();
+
+          if (project) {
             routeToProject(project, router);
 
             (await AppToaster)?.show?.({
@@ -64,12 +66,13 @@ const ProjectCopyButton: FC<ProjectCopyButtonProps> = ({
               intent: "success",
               icon: IconNames.CONFIRM,
             });
-          });
+          }
+        });
       }
 
       closeDialog();
     },
-    [mutate, sourceProject.name, copyLink, router]
+    [mutate, sourceProject.name, copyLink, router, authedFetch]
   );
 
   if (!copyLink) {

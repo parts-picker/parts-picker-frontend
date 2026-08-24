@@ -10,6 +10,7 @@ import LinkUtil from "../../links/LinkUtil";
 import { LinkName } from "../../links/types/LinkModel";
 import ItemTypeModel from "../models/ItemTypeModel";
 import ItemTypeDialog from "./ItemTypeDialog";
+import { useAuthedFetch } from "../../common/security/hooks/useAuthedFetch";
 
 const formId = "createItemTypeForm";
 
@@ -24,6 +25,7 @@ const CreateItemTypeDialog: FC<CreateItemTypeDialogProps> = ({
 }) => {
   const entryLinks = useEntryLinks();
   const mutateMatch = useMatchMutate();
+  const authedFetch = useAuthedFetch();
 
   const onSubmit = (data: FieldValues) => {
     const itemTypeCreateLink = LinkUtil.findLink(
@@ -33,27 +35,27 @@ const CreateItemTypeDialog: FC<CreateItemTypeDialogProps> = ({
     );
 
     if (itemTypeCreateLink) {
-      fetch(itemTypeCreateLink.href, {
+      authedFetch<ItemTypeModel>(itemTypeCreateLink.href, {
         method: "POST",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(data),
-      })
-        .then((response) => response.json() as Promise<ItemTypeModel>)
-        .then(async (newItemType) => {
-          // invalidate all pages
-          const itemTypesREADLink = LinkUtil.findLink(
-            entryLinks,
-            "itemTypes",
-            LinkName.READ
-          );
-          mutateMatch(itemTypesREADLink);
+      }).then(async (newItemType) => {
+        // invalidate all pages
+        const itemTypesREADLink = LinkUtil.findLink(
+          entryLinks,
+          "itemTypes",
+          LinkName.READ
+        );
+        mutateMatch(itemTypesREADLink);
 
+        if (newItemType) {
           (await AppToaster)?.show?.({
             message: "Item type " + newItemType.name + " was created",
             intent: "success",
             icon: IconNames.CONFIRM,
           });
-        });
+        }
+      });
     }
     handleClose();
   };

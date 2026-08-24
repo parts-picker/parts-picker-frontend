@@ -26,7 +26,7 @@ const AssignableItemView: FC<AssignableItemViewProps> = ({
   const assignableItems = data?._embedded?.assignableItems ?? [];
 
   const columnHelper = createColumnHelper<AssignableItemModel>();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const columns: ColumnDef<AssignableItemModel, any>[] = [
     columnHelper.accessor("condition", {
       header: () => "Condition",
