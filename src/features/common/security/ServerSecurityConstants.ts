@@ -1,6 +1,6 @@
 import "server-only";
 
-import { requireEnv } from "../utils/ServerEnvUtils";
+import { optionalEnv, requireEnv } from "../utils/ServerEnvUtils";
 
 // memoize a factory so env is read/derived on first use, not at module load
 const once = <T>(factory: () => T): (() => T) => {
@@ -41,7 +41,10 @@ export const PROXY_FORWARDED_RESPONSE_HEADERS = [
 export const BACKEND_TIMEOUT_MS = 30000;
 
 export const getPublicBaseUrl = once(() => requireEnv("PUBLIC_BASE_URL"));
-export const getPublicBasePath = once(() => requireEnv("PUBLIC_BASE_PATH"));
+// no base path is valid: the app is then served at the root "/"
+export const getPublicBasePath = once(() =>
+  optionalEnv("PUBLIC_BASE_PATH", "")
+);
 
 export const getPublicRootUrl = once(() => {
   const rootUrl = `${getPublicBaseUrl()}${getPublicBasePath()}`;
