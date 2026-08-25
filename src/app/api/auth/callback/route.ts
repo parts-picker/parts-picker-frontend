@@ -7,7 +7,7 @@ import {
   getOidcIssuerUrl,
   getOidcClientId,
   getOidcClientSecret,
-  getPublicBasePath,
+  getCallbackUri,
 } from "../../../../features/common/security/ServerSecurityConstants";
 import {
   buildInvalidLoginErrorResponse,
@@ -22,9 +22,8 @@ const discoveryOptions =
 // /api/auth/callback/route.ts
 export const GET = async (request: NextRequest) => {
   const url = request.nextUrl;
-  // nextjs does not set the base path correctly in proxy.ts
-  url.basePath = getPublicBasePath();
-  const originalUrl = new URL(url);
+  const originalUrl = new URL(getCallbackUri());
+  originalUrl.search = url.search;
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
 
