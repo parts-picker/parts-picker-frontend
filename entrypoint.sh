@@ -15,6 +15,16 @@ else
   replaceValue="$BASE_PATH"
 fi
 
+# Next inlines the base path into the middleware matcher regexes in escaped form
+# ("^\\/__BASE_PATH_PLACEHOLDER__"). When the app is served at the root the whole
+# "\\/" prefix has to go, otherwise a dangling backslash makes the regex invalid.
+if [ -z "$replaceValue" ] ; then
+  find .next \
+    -type f \
+    -exec sed -i \
+    -e 's#\\\\/__BASE_PATH_PLACEHOLDER__##g' {} +
+fi
+
 # Workaround to set the base path of the app dynamically
 find .next \
   -type f \
