@@ -1,1 +1,14 @@
 node_modules
+.next
+output
+tsconfig.tsbuildinfo
+
+.git
+.gitignore
+.github
+.husky
+.vscode
+
+# .env is required
+.env.development
+.env*.local
