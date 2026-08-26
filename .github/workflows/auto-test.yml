@@ -13,15 +13,23 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [22.x]
+                node-version: [24.x, 26.x]
                 # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
         steps:
             - uses: actions/checkout@v4
             - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v7
               with:
                   node-version: ${{ matrix.node-version }}
+                  cache: 'npm'
+            - name: Cache Next.js build
+              uses: actions/cache@v4
+              with:
+                  path: ${{ github.workspace }}/.next/cache
+                  key: ${{ runner.os }}-node${{ matrix.node-version }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node${{ matrix.node-version }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
             - run: npm ci
             - run: npm run lint:output
             - name: Upload eslint results
