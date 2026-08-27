@@ -22,8 +22,8 @@ interface ItemDialogProps {
 }
 
 const fullSchema = z.object({
-  status: z.nativeEnum(ItemStatusForCreate),
-  condition: z.nativeEnum(ItemCondition),
+  status: z.enum(ItemStatusForCreate),
+  condition: z.enum(ItemCondition),
   note: z.string().nullable(),
 });
 
