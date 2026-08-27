@@ -1,4 +1,5 @@
-import { Table } from "@tanstack/react-table";
+import { ReactTable } from "@tanstack/react-table";
+import { SortableTableFeatures } from "../TableFeatures";
 import React, { ReactElement, useContext } from "react";
 import { ResponseModel } from "../../../links/types/ResponseModel";
 import PaginationControlOptions from "../types/PaginationControlOptions";
@@ -10,7 +11,7 @@ export const TableContext = React.createContext<TableContextModel<any>>(
 
 export interface TableContextModel<Content extends ResponseModel> {
   loading: boolean;
-  table: Table<Content>;
+  table: ReactTable<SortableTableFeatures, Content>;
   tableOptions?: TableOptions<Content>;
   pageOptions?: PaginationControlOptions;
 }

@@ -2,6 +2,7 @@
 
 import { NonIdealState } from "@blueprintjs/core";
 import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
+import { SortableTableFeatures } from "../common/tables/TableFeatures";
 import { FC } from "react";
 import URITemplate from "urijs/src/URITemplate";
 import PaginationQueryOptions from "../common/tables/types/PaginationQueryOptions";
@@ -39,9 +40,12 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
   });
   const projects = data?._embedded?.projects ?? new Array<ProjectModel>();
 
-  const projectsColumnHelper = createColumnHelper<ProjectModel>();
+  const projectsColumnHelper = createColumnHelper<
+    SortableTableFeatures,
+    ProjectModel
+  >();
 
-  const columns: ColumnDef<ProjectModel, any>[] = [
+  const columns: ColumnDef<SortableTableFeatures, ProjectModel, any>[] = [
     projectsColumnHelper.accessor("name", { header: () => "Name" }),
     projectsColumnHelper.accessor((row) => row.displayStatus, {
       id: "workflowInstance.currentNode.displayName",
@@ -74,7 +78,7 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
   ];
 
   const rowClickAction = (
-    row: Row<ProjectModel>,
+    row: Row<SortableTableFeatures, ProjectModel>,
     router: AppRouterInstance
   ) => {
     routeToProject(row.original, router);

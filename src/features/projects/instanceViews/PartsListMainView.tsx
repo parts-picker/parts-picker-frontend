@@ -2,6 +2,7 @@
 
 import { NonIdealState } from "@blueprintjs/core";
 import { ColumnDef, Row, createColumnHelper } from "@tanstack/react-table";
+import { SortableTableFeatures } from "../../common/tables/TableFeatures";
 import { FC, useMemo } from "react";
 import SortableTable from "../../common/tables/SortableTable";
 import { useSWRWithURILike } from "../../common/utils/swr/useSWRWithURILike";
@@ -68,30 +69,34 @@ const PartsListMainView: FC<PartsListMainViewProps> = ({
     mutate();
   }, [project]);
 
-  const columnHelper = createColumnHelper<RequiredItemType>();
+  const columnHelper = createColumnHelper<
+    SortableTableFeatures,
+    RequiredItemType
+  >();
 
-  const columns: ColumnDef<RequiredItemType, any>[] = useMemo(
-    () => [
-      columnHelper.accessor("itemTypeName", {
-        header: () => "Item Type Name",
-      }),
-      columnHelper.display({
-        id: "amount",
-        header: "Amount (Assigned/Required)",
-        meta: mutate,
-        cell: (props) => <RequiredItemTypeRequiredAmountCell {...props} />,
-      }),
-      columnHelper.display({
-        id: "actions",
-        header: "Actions",
-        meta: mutate,
-        cell: (props) => <RequiredItemTypeDeleteCell {...props} />,
-      }),
-    ],
-    [columnHelper, mutate]
-  );
+  const columns: ColumnDef<SortableTableFeatures, RequiredItemType, any>[] =
+    useMemo(
+      () => [
+        columnHelper.accessor("itemTypeName", {
+          header: () => "Item Type Name",
+        }),
+        columnHelper.display({
+          id: "amount",
+          header: "Amount (Assigned/Required)",
+          meta: mutate,
+          cell: (props) => <RequiredItemTypeRequiredAmountCell {...props} />,
+        }),
+        columnHelper.display({
+          id: "actions",
+          header: "Actions",
+          meta: mutate,
+          cell: (props) => <RequiredItemTypeDeleteCell {...props} />,
+        }),
+      ],
+      [columnHelper, mutate]
+    );
 
-  const onRowClick = (row: Row<RequiredItemType>) => {
+  const onRowClick = (row: Row<SortableTableFeatures, RequiredItemType>) => {
     setDetailedRequiredItemType(row.original);
   };
 

@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { AssignedItemModel } from "../../../inventory/models/AssignedItemModel";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
+import { SortableTableFeatures } from "../../../common/tables/TableFeatures";
 import SortableTable from "../../../common/tables/SortableTable";
 import { ALLOWED_PAGE_SIZES } from "../../../common/utils/ConfigReaderUtils";
 import AssignedItemActionCell from "./AssignedItemActionCell";
@@ -25,9 +26,12 @@ const AssignedItemView: FC<AssignedItemViewProps> = ({
 }) => {
   const assignedItems = data?._embedded?.assignedItems ?? [];
 
-  const columnHelper = createColumnHelper<AssignedItemModel>();
+  const columnHelper = createColumnHelper<
+    SortableTableFeatures,
+    AssignedItemModel
+  >();
 
-  const columns: ColumnDef<AssignedItemModel, any>[] = [
+  const columns: ColumnDef<SortableTableFeatures, AssignedItemModel, any>[] = [
     columnHelper.display({
       id: "actions",
       cell: AssignedItemActionCell,

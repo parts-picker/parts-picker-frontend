@@ -14,6 +14,7 @@ import URITemplate from "urijs/src/URITemplate";
 import { EmbeddedItemTypes } from "./models/ItemEmbeddedTypes";
 import { useEntryLinkFor } from "../links/hooks/useEntryLinkFor";
 import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
+import { SortableTableFeatures } from "../common/tables/TableFeatures";
 import ActionButtons from "../common/tables/subcomponents/ActionButtons";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { requestedSortRulesToQueryParam } from "../common/utils/pageQueries/usePageQueryParamsV2";
@@ -47,9 +48,12 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
     setEditData(undefined);
   };
 
-  const itemTypeColumnHelper = createColumnHelper<ItemTypeModel>();
+  const itemTypeColumnHelper = createColumnHelper<
+    SortableTableFeatures,
+    ItemTypeModel
+  >();
 
-  const columns: ColumnDef<ItemTypeModel, any>[] = [
+  const columns: ColumnDef<SortableTableFeatures, ItemTypeModel, any>[] = [
     itemTypeColumnHelper.accessor("name", { header: () => "Name" }),
     itemTypeColumnHelper.accessor("description", {
       header: () => "Description",
@@ -78,7 +82,7 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
   ];
 
   const rowClickAction = (
-    row: Row<ItemTypeModel>,
+    row: Row<SortableTableFeatures, ItemTypeModel>,
     router: AppRouterInstance
   ) => {
     const link = LinkUtil.findLink(row.original, "self", LinkName.READ);

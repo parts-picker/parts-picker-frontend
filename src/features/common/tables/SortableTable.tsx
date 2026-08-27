@@ -9,14 +9,15 @@ import PaginationControlOptions from "./types/PaginationControlOptions";
 import { RowClickAction } from "./types/RowClickAction";
 import {
   ColumnDef,
-  useReactTable,
-  getCoreRowModel,
+  ReactTable,
+  useTable,
   Updater,
   SortingState,
 } from "@tanstack/react-table";
+import { sortableTableFeatures, SortableTableFeatures } from "./TableFeatures";
 
 interface SortableTableProps<Content extends ResponseModel> {
-  columns: ColumnDef<Content>[];
+  columns: ColumnDef<SortableTableFeatures, Content>[];
   data: Content[] | undefined;
   loading?: boolean;
   options?: {
@@ -49,11 +50,10 @@ const SortableTable = <Content extends ResponseModel>({
     pageControlOptions?.setRequestedSortRules(newSortingState);
   };
 
-  // eslint-disable-next-line react-hooks/incompatible-library -- TanStack Table returns non-memoizable functions by design
-  const table = useReactTable({
+  const table = useTable({
+    features: sortableTableFeatures,
     columns: columns,
     data: data ?? [],
-    getCoreRowModel: getCoreRowModel(),
     manualSorting: true,
     state: {
       sorting: pageControlOptions?.requestedSortRules,
@@ -66,7 +66,7 @@ const SortableTable = <Content extends ResponseModel>({
       <TableContext.Provider
         value={{
           loading,
-          table: table,
+          table: table as ReactTable<SortableTableFeatures, any>,
           tableOptions: {
             onRowClickAction: options.onRowClickAction,
             nonIdealState: options.nonIdealState,

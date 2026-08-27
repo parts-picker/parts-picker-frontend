@@ -1,4 +1,5 @@
 import { CellContext } from "@tanstack/react-table";
+import { SortableTableFeatures } from "../../../common/tables/TableFeatures";
 import { FC } from "react";
 import { AssignableItemModel } from "../../../inventory/models/AssignableItemModel";
 import { Button } from "@blueprintjs/core";
@@ -10,7 +11,7 @@ import { AuthedFetch } from "../../../common/utils/swr/DefaultFetcher";
 import { useAuthedFetch } from "../../../common/security/hooks/useAuthedFetch";
 
 const AssignableItemActionCell: FC<
-  CellContext<AssignableItemModel, unknown>
+  CellContext<SortableTableFeatures, AssignableItemModel, unknown>
 > = (props) => {
   const authedFetch = useAuthedFetch();
   const itemPatchLink = LinkUtil.findLink(
