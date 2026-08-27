@@ -1,4 +1,4 @@
-import { z, ZodTypeAny } from "zod";
+import { z } from "zod";
 import {
   ALLOWED_PAGE_SIZES,
   DEFAULT_PAGE_NUMBER,
@@ -10,10 +10,7 @@ const pagePreprocessingSchema = z.preprocess(
   z.number().nonnegative()
 );
 
-const allowedLiterals = ALLOWED_PAGE_SIZES.map((number) => z.literal(number));
-const sizeSchema = z.union(
-  allowedLiterals as unknown as [ZodTypeAny, ZodTypeAny, ...ZodTypeAny[]] //TODO fix typing
-);
+const sizeSchema = z.literal(ALLOWED_PAGE_SIZES);
 const sizePreprocessingSchema = z.preprocess(
   (val: unknown) => Number(val),
   sizeSchema
