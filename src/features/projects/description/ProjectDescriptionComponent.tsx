@@ -103,7 +103,7 @@ const ProjectDescriptionComponent: FC<ProjectDescriptionComponentProps> = ({
           onChange={(event) => setDescription(event.target.value)}
           fill
           autoFocus
-          growVertically
+          autoResize
         />
       </div>
 

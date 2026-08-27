@@ -1,4 +1,4 @@
-import { Button, Classes, H5, Popover } from "@blueprintjs/core";
+import { Button, Classes, H5, PopoverNext } from "@blueprintjs/core";
 import { FC, ReactNode } from "react";
 import { ClickMouseEvent } from "../types/ClickMouseEvent";
 
@@ -30,7 +30,7 @@ const ConfirmPopover: FC<ConfirmPopoverProps> = ({
 
   return (
     <div onClick={(event) => event.stopPropagation()}>
-      <Popover
+      <PopoverNext
         isOpen={isOpen}
         onClose={handleClose}
         popoverClassName={Classes.POPOVER_CONTENT_SIZING}
@@ -63,7 +63,7 @@ const ConfirmPopover: FC<ConfirmPopoverProps> = ({
         }
       >
         {children}
-      </Popover>
+      </PopoverNext>
     </div>
   );
 };
