@@ -1,29 +1,35 @@
 name: Prepare new version
 
 on:
-    pull_request:
-        types: [closed]
+    push:
         branches: [main]
     workflow_dispatch:
 
+concurrency:
+    group: ${{ github.workflow }}
+    cancel-in-progress: false
+
 jobs:
     testing:
-        if: github.event.pull_request.merged == true
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            actions: write
+            security-events: write
 
         env:
             # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
             NODE_VERSION: 26.x
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v7
               with:
                   node-version: ${{ env.NODE_VERSION }}
                   cache: 'npm'
             - name: Cache Next.js build
-              uses: actions/cache@v4
+              uses: actions/cache@v6
               with:
                   path: ${{ github.workspace }}/.next/cache
                   key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
@@ -33,14 +39,13 @@ jobs:
             - run: npm run lint:output
             - name: Upload eslint results
               if: success() || failure()
-              uses: github/codeql-action/upload-sarif@v2
+              uses: github/codeql-action/upload-sarif@v4
               with:
                   sarif_file: output/eslint-result.sarif
             - run: npm run build --if-present
             - run: npm test
 
     tag:
-        if: github.event.pull_request.merged == true
         runs-on: ubuntu-latest
         needs: testing
         permissions:
@@ -49,12 +54,12 @@ jobs:
         outputs:
             version: ${{ steps.bump-version.outputs.new_tag }}
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
               with:
                   fetch-depth: '0'
 
             - name: Bump version and push tag
-              uses: anothrNick/github-tag-action@1.75.0
+              uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8 # 1.75.0
               id: bump-version
               env:
                   DEFAULT_BUMP: patch
@@ -64,16 +69,18 @@ jobs:
                   WITH_V: true
 
     docker:
-        if: github.event.pull_request.merged == true
         runs-on: ubuntu-latest
         needs: tag
+        permissions:
+            contents: read
+            actions: write
         steps:
             - name: Set up QEMU
-              uses: docker/setup-qemu-action@v3
+              uses: docker/setup-qemu-action@v4
             - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@v3
+              uses: docker/setup-buildx-action@v4
             - name: Login to Docker Hub
-              uses: docker/login-action@v3
+              uses: docker/login-action@v4
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -86,9 +93,9 @@ jobs:
                   cache-to: type=gha,mode=max
 
     deploy-on-dev:
-      if: github.event.pull_request.merged == true
       runs-on: ubuntu-latest
       needs: [ docker, tag ]
+      permissions: {}
       steps:
         - name: Trigger dev deployment
           run: |
