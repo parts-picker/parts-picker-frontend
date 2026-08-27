@@ -14,6 +14,7 @@ import LinkUtil from "../links/LinkUtil";
 import EditItemDialog from "./dialogs/EditItemDialog";
 import ItemTypeModel from "./models/ItemTypeModel";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
+import { SortableTableFeatures } from "../common/tables/TableFeatures";
 import ActionButtons from "../common/tables/subcomponents/ActionButtons";
 import { requestedSortRulesToQueryParam } from "../common/utils/pageQueries/usePageQueryParamsV2";
 
@@ -50,9 +51,12 @@ const ItemListView: FC<ItemListViewProps> = ({
     setEditData(undefined);
   };
 
-  const itemColumnHelper = createColumnHelper<ItemModel>();
+  const itemColumnHelper = createColumnHelper<
+    SortableTableFeatures,
+    ItemModel
+  >();
 
-  const columns: ColumnDef<ItemModel, any>[] = [
+  const columns: ColumnDef<SortableTableFeatures, ItemModel, any>[] = [
     itemColumnHelper.accessor("condition", { header: () => "Condition" }),
     itemColumnHelper.accessor("status", { header: () => "Status" }),
     itemColumnHelper.accessor("note", { header: () => "Note" }),

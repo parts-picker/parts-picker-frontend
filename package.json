@@ -22,7 +22,7 @@
     "@blueprintjs/icons": "6.13.0",
     "@blueprintjs/select": "6.3.4",
     "@hookform/resolvers": "5.9.1",
-    "@tanstack/react-table": "8.21.2",
+    "@tanstack/react-table": "9.2.3",
     "iron-session": "8.0.4",
     "next": "16.3.3",
     "openid-client": "6.8.7",

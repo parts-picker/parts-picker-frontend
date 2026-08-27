@@ -1,6 +1,7 @@
 import { FC, useCallback } from "react";
 import { RequiredItemType } from "../../../workflow/models/RequiredItemTypeModel";
 import { CellContext } from "@tanstack/react-table";
+import { SortableTableFeatures } from "../../../common/tables/TableFeatures";
 import { KeyedMutator } from "swr";
 import DebouncedNumberInput from "./DebouncedNumberInput";
 import ResponseUtil from "../../../links/ResponseUtil";
@@ -12,7 +13,7 @@ import { Classes } from "@blueprintjs/core";
 import { useAuthedFetch } from "../../../common/security/hooks/useAuthedFetch";
 
 const RequiredItemTypeRequiredAmountCell: FC<
-  CellContext<RequiredItemType, unknown>
+  CellContext<SortableTableFeatures, RequiredItemType, unknown>
 > = (props) => {
   const authedFetch = useAuthedFetch();
   const mutate = props.column.columnDef

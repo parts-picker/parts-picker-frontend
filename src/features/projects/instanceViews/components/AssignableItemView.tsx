@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { createColumnHelper, ColumnDef } from "@tanstack/react-table";
+import { SortableTableFeatures } from "../../../common/tables/TableFeatures";
 import SortableTable from "../../../common/tables/SortableTable";
 import { ALLOWED_PAGE_SIZES } from "../../../common/utils/ConfigReaderUtils";
 import { PaginationParamState } from "../../../common/utils/pageQueries/usePaginationParamsState";
@@ -25,18 +26,22 @@ const AssignableItemView: FC<AssignableItemViewProps> = ({
 }) => {
   const assignableItems = data?._embedded?.assignableItems ?? [];
 
-  const columnHelper = createColumnHelper<AssignableItemModel>();
+  const columnHelper = createColumnHelper<
+    SortableTableFeatures,
+    AssignableItemModel
+  >();
 
-  const columns: ColumnDef<AssignableItemModel, any>[] = [
-    columnHelper.accessor("condition", {
-      header: () => "Condition",
-    }),
-    columnHelper.display({
-      id: "actions",
-      cell: AssignableItemActionCell,
-      meta: { invalidateData: invalidateData, mutate: mutate },
-    }),
-  ];
+  const columns: ColumnDef<SortableTableFeatures, AssignableItemModel, any>[] =
+    [
+      columnHelper.accessor("condition", {
+        header: () => "Condition",
+      }),
+      columnHelper.display({
+        id: "actions",
+        cell: AssignableItemActionCell,
+        meta: { invalidateData: invalidateData, mutate: mutate },
+      }),
+    ];
 
   return (
     <SortableTable
