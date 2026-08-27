@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, MenuDivider, MenuItem, Popover } from "@blueprintjs/core";
+import { Menu, MenuDivider, MenuItem, PopoverNext } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import { FC } from "react";
 import { useUser } from "../user/UserContext";
@@ -17,7 +17,7 @@ const UserMenu: FC<UserMenuProps> = ({ logoutUrl }) => {
     (username ?? email ?? "?").trim().charAt(0).toUpperCase() || "?";
 
   return (
-    <Popover
+    <PopoverNext
       placement={"bottom-end"}
       content={
         <Menu>
@@ -31,7 +31,7 @@ const UserMenu: FC<UserMenuProps> = ({ logoutUrl }) => {
       <button type="button" className={"user-avatar"} aria-label={"User menu"}>
         {initial}
       </button>
-    </Popover>
+    </PopoverNext>
   );
 };
 
