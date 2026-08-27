@@ -1,4 +1,4 @@
-FROM node:22.14.0-alpine AS base
+FROM node:26.8.1-alpine AS base
 
 # -------------------
 # STEP: DEPENDENCIES
@@ -20,7 +20,7 @@ COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 
 # Disable next.js telemetry during build
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN npm run build
 
@@ -30,10 +30,10 @@ FROM base AS runner
 
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 # Disable next.js telemetry during run
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 nextjs
@@ -61,9 +61,9 @@ RUN chmod +x ./entrypoint.sh \
 USER nextjs
 
 EXPOSE 3000
-ENV PORT 3000
+ENV PORT=3000
 # Set hostname to localhost
-ENV HOSTNAME "0.0.0.0"
+ENV HOSTNAME="0.0.0.0"
 
 ENTRYPOINT ["./entrypoint.sh"]
 # Start app
