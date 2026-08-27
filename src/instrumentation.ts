@@ -3,8 +3,7 @@ export async function register() {
     return;
   }
 
-  const { validateServerSecurityEnv } = await import(
-    "./features/common/security/ServerSecurityConstants"
-  );
+  const { validateServerSecurityEnv } =
+    await import("./features/common/security/ServerSecurityConstants");
   validateServerSecurityEnv();
 }
