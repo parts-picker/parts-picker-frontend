@@ -8,7 +8,7 @@ if [ -z "$BASE_PATH" ] || [ "$BASE_PATH" = "/" ] ; then
   replaceValue=""
 else
   # check if BASE_PATH fulfills simple regex - might need an improvement in the future
-  if ! [[ "$BASE_PATH" =~ "^(\/[A-Za-z0-9_.~-]+)+$" ]] ; then
+  if ! echo "$BASE_PATH" | grep -Eq '^(/[A-Za-z0-9_.~-]+)+$' ; then
     echo "BASE_PATH needs to match regex ^(\/[A-Za-z0-9_.~-]+)+, but was '$BASE_PATH'"
   	exit 1;
   fi
