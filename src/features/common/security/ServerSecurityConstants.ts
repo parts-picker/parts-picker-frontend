@@ -1,6 +1,6 @@
 import "server-only";
 
-import { optionalEnv, requireEnv } from "../utils/ServerEnvUtils";
+import { optionalEnv, requireEnv } from "../utils/server/ServerEnvUtils";
 
 // memoize a factory so env is read/derived on first use, not at module load
 const once = <T>(factory: () => T): (() => T) => {

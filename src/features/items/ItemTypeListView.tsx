@@ -12,7 +12,9 @@ import PaginationQueryOptions from "../common/tables/types/PaginationQueryOption
 import { useSWRWithURILike } from "../common/utils/swr/useSWRWithURILike";
 import URITemplate from "urijs/src/URITemplate";
 import { EmbeddedItemTypes } from "./models/ItemEmbeddedTypes";
-import { useEntryLinkFor } from "../links/hooks/useEntryLinkFor";
+import { useOrgUnitLinkFor } from "../orgUnits/hooks/useOrgUnitLinkFor";
+import { useOrgUnit } from "../orgUnits/hooks/useOrgUnit";
+import { encodeLinkBase64Url } from "../links/LinkEncoding";
 import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
 import { SortableTableFeatures } from "../common/tables/TableFeatures";
 import ActionButtons from "../common/tables/subcomponents/ActionButtons";
@@ -24,7 +26,8 @@ interface ItemTypeViewProps {
 }
 
 const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
-  const itemTypesReadLink = useEntryLinkFor(LinkName.READ, "itemTypes");
+  const { orgUnitPath } = useOrgUnit();
+  const itemTypesReadLink = useOrgUnitLinkFor(LinkName.READ, "itemTypes");
   const itemTypesReadLinkTemplate = itemTypesReadLink
     ? new URITemplate(itemTypesReadLink.href)
     : undefined;
@@ -90,8 +93,7 @@ const ItemTypeListView: FC<ItemTypeViewProps> = ({ pageQueryOptions }) => {
       return;
     }
 
-    const encodedLink = window.btoa(link.href);
-    router.push(`/item-types/${encodedLink}`);
+    router.push(`${orgUnitPath}/item-types/${encodeLinkBase64Url(link.href)}`);
   };
 
   const nonIdealState = (

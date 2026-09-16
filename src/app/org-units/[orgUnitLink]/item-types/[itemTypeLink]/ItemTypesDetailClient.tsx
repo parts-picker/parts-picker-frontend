@@ -5,26 +5,27 @@ import { IconNames } from "@blueprintjs/icons";
 import { useParams, useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import useSWR from "swr";
-import DefaultLoadingSpinner from "../../../features/common/loading/DefaultLoadingSpinner";
-import { ALLOWED_PAGE_SIZES } from "../../../features/common/utils/ConfigReaderUtils";
-import CreateItemDialog from "../../../features/items/dialogs/CreateItemDialog";
-import ItemListView from "../../../features/items/ItemListView";
-import ItemTypeModel from "../../../features/items/models/ItemTypeModel";
-import LinkUtil from "../../../features/links/LinkUtil";
-import { LinkName } from "../../../features/links/types/LinkModel";
-import { usePageQueryParamsV2 } from "../../../features/common/utils/pageQueries/usePageQueryParamsV2";
+import DefaultLoadingSpinner from "@/features/common/loading/DefaultLoadingSpinner";
+import { ALLOWED_PAGE_SIZES } from "@/features/common/utils/ConfigReaderUtils";
+import CreateItemDialog from "@/features/items/dialogs/CreateItemDialog";
+import ItemListView from "@/features/items/ItemListView";
+import ItemTypeModel from "@/features/items/models/ItemTypeModel";
+import LinkUtil from "@/features/links/LinkUtil";
+import { LinkName } from "@/features/links/types/LinkModel";
+import { usePageQueryParamsV2 } from "@/features/common/utils/pageQueries/usePageQueryParamsV2";
+import { decodeLinkBase64Url } from "@/features/links/LinkEncoding";
+import { useOrgUnit } from "@/features/orgUnits/hooks/useOrgUnit";
 
 type Params = { itemTypeLink?: string };
 
 const ItemTypeDetails: FC = () => {
   const router = useRouter();
+  const { orgUnitPath } = useOrgUnit();
   const pageQueryOptions = usePageQueryParamsV2();
   const params = useParams<Params>();
 
   const itemTypeLink = params?.itemTypeLink;
-  const decodedLink = itemTypeLink
-    ? window.atob(decodeURIComponent(itemTypeLink))
-    : undefined;
+  const decodedLink = decodeLinkBase64Url(itemTypeLink);
   const { data: itemType } = useSWR<ItemTypeModel>(decodedLink);
 
   const itemCreateLink = LinkUtil.findLink(
@@ -34,7 +35,7 @@ const ItemTypeDetails: FC = () => {
   );
 
   const backButtonOnClick = () => {
-    router.push("/item-types");
+    router.push(`${orgUnitPath}/item-types`);
   };
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false);

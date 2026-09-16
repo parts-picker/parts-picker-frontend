@@ -16,6 +16,7 @@ import { AppToaster } from "../../common/utils/Toaster";
 import { routeToProject } from "../util/ProjectRoutingUtil";
 import { useRouter } from "next/navigation";
 import { useAuthedFetch } from "../../common/security/hooks/useAuthedFetch";
+import { useOrgUnit } from "../../orgUnits/hooks/useOrgUnit";
 
 interface ProjectCopyButtonProps {
   sourceProject: ProjectModel;
@@ -28,6 +29,7 @@ const ProjectCopyButton: FC<ProjectCopyButtonProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { orgUnitPath } = useOrgUnit();
   const authedFetch = useAuthedFetch();
 
   const handleOnClick = (event: ClickMouseEvent) => {
@@ -56,7 +58,7 @@ const ProjectCopyButton: FC<ProjectCopyButtonProps> = ({
           mutate();
 
           if (project) {
-            routeToProject(project, router);
+            routeToProject(project, orgUnitPath, router);
 
             (await AppToaster)?.show?.({
               message:
@@ -72,7 +74,7 @@ const ProjectCopyButton: FC<ProjectCopyButtonProps> = ({
 
       closeDialog();
     },
-    [mutate, sourceProject.name, copyLink, router, authedFetch]
+    [mutate, sourceProject.name, copyLink, router, authedFetch, orgUnitPath]
   );
 
   if (!copyLink) {

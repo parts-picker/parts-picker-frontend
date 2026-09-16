@@ -1,12 +1,14 @@
 import { FC } from "react";
 import ItemTypesDetailClient from "./ItemTypesDetailClient";
-import { PageQueryParams } from "../../../features/common/types/PageQueryParams";
+import { PageQueryParams } from "@/features/common/types/PageQueryParams";
 import { redirect } from "next/navigation";
-import { parsePageQueryParams } from "../../../features/common/utils/pageQueries/ParsePageQueryParams";
+import { parsePageQueryParams } from "@/features/common/utils/pageQueries/ParsePageQueryParams";
+import { buildOrgUnitPath } from "@/features/orgUnits/util/OrgUnitRoutingUtil";
+import { OrgUnitLinkParam } from "@/features/orgUnits/types/OrgUnitLinkParam";
 
 interface ItemTypesDetailClientProps {
   searchParams: Promise<PageQueryParams>;
-  params: Promise<{ itemTypeLink?: string }>;
+  params: Promise<OrgUnitLinkParam & { itemTypeLink: string }>;
 }
 
 const ItemTypesDetailPage: FC<ItemTypesDetailClientProps> = async ({
@@ -21,8 +23,9 @@ const ItemTypesDetailPage: FC<ItemTypesDetailClientProps> = async ({
   );
 
   if (!valid) {
+    const { orgUnitLink, itemTypeLink } = await params;
     redirect(
-      `/item-types/${(await params).itemTypeLink}?page=${parsedPage}&size=${parsedSize}`
+      `${buildOrgUnitPath(orgUnitLink)}/item-types/${itemTypeLink}?page=${parsedPage}&size=${parsedSize}`
     );
   }
 

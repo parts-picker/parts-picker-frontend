@@ -7,7 +7,8 @@ import { FC } from "react";
 import URITemplate from "urijs/src/URITemplate";
 import PaginationQueryOptions from "../common/tables/types/PaginationQueryOptions";
 import { useSWRWithURILike } from "../common/utils/swr/useSWRWithURILike";
-import { useEntryLinkFor } from "../links/hooks/useEntryLinkFor";
+import { useOrgUnitLinkFor } from "../orgUnits/hooks/useOrgUnitLinkFor";
+import { useOrgUnit } from "../orgUnits/hooks/useOrgUnit";
 import { LinkName } from "../links/types/LinkModel";
 import ProjectModel from "./models/ProjectModel";
 import { ReadProjectsResponse } from "./models/ReadProjectsResponse";
@@ -24,7 +25,8 @@ interface ProjectViewProps {
 }
 
 const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
-  const projectReadLink = useEntryLinkFor(LinkName.READ, "projects");
+  const { orgUnitPath } = useOrgUnit();
+  const projectReadLink = useOrgUnitLinkFor(LinkName.READ, "projects");
   const projectReadLinkTemplate = projectReadLink
     ? new URITemplate(projectReadLink.href)
     : undefined;
@@ -81,7 +83,7 @@ const ProjectListView: FC<ProjectViewProps> = ({ pageQueryOptions }) => {
     row: Row<SortableTableFeatures, ProjectModel>,
     router: AppRouterInstance
   ) => {
-    routeToProject(row.original, router);
+    routeToProject(row.original, orgUnitPath, router);
   };
 
   const nonIdealState = (

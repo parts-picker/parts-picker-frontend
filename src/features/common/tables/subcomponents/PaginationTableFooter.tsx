@@ -1,4 +1,4 @@
-import { HTMLSelect } from "@blueprintjs/core";
+import PageSizeSelect from "./PageSizeSelect";
 import { IconNames } from "@blueprintjs/icons";
 import { FC, useMemo } from "react";
 import { range } from "../../utils/ArrayUtils";
@@ -62,10 +62,10 @@ const PaginationTableFooter: FC = () => {
               visible={pageOptions.number < pageOptions.totalPages - 1}
             />
             Elements per page:
-            <HTMLSelect
-              options={pageSizeValues}
-              value={pageOptions.size}
-              onChange={(event) => handleSetSize(Number(event.target.value))}
+            <PageSizeSelect
+              allowedPageSizes={pageSizeValues}
+              pageSize={pageOptions.size}
+              onPageSizeChange={handleSetSize}
             />
           </div>
         </td>
