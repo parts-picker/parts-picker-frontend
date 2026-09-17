@@ -5,6 +5,15 @@ import {
   SetRequestedSortRules,
 } from "../../tables/types/PaginationQueryOptions";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../ConfigReaderUtils";
+
+const getAsNumberOrElse = (
+  param: string | null | undefined,
+  fallback: number
+) =>
+  param === null || param === undefined || Number.isNaN(Number(param))
+    ? fallback
+    : Number(param);
 
 /**
  * Custom hook to simplify the usage of the size, page & sort query parameters used in pagination.
@@ -20,12 +29,8 @@ export const usePageQueryParamsV2 = (): PageQueryOptions => {
   const sizeParam = searchParams?.get("size");
   const sortParam = searchParams?.getAll("sort");
 
-  const requestedPageNumber = isNaN(Number(pageParam))
-    ? Number(process.env.NEXT_PUBLIC_DEFAULT_PAGE_NUMBER)
-    : Number(pageParam);
-  const requestedPageSize = isNaN(Number(sizeParam))
-    ? Number(process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE)
-    : Number(sizeParam);
+  const requestedPageNumber = getAsNumberOrElse(pageParam, DEFAULT_PAGE_NUMBER);
+  const requestedPageSize = getAsNumberOrElse(sizeParam, DEFAULT_PAGE_SIZE);
   const requestedSortRules = queryParamToSortRules(sortParam);
 
   const setRequestedPageNumber = (page: number) =>

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z, ZodTypeAny } from "zod";
 import {
   ALLOWED_PAGE_SIZES,
   DEFAULT_PAGE_NUMBER,
@@ -16,29 +16,42 @@ const sizePreprocessingSchema = z.preprocess(
   sizeSchema
 );
 
+/**
+ * Validates the pagination query params. Absent params are valid and fall back to the defaults.
+ * Only present but unusable values make the result invalid.
+ */
 export const parsePageQueryParams = (
   size: QueryParam,
   page: QueryParam
 ): PageQueryParseResult => {
-  let valid = true;
+  const { value: parsedSize, valid: sizeValid } = parseParam(
+    size,
+    sizePreprocessingSchema,
+    DEFAULT_PAGE_SIZE
+  );
+  const { value: parsedPage, valid: pageValid } = parseParam(
+    page,
+    pagePreprocessingSchema,
+    DEFAULT_PAGE_NUMBER
+  );
 
-  let parsedSize: number;
-  try {
-    parsedSize = sizePreprocessingSchema.parse(size);
-  } catch (_: unknown) {
-    parsedSize = DEFAULT_PAGE_SIZE;
-    valid = false;
+  return { valid: sizeValid && pageValid, parsedPage, parsedSize };
+};
+
+const parseParam = (
+  param: QueryParam,
+  schema: ZodTypeAny,
+  fallback: number
+): { value: number; valid: boolean } => {
+  if (param === undefined || param === null) {
+    return { value: fallback, valid: true };
   }
 
-  let parsedPage: number;
   try {
-    parsedPage = pagePreprocessingSchema.parse(page);
+    return { value: schema.parse(param) as number, valid: true };
   } catch (_: unknown) {
-    parsedPage = DEFAULT_PAGE_NUMBER;
-    valid = false;
+    return { value: fallback, valid: false };
   }
-
-  return { valid, parsedPage, parsedSize };
 };
 
 type QueryParam = string | string[] | undefined | null;

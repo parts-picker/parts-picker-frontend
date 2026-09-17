@@ -4,27 +4,28 @@ import { Button, Divider, Tab, Tabs, Text } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import { FC, useCallback } from "react";
 import useSWR, { KeyedMutator } from "swr";
-import DefaultLoadingSpinner from "../../../features/common/loading/DefaultLoadingSpinner";
-import LinkUtil from "../../../features/links/LinkUtil";
-import { LinkName } from "../../../features/links/types/LinkModel";
-import ProjectDescriptionComponent from "../../../features/projects/description/ProjectDescriptionComponent";
-import PartsListView from "../../../features/projects/instanceViews/PartsListView";
-import ProjectModel from "../../../features/projects/models/ProjectModel";
-import InstanceStatusBar from "../../../features/workflow/InstanceStatusBar";
-import { InstanceInfo } from "../../../features/workflow/models/InstanceInfoModel";
+import DefaultLoadingSpinner from "@/features/common/loading/DefaultLoadingSpinner";
+import LinkUtil from "@/features/links/LinkUtil";
+import { LinkName } from "@/features/links/types/LinkModel";
+import ProjectDescriptionComponent from "@/features/projects/description/ProjectDescriptionComponent";
+import PartsListView from "@/features/projects/instanceViews/PartsListView";
+import ProjectModel from "@/features/projects/models/ProjectModel";
+import InstanceStatusBar from "@/features/workflow/InstanceStatusBar";
+import { InstanceInfo } from "@/features/workflow/models/InstanceInfoModel";
 import { useParams, useRouter } from "next/navigation";
-import ProjectNameComponent from "../../../features/projects/instanceViews/components/ProjectNameComponent";
+import ProjectNameComponent from "@/features/projects/instanceViews/components/ProjectNameComponent";
+import { decodeLinkBase64Url } from "@/features/links/LinkEncoding";
+import { useOrgUnit } from "@/features/orgUnits/hooks/useOrgUnit";
 
 type Params = { projectLink?: string };
 
 const ProjectDetailsClient: FC = () => {
   const router = useRouter();
+  const { orgUnitPath } = useOrgUnit();
   const params = useParams<Params>();
   const projectLink = params?.projectLink;
 
-  const decodedLink = projectLink
-    ? window.atob(decodeURIComponent(projectLink))
-    : undefined;
+  const decodedLink = decodeLinkBase64Url(projectLink);
   const { data: project, mutate: projectMutate } =
     useSWR<ProjectModel>(decodedLink);
   const instanceInfoLink = LinkUtil.findLink(
@@ -44,8 +45,8 @@ const ProjectDetailsClient: FC = () => {
   );
 
   const backButtonOnClick = useCallback(() => {
-    router.push("/projects");
-  }, [router]);
+    router.push(`${orgUnitPath}/projects`);
+  }, [router, orgUnitPath]);
 
   if (!project) {
     return <DefaultLoadingSpinner />;

@@ -5,7 +5,6 @@ import { IconNames } from "@blueprintjs/icons";
 import { FieldValues } from "react-hook-form";
 import { useMatchMutate } from "../../common/utils/swr/useMutateMatch";
 import { AppToaster } from "../../common/utils/Toaster";
-import { useEntryLinks } from "../../links/hooks/useEntryLinks";
 import LinkUtil from "../../links/LinkUtil";
 import { LinkName } from "../../links/types/LinkModel";
 import ItemModel from "../models/ItemModel";
@@ -27,7 +26,6 @@ const EditItemDialog: FC<EditItemDialogProps> = ({
   handleClose,
   targetItemType,
 }) => {
-  const entryLinks = useEntryLinks();
   const mutateMatch = useMatchMutate();
   const authedFetch = useAuthedFetch();
 
@@ -45,8 +43,8 @@ const EditItemDialog: FC<EditItemDialogProps> = ({
         body: JSON.stringify(data),
       }).then(async () => {
         const itemReadLink = LinkUtil.findLink(
-          entryLinks,
-          "itemTypes",
+          targetItemType,
+          "describes",
           LinkName.READ
         );
 

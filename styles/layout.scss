@@ -50,7 +50,7 @@
   grid-area: header;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 0 1.5rem;
   background-color: bp.$light-gray4;
   border-bottom: 0.1rem solid bp.$light-gray1;
@@ -91,4 +91,36 @@
   grid-area: content;
   padding: 0.75em;
   overflow: auto;
+}
+
+.org-unit-switcher-target {
+  height: 100%;
+  display: flex;
+}
+
+.org-unit-switcher {
+  width: v.$org-unit-switcher-width;
+  height: 100%;
+  padding: 0 1.5rem;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 1.3rem;
+  font-weight: 600;
+  column-gap: 0.75rem;
+
+  &:hover {
+    background-color: bp.$light-gray1;
+  }
+
+  .#{bp.$ns}-dark &:hover {
+    background-color: bp.$dark-gray5;
+  }
+
+  &__name {
+    flex: 1;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }

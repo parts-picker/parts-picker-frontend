@@ -5,7 +5,7 @@ import { FC } from "react";
 import { FieldValues } from "react-hook-form";
 import { useMatchMutate } from "../../common/utils/swr/useMutateMatch";
 import { AppToaster } from "../../common/utils/Toaster";
-import { useEntryLinks } from "../../links/hooks/useEntryLinks";
+import { useOrgUnit } from "../../orgUnits/hooks/useOrgUnit";
 import LinkUtil from "../../links/LinkUtil";
 import { LinkName } from "../../links/types/LinkModel";
 import ItemTypeModel from "../models/ItemTypeModel";
@@ -23,13 +23,13 @@ const CreateItemTypeDialog: FC<CreateItemTypeDialogProps> = ({
   isOpen,
   handleClose,
 }) => {
-  const entryLinks = useEntryLinks();
+  const { orgUnit } = useOrgUnit();
   const mutateMatch = useMatchMutate();
   const authedFetch = useAuthedFetch();
 
   const onSubmit = (data: FieldValues) => {
     const itemTypeCreateLink = LinkUtil.findLink(
-      entryLinks,
+      orgUnit,
       "itemTypes",
       LinkName.CREATE
     );
@@ -42,7 +42,7 @@ const CreateItemTypeDialog: FC<CreateItemTypeDialogProps> = ({
       }).then(async (newItemType) => {
         // invalidate all pages
         const itemTypesREADLink = LinkUtil.findLink(
-          entryLinks,
+          orgUnit,
           "itemTypes",
           LinkName.READ
         );

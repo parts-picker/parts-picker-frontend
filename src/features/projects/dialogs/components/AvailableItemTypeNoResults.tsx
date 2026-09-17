@@ -2,6 +2,7 @@ import { Icon, MenuItem } from "@blueprintjs/core";
 import { FC } from "react";
 import { IconNames } from "@blueprintjs/icons";
 import Link from "next/link";
+import { useOrgUnit } from "../../../orgUnits/hooks/useOrgUnit";
 
 interface AvailableItemTypeNoResultsProps {
   searchQueryName: string;
@@ -10,6 +11,8 @@ interface AvailableItemTypeNoResultsProps {
 const AvailableItemNoResults: FC<AvailableItemTypeNoResultsProps> = ({
   searchQueryName,
 }) => {
+  const { orgUnitPath } = useOrgUnit();
+
   let text;
   if (searchQueryName) {
     text = "No available item types found with name '" + searchQueryName + "'";
@@ -22,11 +25,9 @@ const AvailableItemNoResults: FC<AvailableItemTypeNoResultsProps> = ({
         }}
       >
         <span>All available item types are already assigned</span>
-        <Link href="/item-types" legacyBehavior>
-          <a>
-            You may create new ones in the item inventory{" "}
-            <Icon icon={IconNames.BOX} />
-          </a>
+        <Link href={`${orgUnitPath}/item-types`}>
+          You may create new ones in the item inventory{" "}
+          <Icon icon={IconNames.BOX} />
         </Link>
       </div>
     );

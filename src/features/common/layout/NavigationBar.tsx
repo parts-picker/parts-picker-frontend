@@ -1,20 +1,22 @@
 "use client";
 
-import { Icon, IconName } from "@blueprintjs/core";
-import { IconNames } from "@blueprintjs/icons";
+import { Icon } from "@blueprintjs/core";
 
 import { FC } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { NavLink } from "./NavLink";
 
-const navLinks: NavLink[] = [
-  { href: "/", text: "Dashboard", icon: IconNames.TIMELINE_AREA_CHART },
-  { href: "/projects", text: "Project Overview", icon: IconNames.CLIPBOARD },
-  { href: "/item-types", text: "Item Inventory", icon: IconNames.BOX },
-];
+interface NavigationBarProps {
+  navLinks: NavLink[];
+}
 
-const NavigationBar: FC = () => {
+const NavigationBar: FC<NavigationBarProps> = ({ navLinks }) => {
   const pathname = usePathname();
+
+  if (navLinks.length === 0) {
+    return null;
+  }
 
   return (
     <div className={"nav-container"}>
@@ -42,9 +44,3 @@ const NavigationBar: FC = () => {
 };
 
 export default NavigationBar;
-
-interface NavLink {
-  href: string;
-  text: string;
-  icon: IconName;
-}
